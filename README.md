@@ -1,6 +1,7 @@
 # JS-Projekt-kommunikation-agila-projektmetoder
 Here we go again.
 
+Team 5: Ziggi, Ludvig, Dan & Sandra
 
 Inledning
 
