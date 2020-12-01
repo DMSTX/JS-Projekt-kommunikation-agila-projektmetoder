@@ -29,7 +29,6 @@ function openTextArea() {
  * Döljer Empty Note-knappen
  */
 function hideNewEmptyNoteButton() {
-    console.log("nu är jag i hide");
     emptyNoteButton.style.display = "none";
 }
 
@@ -37,17 +36,8 @@ function hideNewEmptyNoteButton() {
  * Visar Save-knappen
  */
 function showSaveButton() {
-    console.log("nu är jag i show save button");
     saveButton.style.display = "block";
 }
-
-/**
- * Skapar ett nytt Empty Note-objekt
- */
-function emptyNote() {
-    
-}
-
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     hideNewEmptyNoteButton();  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
