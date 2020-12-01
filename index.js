@@ -10,7 +10,7 @@ emptyNoteButton.textContent = "New empty note"; // sätter knappens text till Ne
 
 let saveButton = document.createElement("button"); // skapar ett nytt button-element
 saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id="saveButton"
-saveButton.setAttribute("display", "none"); // ger den visibility: none, så att den är osynlig
+saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
 saveButton.textContent = "Save"; // ger den texten Save
 
 const container = document.getElementById("container"); // sparar container i en variabel
@@ -30,7 +30,7 @@ function openTextArea() {
  */
 function hideNewEmptyNoteButton() {
     console.log("nu är jag i hide");
-    emptyNoteButton.setAttribute("display", "none");
+    emptyNoteButton.style.display = "none";
 }
 
 /**
@@ -38,8 +38,9 @@ function hideNewEmptyNoteButton() {
  */
 function showSaveButton() {
     console.log("nu är jag i show save button");
-    saveButton.removeAttribute("display", "none");
+    saveButton.style.display = "block";
 }
+
 /**
  * Skapar ett nytt Empty Note-objekt
  */
@@ -48,8 +49,11 @@ function emptyNote() {
 }
 
 
-emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på knappen som kör openTextArea vid klick
-    hideNewEmptyNoteButton(); 
+emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
+    hideNewEmptyNoteButton();  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
     openTextArea(); 
     showSaveButton(); });
 
+saveButton.addEventListener("click", () => { // lägger till eventlistener på save-knappen och kör 
+
+})
