@@ -43,7 +43,3 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
     hideNewEmptyNoteButton();  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
     openTextArea(); 
     showSaveButton(); });
-
-saveButton.addEventListener("click", () => { // lägger till eventlistener på save-knappen och kör 
-
-})
