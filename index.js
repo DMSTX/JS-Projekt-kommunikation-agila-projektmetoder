@@ -1,5 +1,8 @@
 //feature_list_note
 
+
+/* create content for the site using JS*/
+
 	
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");
@@ -21,6 +24,7 @@ newEmptyListButton.addEventListener("click", () => {
 });
 
 /* create content to for the site using JS*/
+
 let listTitle = document.createElement("h3"); //sub-heading//
 listTitle.setAttribute("id", "listTitle");
 listTitle.innerText = "Add your Title:";
@@ -50,6 +54,12 @@ let listNote = document.createElement("ul"); //unordered list
 listNote.setAttribute("class", "myList"); //om id, numereriskt som ökar för varje lista?
 document.getElementById("secondContainer").appendChild(listNote);
 
+let saveBtn = document.createElement("button");
+saveBtn.setAttribute("id", "listSaveBtn");
+saveBtn.style.display ="none";
+saveBtn.innerText = "Save";
+document.getElementById("secondContainer").appendChild(saveBtn);
+
 //function to add title to variable. Triggered when enter is released. 
 inputTitleBox.addEventListener("keyup", function (e) {
     let inputTitle = document.getElementById("inputTitleBox").value;
@@ -62,7 +72,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
     return inputTitle;
 });
 
-//function for user to add list items//
+//Event for user to add list items//
 inputItemBox.addEventListener("keyup", function(e) { 
     let listItem ="";
 
@@ -76,10 +86,16 @@ inputItemBox.addEventListener("keyup", function(e) {
             listItem.innerText = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
-            inputItemBox.value = "";  //clears input field
+            clearInput(inputItemBox);    
+            showSaveButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
         }    
     }    
 });
+
+//function to clear input field//
+function clearInput(input){
+    input.value = "";
+}
 
 
 /*
@@ -93,6 +109,10 @@ function ListNote(inputtitle, inputlistItem, date){
     listItem = inputlistItem;
     listDate = date;
 };*/
+
+//feature_list_saveButton
+
+//Ziggi ************************************************************************//
 
 // när knappen trycks 
 // skapas en ny anteckning 
@@ -131,11 +151,21 @@ function hideNewEmptyNoteButton() {
 /**
  * Visar Save-knappen
  */
+
+function showSaveButton(button) {
+    button.style.display = "block";
+
 function showSaveButton() {
     saveButton.style.display = "block";
+
 }
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     hideNewEmptyNoteButton();  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
     openTextArea(); 
+//feature_list_saveButton
     showSaveButton(); });
+
+
+    showSaveButton(); });
+
