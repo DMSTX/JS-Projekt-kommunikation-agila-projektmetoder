@@ -1,3 +1,4 @@
+"use strict"
 //feature_list_note
 
 
@@ -20,7 +21,8 @@ function hideNewEmptyListButton () {
 
 newEmptyListButton.addEventListener("click", () => { 
 	showNewList();
-	hideNewEmptyListButton();
+    hideNewEmptyListButton();
+    showSaveButton(saveBtn);
 });
 
 /* create content to for the site using JS*/
@@ -154,18 +156,15 @@ function hideNewEmptyNoteButton() {
 
 function showSaveButton(button) {
     button.style.display = "block";
-
-function showSaveButton() {
-    saveButton.style.display = "block";
-
 }
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     hideNewEmptyNoteButton();  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
     openTextArea(); 
+
 //feature_list_saveButton
-    showSaveButton(); });
+    showSaveButton(saveButton); 
+});
 
 
-    showSaveButton(); });
 
