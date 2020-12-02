@@ -149,14 +149,14 @@ function openSuggestionTextArea() {
 
 /**
  * Slumpar fram ett av 10 textförslag
- * Returnerar: en string med ett textförslag
+ * Returnerar en string med ett textförslag
  */
 function randomTextSuggestion() {
     let number = Math.round((Math.random() * 10) + 1);
     let text;
     switch (number) {
         case 1:
-            text = "Who did you hate most about 2020?";
+            text = "What did you hate most about 2020?";
             break;
         case 2:
             text = "Where do you want to travel when Corona restrictions end?";
