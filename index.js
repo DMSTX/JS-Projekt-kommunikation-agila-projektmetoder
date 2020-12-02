@@ -1,11 +1,35 @@
-
 //feature_list_note
 
+
 /* create content for the site using JS*/
+
+	
+let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
+newEmptyListButton.setAttribute("id", "newEmptyListButton");
+newEmptyListButton.textContent = "New empty list";
+document.getElementById("container").appendChild(newEmptyListButton);
+
+function showNewList () {						//function displays list
+	listTitle.style.display = "block"; 
+	listHeading.style.display = "block";
+}
+
+function hideNewEmptyListButton () {
+	newEmptyListButton.style.display = "none"; //function hides newEmptyListButton
+}
+
+newEmptyListButton.addEventListener("click", () => { 
+	showNewList();
+	hideNewEmptyListButton();
+});
+
+/* create content to for the site using JS*/
+
 let listTitle = document.createElement("h3"); //sub-heading//
 listTitle.setAttribute("id", "listTitle");
 listTitle.innerText = "Add your Title:";
 document.getElementById("container").appendChild(listTitle);
+listTitle.style.display = "none"; // display = 'block' from eventlistener (DAN)
 
 let inputTitleBox = document.createElement("input"); //input field for user title//
 inputTitleBox.setAttribute("id", "inputTitleBox");
@@ -17,6 +41,7 @@ let listHeading = document.createElement("h3"); //subheading//
 listHeading.setAttribute("id", "listHeading");
 listHeading.innerText = "Add your entry:";
 document.getElementById("container").appendChild(listHeading);
+listHeading.style.display = "none"; //display = 'block' from eventlistener (DAN)
 
 let inputItemBox = document.createElement("input"); //input field for user list items
 inputItemBox.setAttribute("id", "inputListBox");     
@@ -85,8 +110,10 @@ function ListNote(inputtitle, inputlistItem, date){
     listDate = date;
 };*/
 
+//feature_list_saveButton
 
 //Ziggi ************************************************************************//
+
 // när knappen trycks 
 // skapas en ny anteckning 
 // och det öppnas en textruta 
@@ -124,12 +151,21 @@ function hideNewEmptyNoteButton() {
 /**
  * Visar Save-knappen
  */
+
 function showSaveButton(button) {
     button.style.display = "block";
+
+function showSaveButton() {
+    saveButton.style.display = "block";
+
 }
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     hideNewEmptyNoteButton();  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
     openTextArea(); 
+//feature_list_saveButton
+    showSaveButton(); });
+
+
     showSaveButton(); });
 
