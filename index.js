@@ -61,11 +61,16 @@ inputItemBox.addEventListener("keyup", function(e) {
             listItem.innerText = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
-            inputItemBox.value = "";  //clears input field, seperate function?
+            clearInput(inputItemBox);    
             showSaveButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
         }    
     }    
 });
+
+//function to clear input field//
+function clearInput(input){
+    input.value = "";
+}
 
 
 /*
