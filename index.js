@@ -1,6 +1,6 @@
 //feature_list_note
 
-//sidan visar ingenting med denna kod!
+	
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");
 newEmptyListButton.textContent = "New empty list";
@@ -17,7 +17,7 @@ function hideNewEmptyListButton () {
 
 newEmptyListButton.addEventListener("click", () => { 
 	showNewList();
-	newEmptyListButton();
+	hideNewEmptyListButton();
 });
 
 /* create content to for the site using JS*/
