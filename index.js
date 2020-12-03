@@ -58,17 +58,23 @@ saveBtn.style.display = "none";
 saveBtn.innerText = "Save";
 document.getElementById("secondContainer").appendChild(saveBtn);
 
-//function to add title to variable. Triggered when enter is released. 
+//function to add title chosen by user. Triggered when enter is released. 
 inputTitleBox.addEventListener("keyup", function (e) {
-    let inputTitle = document.getElementById("inputTitleBox").value;
-    if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
-        if (inputTitle.length == 0) {
+    
+    if(e.which === 13 || e.key === 13){  //firefox .which, chrome .key//
+        if(inputTitleBox.value.length == 0){
             alert("Wow, so much empty")
         }
-        //console.log(inputTitle);//
+        else{
+            inputTitle.innerText = document.getElementById("inputTitleBox").value;
+            console.log(inputTitle);    
+            inputTitle.style.display ="block"
+            document.getElementById("secondContainer").appendChild(inputTitle); //NOT IN RIGHT PLACE//
+            
+        }
     }
-    return inputTitle;
 });
+
 
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
@@ -86,6 +92,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearInput(inputItemBox);
             showButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
+            addRemoveBtn();
         }
     }
 });
@@ -94,6 +101,24 @@ inputItemBox.addEventListener("keyup", function (e) {
 function clearInput(input) {
     input.value = "";
 }
+
+//function to add remove button to every list item//
+function addRemoveBtn (){
+    let items = document.querySelectorAll(".myListItem");
+    let removeBtn = document.createElement("button");
+    removeBtn.setAttribute("class", "removeListItem");
+    removeBtn.innerText = "X";
+
+    for (let i = 0; i < items.length; i++){
+        document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
+    }
+}
+
+
+let inputTitle = document.createElement("h4"); //skapar en titel som user valt
+inputTitle.setAttribute("class", "userTitle");
+inputTitle.setAttribute("id", "myTitle");
+inputTitle.style.display = "none";
 
 
 /*
