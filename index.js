@@ -35,6 +35,10 @@ inputTitleBox.setAttribute("type", "text");
 inputTitleBox.setAttribute("placeholder", "Title");
 document.getElementById("listTitle").appendChild(inputTitleBox);
 
+let userTitle = document.createElement("h4");
+userTitle.setAttribute("class", "userTitle");
+userTitle.style.display="none";
+
 let listHeading = document.createElement("h3"); //subheading//
 listHeading.setAttribute("id", "listHeading");
 listHeading.innerText = "Add your entry:";
@@ -62,21 +66,19 @@ document.getElementById("secondContainer").appendChild(saveBtn);
 inputTitleBox.addEventListener("keyup", function (e) {
     
     if(e.which === 13 || e.key === 13){  //firefox .which, chrome .key//
-        if(inputTitleBox.value.length == 0){
+        if(inputTitleBox.value.length == 0){  //checks if input field is empty//
             alert("Wow, so much empty")
         }
         else{
-            inputTitle.innerText = document.getElementById("inputTitleBox").value;
-            console.log(inputTitle);    
-            inputTitle.style.display ="block"
-            document.getElementById("secondContainer").appendChild(inputTitle); //NOT IN RIGHT PLACE//
-            
+            userTitle.innerText = document.getElementById("inputTitleBox").value;   
+            userTitle.style.display ="block"
+            document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
+            clearInput(inputTitleBox);
         }
     }
 });
 
-
-//Event for user to add list items//
+//Event for user to add list items in DIV secondContainer//
 inputItemBox.addEventListener("keyup", function (e) {
     let listItem = "";
 
@@ -113,7 +115,6 @@ function addRemoveBtn (){
         document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
     }
 }
-
 
 let inputTitle = document.createElement("h4"); //skapar en titel som user valt
 inputTitle.setAttribute("class", "userTitle");
@@ -154,6 +155,24 @@ const container = document.getElementById("container"); // sparar container i en
 container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
 container.appendChild(saveButton); // Lägger till save-knappen i container-div:en
 container.appendChild(textSuggestionButton); // Lägger till textSuggestionButton i container-div:en
+
+let newTextArea = document.createElement("textarea");
+container.appendChild(newTextArea);
+newTextArea.style.display = "none";
+
+/**
+ * Visar text area vid tryck på "new note"
+*/
+function showTextArea() {
+    newTextArea.style.display = "block";
+}
+
+/**
+* Rensar text area vid tryck på "save"
+*/
+function clearTextArea() {
+    newTextArea.value = '';
+}
 
 /**
  * Skapar en ny text area och lägger till den i container-div:en
@@ -237,12 +256,16 @@ function showButton(button) {
     button.style.display = "block";
 }
 
+saveButton.addEventListener("click", () => { //clear text area vid tryck på save
+    clearTextArea();
+})
+
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     hideButton(emptyNoteButton);
     hideButton(newEmptyListButton);
     hideButton(textSuggestionButton);  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
-    openEmptyTextArea();
     showButton(saveButton);
+    showTextArea();
 });
 
 textSuggestionButton.addEventListener("click", () => {
