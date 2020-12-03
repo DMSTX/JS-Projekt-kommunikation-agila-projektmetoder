@@ -147,6 +147,26 @@ function openSuggestionTextArea() {
     container.appendChild(newPromptTextArea);
 }
 
+function modal() {
+    let modalBg = document.createElement("div");
+    let innerModal = document.createElement("div");
+    let body = document.querySelector("body");
+    modalBg.setAttribute("id", "modalBgBox");
+    
+    modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
+    modalBg.style.width = "100%";
+    modalBg.style.height = "100vh";
+    modalBg.style.position = "absolute";
+    modalBg.style.top = "0px";
+
+    innerModal.textContent = "hallå eller";
+    innerModal.style.backgroundColor = "green";
+    
+    body.appendChild(modalBg);
+    modalBg.appendChild(innerModal);
+}
+
+
 /**
  * Slumpar fram ett av 10 textförslag
  * Returnerar en string med ett textförslag
@@ -221,6 +241,7 @@ textSuggestionButton.addEventListener("click", () => {
     hideButton(textSuggestionButton);
     openSuggestionTextArea();
     showButton(saveButton);
+    modal();
 });
 
 newEmptyListButton.addEventListener("click", () => {
