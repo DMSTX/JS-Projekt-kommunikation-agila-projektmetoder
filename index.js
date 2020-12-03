@@ -167,6 +167,7 @@ function modal() {
 }
 
 
+
 /**
  * Slumpar fram ett av 10 textförslag
  * Returnerar en string med ett textförslag
