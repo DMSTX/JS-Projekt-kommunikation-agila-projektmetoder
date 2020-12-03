@@ -3,8 +3,6 @@
 
 
 /* create content for the site using JS*/
-
-	
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");
 newEmptyListButton.textContent = "New empty list";
@@ -25,7 +23,7 @@ newEmptyListButton.addEventListener("click", () => {
     showSaveButton(saveBtn);
 });
 
-/* create content to for the site using JS*/
+/*create list note*/
 
 let listTitle = document.createElement("h3"); //sub-heading//
 listTitle.setAttribute("id", "listTitle");
@@ -38,6 +36,11 @@ inputTitleBox.setAttribute("id", "inputTitleBox");
 inputTitleBox.setAttribute("type", "text");
 inputTitleBox.setAttribute("placeholder", "Title");
 document.getElementById("listTitle").appendChild(inputTitleBox);
+
+let inputTitle = document.createElement("h4"); //skapar en titel som user valt
+inputTitle.setAttribute("class", "userTitle");
+inputTitle.setAttribute("id", "myTitle");
+inputTitle.style.display = "none";
 
 let listHeading = document.createElement("h3"); //subheading//
 listHeading.setAttribute("id", "listHeading");
@@ -62,16 +65,21 @@ saveBtn.style.display ="none";
 saveBtn.innerText = "Save";
 document.getElementById("secondContainer").appendChild(saveBtn);
 
-//function to add title to variable. Triggered when enter is released. 
+//function to add title chosen by user. Triggered when enter is released. 
 inputTitleBox.addEventListener("keyup", function (e) {
-    let inputTitle = document.getElementById("inputTitleBox").value;
+    
     if(e.which === 13 || e.key === 13){  //firefox .which, chrome .key//
-        if(inputTitle.length == 0){
+        if(inputTitleBox.value.length == 0){
             alert("Wow, so much empty")
         }
-        //console.log(inputTitle);//
+        else{
+            inputTitle.innerText = document.getElementById("inputTitleBox").value;
+            console.log(inputTitle);    
+            inputTitle.style.display ="block"
+            document.getElementById("secondContainer").appendChild(inputTitle); //NOT IN RIGHT PLACE//
+            
+        }
     }
-    return inputTitle;
 });
 
 //Event for user to add list items//
@@ -85,32 +93,57 @@ inputItemBox.addEventListener("keyup", function(e) {
         else {
             listItem = document.createElement("li"); 
             listItem.setAttribute("class", "myListItem");
+            listItem.setAttribute("id", "");
             listItem.innerText = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearInput(inputItemBox);    
-            showSaveButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
+            showSaveButton(saveBtn); //skicka med vilken button det gäller till Ziggis function
+            addRemoveBtn();
+            
         }    
     }    
 });
+
+/*
+//Event added to removeBTN to clear/remove list-item//
+removeBtn.addEventListener("click", function (e){
+    input
+
+});
+*/
 
 //function to clear input field//
 function clearInput(input){
     input.value = "";
 }
 
+//function to add remove button to every list item//
+function addRemoveBtn (){
+    let items = document.querySelectorAll(".myListItem");
+    let removeBtn = document.createElement("button");
+    removeBtn.setAttribute("class", "removeListItem");
+    removeBtn.innerText = "X";
+
+    for (let i = 0; i < items.length; i++){
+        document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
+    }
+}
 
 /*
-//Add todays date to list note//
-let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+//function to add id to list-items// 
+function addIdListItem (itemlist){
+    itemlist = document.querySelectorAll(".myListItem");
+    let i = 0;
+    itemlist.forEach(function (item){
+        itemlist[i].id = "li" + i+1; 
+        console.log(i);
+        console.log(itemlist[i].id);
+    })
 
-//constructor for note-object in list form//
-function ListNote(inputtitle, inputlistItem, date){
-    listTitle = inputtitle;
-    listItem = inputlistItem;
-    listDate = date;
-};*/
+}
+*/
+
 
 //feature_list_saveButton
 
