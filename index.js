@@ -146,7 +146,12 @@ function openSuggestionTextArea() {
     newPromptTextArea.value = randomTextSuggestion();
     container.appendChild(newPromptTextArea);
 }
+function modal() {
+    let modalBg = document.createElement("div");
+    let innerModal = document.createElement("div");
 
+    modalBg.setAttribute("id", "")
+}
 /**
  * Slumpar fram ett av 10 textförslag
  * Returnerar en string med ett textförslag
