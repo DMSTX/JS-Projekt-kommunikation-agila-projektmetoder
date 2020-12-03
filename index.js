@@ -3,9 +3,23 @@
 // ALLA VARIABLER ***************************************************************************************************************
 
 // KONSTANTER
+const body = document.querySelector("body");
 const container = document.getElementById("container"); // sparar container i en variabel
 const secondContainer = document.getElementById("secondContainer") //sparar secondContainer i en variabel
+const modalBg = document.createElement("div"); // modalens transperenta bakgrund
+modalBg.setAttribute("id", "modalBgBox");
 const innerModal = document.createElement("div");// inre divbox i modalen
+
+// Stajling på modaler som kommer flyttas till CSS-dok när vi har det
+modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
+modalBg.style.width = "100%";
+modalBg.style.height = "100vh";
+modalBg.style.position = "absolute";
+modalBg.style.top = "0px";
+modalBg.style.padding = "100px";
+innerModal.style.backgroundColor = "white";
+innerModal.style.width = "50%";
+innerModal.style.padding = "20px";
 
 // KNAPPAR FÖR DE OLIKA ANTECKNINGSTYPERNA
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
@@ -44,7 +58,7 @@ inputTitleBox.setAttribute("placeholder", "Title");
 
 let userTitle = document.createElement("h4");
 userTitle.setAttribute("class", "userTitle");
-userTitle.style.display="none";
+userTitle.style.display = "none";
 
 let listHeading = document.createElement("h3"); //subheading//
 listHeading.setAttribute("id", "listHeading");
@@ -71,9 +85,6 @@ newTextArea.style.display = "none";
 
 let newPromptTextArea = document.createElement("textarea");
 
-// MODALENS TRANSPERENTA BAKGRUND
-let modalBg = document.createElement("div");
-
 // ALLA FUNKTIONER ************************************************************************************************************
 
 //function to clear input field//
@@ -82,13 +93,13 @@ function clearInput(input) {
 }
 
 //function to add remove button to every list item//
-function addRemoveBtn (){
+function addRemoveBtn() {
     let items = document.querySelectorAll(".myListItem");
     let removeBtn = document.createElement("button");
     removeBtn.setAttribute("class", "removeListItem");
     removeBtn.innerText = "X";
 
-    for (let i = 0; i < items.length; i++){
+    for (let i = 0; i < items.length; i++) {
         document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
     }
 }
@@ -133,38 +144,23 @@ function clearTextArea() {
     newTextArea.value = '';
 }
 
+function modal() {
+    body.appendChild(modalBg);
+    modalBg.appendChild(innerModal);
+}
+
+function closeModal(e) {
+    if (e.target === modalBg) {
+        modalBg.style.display = "none";  // denna skulle oxå kunna lösas med anrop till en "dölj objekt"-funktion
+    }
+}
+
 /**
  * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
  */
 function openSuggestionTextArea() {
     newPromptTextArea.value = randomTextSuggestion();
     innerModal.appendChild(newPromptTextArea);
-}
-
-function modal() {
-    
-    let body = document.querySelector("body");
-    modalBg.setAttribute("id", "modalBgBox");
-    
-    modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
-    modalBg.style.width = "100%";
-    modalBg.style.height = "100vh";
-    modalBg.style.position = "absolute";
-    modalBg.style.top = "0px";
-    modalBg.style.padding = "100px";
-
-    innerModal.style.backgroundColor = "white";
-    innerModal.style.width = "50%";
-    
-    
-    body.appendChild(modalBg);
-    modalBg.appendChild(innerModal);
-}
-
-function closeModal (e){
-    if (e.target === modalBg){
-        modalBg.style.display = "none";
-    }
 }
 
 /**
@@ -235,14 +231,14 @@ innerModal.appendChild(newTextArea);
 
 //function to add title chosen by user. Triggered when enter is released. 
 inputTitleBox.addEventListener("keyup", function (e) {
-    
-    if(e.which === 13 || e.key === 13){  //firefox .which, chrome .key//
-        if(inputTitleBox.value.length == 0){  //checks if input field is empty//
+
+    if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
+        if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
             alert("Wow, so much empty")
         }
-        else{
-            userTitle.innerText = document.getElementById("inputTitleBox").value;   
-            userTitle.style.display ="block"
+        else {
+            userTitle.innerText = document.getElementById("inputTitleBox").value;
+            userTitle.style.display = "block"
             document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
             clearInput(inputTitleBox);
         }
@@ -286,7 +282,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 saveButton.addEventListener("click", () => { //clear text area vid tryck på save
     clearTextArea();
 })
-    
+
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
     showTextArea();
@@ -296,7 +292,7 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
 textSuggestionButton.addEventListener("click", () => {
     modal();
     openSuggestionTextArea();
-    showButton(saveButton); 
+    showButton(saveButton);
 });
 
 newEmptyListButton.addEventListener("click", () => {
