@@ -4,11 +4,15 @@
 
 /* create content for the site using JS*/
 
+const container = document.getElementById("container"); // sparar container i en variabel
+const secondContainer = document.getElementById("secondContainer") //sparar secondContainer i en variabel
+const innerModal = document.createElement("div");// inre divbox i modalen
 
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");
 newEmptyListButton.textContent = "New empty list";
 document.getElementById("container").appendChild(newEmptyListButton);
+container.appendChild(newEmptyListButton);
 
 function showNewList() {						//function displays list
     listTitle.style.display = "block";
@@ -27,6 +31,7 @@ let listTitle = document.createElement("h3"); //sub-heading//
 listTitle.setAttribute("id", "listTitle");
 listTitle.innerText = "Add your Title:";
 document.getElementById("container").appendChild(listTitle);
+container.appendChild(listTitle);
 listTitle.style.display = "none"; // display = 'block' from eventlistener (DAN)
 
 let inputTitleBox = document.createElement("input"); //input field for user title//
@@ -43,6 +48,10 @@ let listHeading = document.createElement("h3"); //subheading//
 listHeading.setAttribute("id", "listHeading");
 listHeading.innerText = "Add your entry:";
 document.getElementById("container").appendChild(listHeading);
+let listHeading = document.createElement("h3"); //subheading//
+listHeading.setAttribute("id", "listHeading");
+listHeading.innerText = "Add your entry:";
+container.appendChild(listHeading);
 listHeading.style.display = "none"; //display = 'block' from eventlistener (DAN)
 
 let inputItemBox = document.createElement("input"); //input field for user list items
@@ -79,6 +88,19 @@ inputTitleBox.addEventListener("keyup", function (e) {
 });
 
 //Event for user to add list items in DIV secondContainer//
+//function to add title to variable. Triggered when enter is released. 
+inputTitleBox.addEventListener("keyup", function (e) {
+    let inputTitle = document.getElementById("inputTitleBox").value;
+    if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
+        if (inputTitle.length == 0) {
+            alert("Wow, so much empty")
+        }
+        //console.log(inputTitle);//
+    }
+    return inputTitle;
+});
+
+//Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
     let listItem = "";
 
@@ -174,13 +196,24 @@ function clearTextArea() {
     newTextArea.value = '';
 }
 
+container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
+
+innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
+container.appendChild(textSuggestionButton); // Lägger till textSuggestionButton i container-div:en
+
+
 /**
  * Skapar en ny text area och lägger till den i container-div:en
  */
 function openEmptyTextArea() {
     let newTextArea = document.createElement("textarea");
     container.appendChild(newTextArea);
+
+
+    innerModal.appendChild(newTextArea);
 }
+
+
 
 /**
  * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
@@ -195,7 +228,43 @@ function modal() {
     let innerModal = document.createElement("div");
 
     modalBg.setAttribute("id", "")
+
+    innerModal.appendChild(newPromptTextArea);
 }
+
+let modalBg = document.createElement("div");
+
+function modal() {
+    
+    let body = document.querySelector("body");
+    modalBg.setAttribute("id", "modalBgBox");
+    
+    modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
+    modalBg.style.width = "100%";
+    modalBg.style.height = "100vh";
+    modalBg.style.position = "absolute";
+    modalBg.style.top = "0px";
+    modalBg.style.padding = "100px";
+
+    innerModal.style.backgroundColor = "white";
+    innerModal.style.width = "50%";
+    
+    
+    body.appendChild(modalBg);
+    modalBg.appendChild(innerModal);
+}
+
+function closeModal (e){
+    console.log("jag körs baby!");
+    if (e.target === modalBg){
+        modalBg.style.display = "none";
+    }
+}
+
+modalBg.addEventListener("click", closeModal);
+
+
+
 /**
  * Slumpar fram ett av 10 textförslag
  * Returnerar en string med ett textförslag
@@ -274,6 +343,24 @@ textSuggestionButton.addEventListener("click", () => {
     hideButton(textSuggestionButton);
     openSuggestionTextArea();
     showButton(saveButton);
+});
+    
+emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
+    //hideButton(emptyNoteButton);
+    //hideButton(newEmptyListButton);
+    //hideButton(textSuggestionButton);  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
+    modal();
+    openEmptyTextArea();
+    showButton(saveButton);
+});
+
+textSuggestionButton.addEventListener("click", () => {
+    //hideButton(emptyNoteButton);
+    //hideButton(newEmptyListButton);
+    //hideButton(textSuggestionButton);
+    modal();
+    openSuggestionTextArea();
+    showButton(saveButton); 
 });
 
 newEmptyListButton.addEventListener("click", () => {
