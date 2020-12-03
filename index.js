@@ -130,14 +130,23 @@ container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i
 container.appendChild(saveButton); // Lägger till save-knappen i container-div:en
 container.appendChild(textSuggestionButton); // Lägger till textSuggestionButton i container-div:en
 
+let newTextArea = document.createElement("textarea");
+container.appendChild(newTextArea);
+newTextArea.style.display = "none";
+
 /**
- * Skapar en ny text area och lägger till den i container-div:en
- */
-function openEmptyTextArea() {
-    let newTextArea = document.createElement("textarea");
-    container.appendChild(newTextArea);
+ * Visar text area vid tryck på "new note"
+*/
+function showTextArea() {
+    newTextArea.style.display = "block";
 }
 
+/**
+* Rensar text area vid tryck på "save"
+*/
+function clearTextArea() {
+    newTextArea.value = '';
+}
 /**
  * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
  */
@@ -212,12 +221,16 @@ function showButton(button) {
     button.style.display = "block";
 }
 
+saveButton.addEventListener("click", () => { //clear text area vid tryck på save
+    clearTextArea();
+})
+
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     hideButton(emptyNoteButton);
     hideButton(newEmptyListButton);
     hideButton(textSuggestionButton);  // dessa tre funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
-    openEmptyTextArea();
     showButton(saveButton);
+    showTextArea();
 });
 
 textSuggestionButton.addEventListener("click", () => {
