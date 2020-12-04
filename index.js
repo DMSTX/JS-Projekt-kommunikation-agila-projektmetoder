@@ -248,7 +248,6 @@ inputTitleBox.addEventListener("keyup", function (e) {
 //Event for user to add list items in DIV secondContainer//
 //function to add title to variable. Triggered when enter is released. 
 inputTitleBox.addEventListener("keyup", function (e) {
-    let inputTitle = document.getElementById("inputTitleBox").value;
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
         if (inputTitle.length == 0) {
             alert("Wow, so much empty")
