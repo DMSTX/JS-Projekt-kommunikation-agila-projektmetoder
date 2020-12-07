@@ -83,7 +83,7 @@ inputTitle.style.display = "none";
 let newTextArea = document.createElement("textarea");
 newTextArea.style.display = "none";
 
-let newPromptTextArea = document.createElement("textarea");
+
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -124,13 +124,14 @@ function showObject(object) {
 
 
 function modal() {
-    body.appendChild(modalBg);
-    modalBg.appendChild(innerModal);
+    showObject(body.appendChild(modalBg)) ;
+    showObject(modalBg.appendChild(innerModal));
 }
 
 function closeModal(e) {
     if (e.target === modalBg) {
         hideObject(modalBg);
+        newTextArea.value="";
     }
 }
 
@@ -138,8 +139,8 @@ function closeModal(e) {
  * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
  */
 function openSuggestionTextArea() {
-    newPromptTextArea.value = randomTextSuggestion();
-    innerModal.appendChild(newPromptTextArea);
+    newTextArea.value = randomTextSuggestion();
+    showObject(innerModal.appendChild(newTextArea));
 }
 
 /**
