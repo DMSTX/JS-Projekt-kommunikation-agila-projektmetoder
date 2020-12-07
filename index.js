@@ -105,6 +105,7 @@ function clearList(){
 }
 
 //function to add remove button to every list item//
+/* Väntar med detta...// Sandra
 function addRemoveBtn() {
     let items = document.querySelectorAll(".myListItem");
     let removeBtn = document.createElement("button");
@@ -115,6 +116,7 @@ function addRemoveBtn() {
         document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
     }
 }
+*/
 
 /**
  * Döljer ett objekt genom att sätta display till none
@@ -207,8 +209,9 @@ container.appendChild(textSuggestionButton); // Lägger till textSuggestionButto
 // LISTOR 
 container.appendChild(listTitle);
 container.appendChild(listHeading);
-secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(listNote);
+secondContainer.appendChild(saveBtn);
+secondContainer.appendChild(clearListBtn);
 
 listTitle.appendChild(inputTitleBox);
 document.getElementById("listHeading").appendChild(inputItemBox);
@@ -227,23 +230,14 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         else {
             userTitle.textContent = inputTitleBox.value.toUpperCase();
-            userTitle.style.display = "block"
-            document.getElementById("secondContainer").appendChild(userTitle);
-            clearInput(inputTitleBox);
-        }
-    }
-});
+            showObject(userTitle);
+            container.appendChild(userTitle);
+            clearField(inputTitleBox);
+            inputItemBox.focus();
 
-//Event for user to add list items in DIV secondContainer//
-//function to add title to variable. Triggered when enter is released. 
-inputTitleBox.addEventListener("keyup", function (e) {
-    if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
-        if (inputTitle.length == 0) {
-            alert("Wow, so much empty")
         }
-        
+        //return inputTitle;  Behövs ej?
     }
-    return inputTitle;
 });
 
 //Event for user to add list items//
@@ -260,10 +254,10 @@ inputItemBox.addEventListener("keyup", function (e) {
             listItem.innerText = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
-            clearInput(inputItemBox);
-            showButton(saveBtn);
-             //ADD CLEAR BUTTON HERE?
-            addRemoveBtn();
+            clearField(inputItemBox);
+            showObject(saveBtn);
+            showObject(clearListBtn);
+            //addRemoveBtn();
         }
     }
 });
@@ -295,12 +289,11 @@ newEmptyListButton.addEventListener("click", () => {
 
 modalBg.addEventListener("click", closeModal);
 
-clearListBtn.addEventListener("click", ()=>{
-    while(myList.firstChild){
-        myList.removeChild(myList.firstChild);
+clearListBtn.addEventListener("click", ()=>{ //clears any items fron UL
+    while(listNote.firstChild){
+        listNote.removeChild(listNote.firstChild);
     }
-
-})
+});
 
 /*
 //Add todays date to list note//
