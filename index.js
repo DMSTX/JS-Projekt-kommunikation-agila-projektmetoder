@@ -45,6 +45,12 @@ saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id=
 saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
 saveButton.textContent = "Save"; // ger den texten Save
 
+//CLEAR-BUTTONS
+let clearListBtn = document.createElement("button");
+clearListBtn.setAttribute("id", "clearList");
+clearListBtn.style.display = "none";
+clearListBtn.textContent = "Start Over";
+
 // FÄLT TILL LISTOR 
 let listTitle = document.createElement("h3"); //sub-heading//
 listTitle.setAttribute("id", "listTitle");
@@ -90,6 +96,10 @@ let newPromptTextArea = document.createElement("textarea");
 //function to clear input field//
 function clearInput(input) {
     input.value = "";
+}
+
+function clearList(){
+
 }
 
 //function to add remove button to every list item//
@@ -221,7 +231,7 @@ container.appendChild(listHeading);
 secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(listNote);
 
-document.getElementById("listTitle").appendChild(inputTitleBox);
+listTitle.appendChild(inputTitleBox);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
 innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
@@ -237,9 +247,9 @@ inputTitleBox.addEventListener("keyup", function (e) {
             alert("Wow, so much empty")
         }
         else {
-            userTitle.innerText = document.getElementById("inputTitleBox").value;
+            userTitle.textContent = inputTitleBox.value.toUpperCase();
             userTitle.style.display = "block"
-            document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
+            document.getElementById("secondContainer").appendChild(userTitle);
             clearInput(inputTitleBox);
         }
     }
@@ -252,7 +262,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
         if (inputTitle.length == 0) {
             alert("Wow, so much empty")
         }
-        //console.log(inputTitle);//
+        
     }
     return inputTitle;
 });
@@ -272,7 +282,8 @@ inputItemBox.addEventListener("keyup", function (e) {
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearInput(inputItemBox);
-            showButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
+            showButton(saveBtn);
+             //ADD CLEAR BUTTON HERE?
             addRemoveBtn();
         }
     }
@@ -303,6 +314,13 @@ newEmptyListButton.addEventListener("click", () => {
 });
 
 modalBg.addEventListener("click", closeModal);
+
+clearListBtn.addEventListener("click", ()=>{
+    while(myList.firstChild){
+        myList.removeChild(myList.firstChild);
+    }
+
+})
 
 /*
 //Add todays date to list note//
