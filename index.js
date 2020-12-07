@@ -1,5 +1,9 @@
 "use strict"
 
+let noteArray = []; // skapar en array
+let today = new Date();
+let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
+
 // ALLA VARIABLER ***************************************************************************************************************
 
 // KONSTANTER
@@ -245,19 +249,20 @@ inputTitleBox.addEventListener("keyup", function (e) {
     }
 });
 
-//Event for user to add list items in DIV secondContainer//
 //function to add title to variable. Triggered when enter is released. 
 inputTitleBox.addEventListener("keyup", function (e) {
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
         if (inputTitle.length == 0) {
             alert("Wow, so much empty")
         }
-        //console.log(inputTitle);//
     }
+    noteArray[0].addTitle(inputTitle); /// hur fan kommer vi åt rätt index i arrayen??? 
+    console.log("nu är jag i skapa title");
+    // här ska inputTitle skickas till objektets title-key
     return inputTitle;
 });
 
-//Event for user to add list items//
+//Event for user to add list items in DIV secondContainer//
 inputItemBox.addEventListener("keyup", function (e) {
     let listItem = "";
 
@@ -276,6 +281,9 @@ inputItemBox.addEventListener("keyup", function (e) {
             addRemoveBtn();
         }
     }
+    console.log(noteArray[0].content);
+    noteArray[0].addContent();
+    console.log(noteArray[0]);
 });
 
 saveButton.addEventListener("click", () => { //clear text area vid tryck på save
@@ -286,6 +294,7 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
     modal();
     showTextArea();
     showButton(saveButton);
+    createTextNote(); // här ligger Note-objekt konstruktorn
 });
 
 textSuggestionButton.addEventListener("click", () => {
@@ -300,14 +309,14 @@ newEmptyListButton.addEventListener("click", () => {
     hideButton(newEmptyListButton);
     hideButton(textSuggestionButton);
     showButton(saveBtn);
+    createListNote() // här ligger Note-objekt konstruktorn
 });
 
 modalBg.addEventListener("click", closeModal);
 
 /*
 //Add todays date to list note//
-let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+
 
 //constructor for note-object in list form//
 function ListNote(inputtitle, inputlistItem, date){
@@ -315,3 +324,51 @@ function ListNote(inputtitle, inputlistItem, date){
     listItem = inputlistItem;
     listDate = date;
 };*/
+
+
+function Note(type) {
+    this.date = date;
+    this.type = type;
+    this.title = " ";
+    this.content = " ";
+    this.addContent = function () { 
+        this.content = document.getElementsByTagName("li"); // document.getElementById("myList").value; // Här måste vi fixa så det är dynamiskt för olika typer
+    };
+    this.addTitle = function () { 
+        this.title = document.getElementById("inputTitleBox").value;
+    };
+}
+
+function createTextNote() {
+    noteArray.push(new Note("text"));
+    //console.log("Jag har skapat en Note av text-typ");
+    //console.log(noteArray);
+}
+
+function createListNote() {
+    noteArray.push(new Note("list"));
+    //console.log("Jag har skapat en Note av list-typ");
+    //console.log(noteArray);
+}
+
+//// FUNKAR EJ; 
+
+/*
+
+emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
+    createTextNote();   // dessa fyra funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
+    hideNewEmptyNoteButton();  
+    openTextArea(); 
+    showSaveButton(); 
+});
+
+const test = (note) => {console.log("hepp");  note.addContent().bind(note); console.log("mellan"); note.addTitle().bind(note); 
+    noteArray.push(note); }  // kolla på videon om arrow functions och this, grejer som inte alls funkar här
+
+saveButton.addEventListener('click', () => {
+    let popped = noteArray.pop();
+    console.log(popped);
+    test(popped);
+    } ); // lägger event listener på save-knappen så addNote-funktionen körs */
+
+    //Event for user to add list items//
