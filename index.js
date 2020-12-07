@@ -87,9 +87,11 @@ let newPromptTextArea = document.createElement("textarea");
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
-//function to clear input field//
-function clearInput(input) {
-    input.value = "";
+/**
+* Tar bort innehållet i ett fält 
+*/
+function clearField(field) {
+    field.value = " ";
 }
 
 //function to add remove button to every list item//
@@ -104,45 +106,22 @@ function addRemoveBtn() {
     }
 }
 
-/// ((( ALLA FEM FUNKTIONER HÄR UNDER SKULLE KUNNA ERSÄTTAS MED TVÅ, EN SOM VISAR OBJEKT, O EN SOM DÖLJER)))
-
 /**
- * Döljer knapp
+ * Döljer ett objekt genom att sätta display till none
+ * @param {valfritt objekt} object 
  */
-function hideButton(button) {
-    button.style.display = "none";
+function hideObject(object) {
+    object.style.display = "none";
 }
 
 /**
- * Visar knapp
+ * Visar ett objekt genom att sätta display till block
+ * @param {valfritt objekt} object 
  */
-
-function showButton(button) {
-    button.style.display = "block";
+function showObject(object) {
+    object.style.display = "block";
 }
 
-function showNewList() { //function displays list
-    listTitle.style.display = "block";
-    listHeading.style.display = "block";
-}
-
-function hideNewEmptyListButton() {
-    newEmptyListButton.style.display = "none"; //function hides newEmptyListButton
-}
-
-/**
- * Visar text area vid tryck på "new note"
-*/
-function showTextArea() {
-    newTextArea.style.display = "block";
-}
-
-/**
-* Rensar text area vid tryck på "save"
-*/
-function clearTextArea() {
-    newTextArea.value = '';
-}
 
 function modal() {
     body.appendChild(modalBg);
@@ -151,7 +130,7 @@ function modal() {
 
 function closeModal(e) {
     if (e.target === modalBg) {
-        modalBg.style.display = "none";  // denna skulle oxå kunna lösas med anrop till en "dölj objekt"-funktion
+        hideObject(modalBg);
     }
 }
 
@@ -240,7 +219,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
             userTitle.innerText = document.getElementById("inputTitleBox").value;
             userTitle.style.display = "block"
             document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
-            clearInput(inputTitleBox);
+            clearField(inputTitleBox);
         }
     }
 });
@@ -271,35 +250,36 @@ inputItemBox.addEventListener("keyup", function (e) {
             listItem.innerText = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
-            clearInput(inputItemBox);
-            showButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
+            clearField(inputItemBox);
+            showObject(saveBtn); //skicka med vilken button dete gäller till Ziggis function
             addRemoveBtn();
         }
     }
 });
 
 saveButton.addEventListener("click", () => { //clear text area vid tryck på save
-    clearTextArea();
-})
+    clearField(newTextArea);
+});
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
-    showTextArea();
-    showButton(saveButton);
+    showObject(newTextArea);
+    showObject(saveButton);
 });
 
 textSuggestionButton.addEventListener("click", () => {
     modal();
     openSuggestionTextArea();
-    showButton(saveButton);
+    showObject(saveButton);
 });
 
 newEmptyListButton.addEventListener("click", () => {
-    showNewList();
-    hideButton(emptyNoteButton);
-    hideButton(newEmptyListButton);
-    hideButton(textSuggestionButton);
-    showButton(saveBtn);
+    showObject(listTitle);
+    showObject(listHeading);
+    hideObject(emptyNoteButton);
+    hideObject(newEmptyListButton);
+    hideObject(textSuggestionButton);
+    showObject(saveBtn);
 });
 
 modalBg.addEventListener("click", closeModal);
