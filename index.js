@@ -34,9 +34,9 @@ let emptyNoteButton = document.createElement("button"); // skapar ett nytt butto
 emptyNoteButton.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
 emptyNoteButton.textContent = "New empty note"; // sätter knappens text till New empty note
 
-let textSuggestionButton = document.createElement("button");
-textSuggestionButton.setAttribute("id", "textSuggestionButton"); // ger det nya button-elementet id
-textSuggestionButton.textContent = "New note with text suggestion"; // sätter knappens text
+let textTemplateButton = document.createElement("button");
+textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
+textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
 // SAVE-BUTTONS
 let saveBtn = document.createElement("button");
@@ -48,6 +48,12 @@ let saveButton = document.createElement("button"); // skapar ett nytt button-ele
 saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id="saveButton"
 saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
 saveButton.textContent = "Save"; // ger den texten Save
+
+//CLEAR-BUTTONS
+let clearListBtn = document.createElement("button");
+clearListBtn.setAttribute("id", "clearList");
+clearListBtn.style.display = "none";
+clearListBtn.textContent = "Start Over";
 
 // FÄLT TILL LISTOR 
 let listTitle = document.createElement("h3"); //sub-heading//
@@ -92,12 +98,66 @@ let newTemplateTextArea = document.createElement("textarea");
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
-//function to clear input field//
-function clearInput(input) {
-    input.value = "";
+/**
+ * Konstruktor för Note-objekt
+ * @param {string med list, text eller template} type 
+ */
+function Note(type) {
+    this.date = date;
+    this.type = type;
+    this.title = " ";
+    this.content = "nothing";
+    this.addContent = function () { 
+        if (this.type === "list") {
+            this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
+        }
+        else if (this.type === "text") {
+            this.content = newTextArea.value;
+        }
+        else {
+            this.content = newTemplateTextArea.value;
+        }
+        
+    };
+    this.addTitle = function () { 
+        this.title = document.getElementById("inputTitleBox").value;
+    };
+}
+
+/**
+ * Skapar Note-objekt av text-typ
+ */
+function createTextNote() {
+    noteArray.push(new Note("text"));
+}
+
+/**
+ * Skapar Note-objekt av template-typ
+ */
+function createTemplateTextNote() {
+    noteArray.push(new Note("template"));
+}
+
+/**
+ * Skapar Note-objekt av list-typ
+ */
+function createListNote() {
+    noteArray.push(new Note("list"));
+}
+
+/**
+* Tar bort innehållet i ett fält 
+*/
+function clearField(field) {
+    field.value = " ";
+}
+
+function clearList(){
+
 }
 
 //function to add remove button to every list item//
+/* Väntar med detta...// Sandra
 function addRemoveBtn() {
     let items = document.querySelectorAll(".myListItem");
     let removeBtn = document.createElement("button");
@@ -107,72 +167,51 @@ function addRemoveBtn() {
     for (let i = 0; i < items.length; i++) {
         document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
     }
-} 
-
-/// ((( ALLA FEM FUNKTIONER HÄR UNDER SKULLE KUNNA ERSÄTTAS MED TVÅ, EN SOM VISAR OBJEKT, O EN SOM DÖLJER)))
-
-/**
- * Döljer knapp
- */
-function hideButton(button) {
-    button.style.display = "none";
 }
-
-/**
- * Visar knapp
- */
-
-function showButton(button) {
-    button.style.display = "block";
-}
-
-function showNewList() { //function displays list
-    listTitle.style.display = "block";
-    listHeading.style.display = "block";
-}
-
-function hideNewEmptyListButton() {
-    newEmptyListButton.style.display = "none"; //function hides newEmptyListButton
-}
-
-/**
- * Visar text area vid tryck på "new note"
 */
-function showTextArea() {
-    newTextArea.style.display = "block";
+
+/**
+ * Döljer ett objekt genom att sätta display till none
+ * @param {valfritt objekt} object 
+ */
+function hideObject(object) {
+    object.style.display = "none";
 }
 
 /**
-* Rensar text area vid tryck på "save"
-*/
-function clearTextArea() {
-    newTextArea.value = '';
+ * Visar ett objekt genom att sätta display till block
+ * @param {valfritt objekt} object 
+ */
+function showObject(object) {
+    object.style.display = "block";
 }
+
 
 function modal() {
-    body.appendChild(modalBg);
-    modalBg.appendChild(innerModal);
+    showObject(body.appendChild(modalBg)) ;
+    showObject(modalBg.appendChild(innerModal));
 }
 
 function closeModal(e) {
     if (e.target === modalBg) {
-        modalBg.style.display = "none";  // denna skulle oxå kunna lösas med anrop till en "dölj objekt"-funktion
+        hideObject(modalBg);
+        newTextArea.value="";
     }
 }
 
 /**
  * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
  */
-function openSuggestionTextArea() {
-    newTemplateTextArea.value = randomTextSuggestion();
-    innerModal.appendChild(newTemplateTextArea);
+function openTemplateTextArea() {
+    newTextArea.value = randomTextTemplate();
+    showObject(innerModal.appendChild(newTextArea));
 }
 
 /**
  * Slumpar fram ett av 10 textförslag
  * Returnerar en string med ett textförslag
  */
-function randomTextSuggestion() {
+function randomTextTemplate() {
     let number = Math.round((Math.random() * 10) + 1);
     let text;
     switch (number) {
@@ -230,19 +269,22 @@ function saveContentToNote() {
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
 container.appendChild(newEmptyListButton);
 container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
-container.appendChild(textSuggestionButton); // Lägger till textSuggestionButton i container-div:en
+container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
 // LISTOR 
 container.appendChild(listTitle);
 container.appendChild(listHeading);
-secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(listNote);
+secondContainer.appendChild(saveBtn);
+secondContainer.appendChild(clearListBtn);
 
-document.getElementById("listTitle").appendChild(inputTitleBox);
+listTitle.appendChild(inputTitleBox);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
 innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
+innerModal.appendChild(inputTitleBox);
 innerModal.appendChild(newTextArea);
+
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
@@ -255,17 +297,23 @@ inputTitleBox.addEventListener("keyup", function (e) {
             alert("Wow, so much empty")
         }
         else {
+            userTitle.textContent = inputTitleBox.value.toUpperCase();
+            showObject(userTitle);
+            container.appendChild(userTitle);
+            inputItemBox.focus();
+
+            /* DET GAMLA
             userTitle.innerText = document.getElementById("inputTitleBox").value;
             userTitle.style.display = "block"
             document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
-            //clearInput(inputTitleBox);
+            //clearInput(inputTitleBox); */
         }
         saveTitleToNote();
-        clearInput(inputTitleBox);
+        clearField(inputTitleBox);
     }  
 });  
 
-//Event for user to add list items in DIV secondContainer//
+//Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
     let listItem = "";
 
@@ -279,8 +327,9 @@ inputItemBox.addEventListener("keyup", function (e) {
             listItem.innerText = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
-            clearInput(inputItemBox);
-            showButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
+            clearField(inputItemBox);
+            showObject(saveBtn);
+            showObject(clearListBtn);
             //addRemoveBtn();
         }
     }
@@ -292,61 +341,36 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
     saveContentToNote();
 })
 
+
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
-    showTextArea();
-    showButton(saveButton);
+    showObject(newTextArea);
+    showObject(saveButton);
     createTextNote(); 
+    clearField(newTextArea);
 });
 
-textSuggestionButton.addEventListener("click", () => {
+textTemplateButton.addEventListener("click", () => {
     modal();
-    openSuggestionTextArea();
-    showButton(saveButton);
+    openTemplateTextArea();
+    showObject(saveButton);
     createTemplateTextNote();
 });
 
 newEmptyListButton.addEventListener("click", () => {
-    showNewList();
-    hideButton(emptyNoteButton);
-    hideButton(newEmptyListButton);
-    hideButton(textSuggestionButton);
-    showButton(saveBtn);
+    showObject(listTitle);
+    showObject(listHeading);
+    hideObject(emptyNoteButton);
+    hideObject(newEmptyListButton);
+    hideObject(textTemplateButton);
+    showObject(saveBtn);
     createListNote(); 
 });
 
 modalBg.addEventListener("click", closeModal);
 
-function Note(type) {
-    this.date = date;
-    this.type = type;
-    this.title = " ";
-    this.content = "nothing";
-    this.addContent = function () { 
-        if (this.type === "list") {
-            this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
-        }
-        else if (this.type === "text") {
-            this.content = newTextArea.value;
-        }
-        else {
-            this.content = newTemplateTextArea.value;
-        }
-        
-    };
-    this.addTitle = function () { 
-        this.title = document.getElementById("inputTitleBox").value;
-    };
-}
-
-function createTextNote() {
-    noteArray.push(new Note("text"));
-}
-
-function createTemplateTextNote() {
-    noteArray.push(new Note("template"));
-}
-
-function createListNote() {
-    noteArray.push(new Note("list"));
-}
+clearListBtn.addEventListener("click", ()=>{ //clears any items fron UL
+    while(listNote.firstChild){
+        listNote.removeChild(listNote.firstChild);
+    }
+});
