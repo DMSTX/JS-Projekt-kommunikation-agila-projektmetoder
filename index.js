@@ -218,7 +218,9 @@ listTitle.appendChild(inputTitleBox);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
 innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
+innerModal.appendChild(inputTitleBox);
 innerModal.appendChild(newTextArea);
+
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
@@ -269,6 +271,7 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
+    
     showObject(newTextArea);
     showObject(saveButton);
 });
