@@ -89,12 +89,6 @@ inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
 inputTitle.style.display = "none";
 
-// TEXTAREAS
-let newTextArea = document.createElement("textarea");
-newTextArea.setAttribute("id", "freeText");
-newTextArea.style.display = "none";
-
-let newTemplateTextArea = document.createElement("textarea");
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -112,10 +106,10 @@ function Note(type) {
             this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
         }
         else if (this.type === "text") {
-            this.content = newTextArea.value;
+            this.content = document.getElementsByClassName("text").value;
         }
         else {
-            this.content = newTemplateTextArea.value;
+            this.content = document.getElementsByClassName("template").value;
         }
         
     };
@@ -195,16 +189,25 @@ function modal() {
 function closeModal(e) {
     if (e.target === modalBg) {
         hideObject(modalBg);
-        newTextArea.value="";
+        //newTextArea.value=""; // här borde väl en remove child ligga??
     }
 }
 
-/**
- * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
- */
-function openTemplateTextArea() {
-    newTextArea.value = randomTextTemplate();
-    showObject(innerModal.appendChild(newTextArea));
+function chooseAndOpenTextArea() {
+    let noteObject = noteArray.pop();
+    let newTextArea = document.createElement("textarea");;
+
+    if (noteObject.type === "text") {
+        newTextArea.setAttribute("class", "text");
+        innerModal.appendChild(newTextArea);
+        console.log("typ text");
+    }
+    else {
+        newTextArea.setAttribute("class", "template");
+        newTextArea.value = randomTextTemplate();
+        innerModal.appendChild(newTextArea);
+        console.log("typ template");
+    }
 }
 
 /**
@@ -277,14 +280,14 @@ container.appendChild(listHeading);
 secondContainer.appendChild(listNote);
 secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(clearListBtn);
-
-listTitle.appendChild(inputTitleBox);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
+// MODAL
 innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
-innerModal.appendChild(inputTitleBox);
-innerModal.appendChild(newTextArea);
 
+// dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
+listTitle.appendChild(inputTitleBox);
+innerModal.appendChild(inputTitleBox);
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
@@ -344,17 +347,17 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
-    showObject(newTextArea);
     showObject(saveButton);
     createTextNote(); 
-    clearField(newTextArea);
+    chooseAndOpenTextArea()
+
 });
 
 textTemplateButton.addEventListener("click", () => {
     modal();
-    openTemplateTextArea();
     showObject(saveButton);
     createTemplateTextNote();
+    chooseAndOpenTextArea()
 });
 
 newEmptyListButton.addEventListener("click", () => {
