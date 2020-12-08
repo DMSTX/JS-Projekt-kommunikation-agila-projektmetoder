@@ -189,8 +189,7 @@ function modal() {
 
 function closeModal(e) {
     if (e.target === modalBg) {
-        newTextArea.textContent = " ";
-        console.log("detta är innehållet: " + newTextArea.value);
+        newTextArea.value = " ";
         innerModal.removeChild(newTextArea);
         hideObject(modalBg);
     }
