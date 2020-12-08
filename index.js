@@ -38,12 +38,7 @@ let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
-// SAVE-BUTTONS
-let saveBtn = document.createElement("button");
-saveBtn.setAttribute("id", "listSaveBtn");
-saveBtn.style.display = "none";
-saveBtn.innerText = "Save";
-
+// SAVE-BUTTON
 let saveButton = document.createElement("button"); // skapar ett nytt button-element
 saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id="saveButton"
 saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
@@ -282,7 +277,6 @@ container.appendChild(textTemplateButton); // Lägger till textTemplateButton i 
 container.appendChild(listTitle);
 container.appendChild(listHeading);
 secondContainer.appendChild(listNote);
-secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(clearListBtn);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
@@ -335,7 +329,7 @@ inputItemBox.addEventListener("keyup", function (e) {
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearField(inputItemBox);
-            showObject(saveBtn);
+            showObject(saveButton);
             showObject(clearListBtn);
             //addRemoveBtn();
         }
@@ -354,6 +348,7 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
     showObject(saveButton);
     createTextNote();
     chooseAndOpenTextArea()
+    console.log(noteArray);
 
 });
 
@@ -370,7 +365,7 @@ newEmptyListButton.addEventListener("click", () => {
     hideObject(emptyNoteButton);
     hideObject(newEmptyListButton);
     hideObject(textTemplateButton);
-    showObject(saveBtn);
+    showObject(saveButton);
     createListNote();
 });
 
