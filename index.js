@@ -183,11 +183,11 @@ function modal() {
 }
 
 function closeModal(e) {
-    if (e.target === modalBg) {
-        newTextArea.value = " ";
-        innerModal.removeChild(newTextArea);
+    if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
     }
+    newTextArea.value = " ";
+    innerModal.removeChild(newTextArea); //la dessa efter if-satsen, behöver dock lite input vad tanken är här! (DAN)
 }
 
 function chooseAndOpenTextArea() {
@@ -273,17 +273,16 @@ container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i
 container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
 // LISTOR 
-container.appendChild(listTitle);
-container.appendChild(listHeading);
+innerModal.appendChild(listTitle);
+innerModal.appendChild(listHeading);
+innerModal.appendChild(secondContainer);
 secondContainer.appendChild(listNote);
+secondContainer.appendChild(saveButton); // Lägger till save-knappen i container-div:en
 secondContainer.appendChild(clearListBtn);
-document.getElementById("listHeading").appendChild(inputItemBox);
-
-// MODAL
-innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
+listHeading.appendChild(inputItemBox); // List entry
 
 // dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
-listTitle.appendChild(inputTitleBox);
+//listTitle.appendChild(inputTitleBox);
 innerModal.appendChild(inputTitleBox);
 
 // ALLA EVENT LISTENERS ***********************************************************************************
@@ -299,7 +298,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
         else {
             userTitle.textContent = inputTitleBox.value.toUpperCase();
             showObject(userTitle);
-            container.appendChild(userTitle);
+            innerModal.appendChild(userTitle);
             inputItemBox.focus();
 
             /* DET GAMLA
@@ -358,11 +357,12 @@ textTemplateButton.addEventListener("click", () => {
 
 newEmptyListButton.addEventListener("click", () => {
     createListNote();
+    modal();
     showObject(listTitle);
     showObject(listHeading);
-    hideObject(emptyNoteButton);
-    hideObject(newEmptyListButton);
-    hideObject(textTemplateButton);
+    //hideObject(emptyNoteButton);
+    //hideObject(newEmptyListButton); //ser inte dessa som nödvändiga (DAN)
+    //hideObject(textTemplateButton);
     showObject(saveButton);
 });
 
