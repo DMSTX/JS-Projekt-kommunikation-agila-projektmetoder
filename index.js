@@ -1,5 +1,9 @@
 "use strict"
 
+let noteArray = []; // skapar en array
+let today = new Date();
+let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
+
 // ALLA VARIABLER ***************************************************************************************************************
 
 // KONSTANTER
@@ -30,9 +34,9 @@ let emptyNoteButton = document.createElement("button"); // skapar ett nytt butto
 emptyNoteButton.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
 emptyNoteButton.textContent = "New empty note"; // sätter knappens text till New empty note
 
-let textSuggestionButton = document.createElement("button");
-textSuggestionButton.setAttribute("id", "textSuggestionButton"); // ger det nya button-elementet id
-textSuggestionButton.textContent = "New note with text suggestion"; // sätter knappens text
+let textTemplateButton = document.createElement("button");
+textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
+textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
 // SAVE-BUTTONS
 let saveBtn = document.createElement("button");
@@ -85,13 +89,55 @@ inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
 inputTitle.style.display = "none";
 
-// TEXTAREAS
-let newTextArea = document.createElement("textarea");
-newTextArea.style.display = "none";
-
-
 
 // ALLA FUNKTIONER ************************************************************************************************************
+
+/**
+ * Konstruktor för Note-objekt
+ * @param {string med list, text eller template} type 
+ */
+function Note(type) {
+    this.date = date;
+    this.type = type;
+    this.title = " ";
+    this.content = "nothing";
+    this.addContent = function () { 
+        if (this.type === "list") {
+            this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
+        }
+        else if (this.type === "text") {
+            this.content = document.getElementsByClassName("text").value;
+        }
+        else {
+            this.content = document.getElementsByClassName("template").value;
+        }
+        
+    };
+    this.addTitle = function () { 
+        this.title = document.getElementById("inputTitleBox").value;
+    };
+}
+
+/**
+ * Skapar Note-objekt av text-typ
+ */
+function createTextNote() {
+    noteArray.push(new Note("text"));
+}
+
+/**
+ * Skapar Note-objekt av template-typ
+ */
+function createTemplateTextNote() {
+    noteArray.push(new Note("template"));
+}
+
+/**
+ * Skapar Note-objekt av list-typ
+ */
+function createListNote() {
+    noteArray.push(new Note("list"));
+}
 
 /**
 * Tar bort innehållet i ett fält 
@@ -143,23 +189,32 @@ function modal() {
 function closeModal(e) {
     if (e.target === modalBg) {
         hideObject(modalBg);
-        newTextArea.value="";
+        //newTextArea.value=""; // här borde väl en remove child ligga??
     }
 }
 
-/**
- * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
- */
-function openSuggestionTextArea() {
-    newTextArea.value = randomTextSuggestion();
-    showObject(innerModal.appendChild(newTextArea));
+function chooseAndOpenTextArea() {
+    let noteObject = noteArray.pop();
+    let newTextArea = document.createElement("textarea");;
+
+    if (noteObject.type === "text") {
+        newTextArea.setAttribute("class", "text");
+        innerModal.appendChild(newTextArea);
+        console.log("typ text");
+    }
+    else {
+        newTextArea.setAttribute("class", "template");
+        newTextArea.value = randomTextTemplate();
+        innerModal.appendChild(newTextArea);
+        console.log("typ template");
+    }
 }
 
 /**
  * Slumpar fram ett av 10 textförslag
  * Returnerar en string med ett textförslag
  */
-function randomTextSuggestion() {
+function randomTextTemplate() {
     let number = Math.round((Math.random() * 10) + 1);
     let text;
     switch (number) {
@@ -200,12 +255,24 @@ function randomTextSuggestion() {
     return text;
 }
 
+function saveTitleToNote() {
+    let noteTitle = noteArray.pop();
+    noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
+    noteArray.push(noteTitle); 
+}
+
+function saveContentToNote() {
+    let noteContent = noteArray.pop();
+    noteContent.addContent();
+    noteArray.push(noteContent);
+}
+
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
 container.appendChild(newEmptyListButton);
 container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
-container.appendChild(textSuggestionButton); // Lägger till textSuggestionButton i container-div:en
+container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
 // LISTOR 
 container.appendChild(listTitle);
@@ -213,18 +280,19 @@ container.appendChild(listHeading);
 secondContainer.appendChild(listNote);
 secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(clearListBtn);
-
-listTitle.appendChild(inputTitleBox);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
+// MODAL
 innerModal.appendChild(saveButton); // Lägger till save-knappen i container-div:en
-innerModal.appendChild(inputTitleBox);
-innerModal.appendChild(newTextArea);
 
+// dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
+listTitle.appendChild(inputTitleBox);
+innerModal.appendChild(inputTitleBox);
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
 //function to add title chosen by user. Triggered when enter is released. 
+
 inputTitleBox.addEventListener("keyup", function (e) {
 
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
@@ -235,13 +303,18 @@ inputTitleBox.addEventListener("keyup", function (e) {
             userTitle.textContent = inputTitleBox.value.toUpperCase();
             showObject(userTitle);
             container.appendChild(userTitle);
-            clearField(inputTitleBox);
             inputItemBox.focus();
 
+            /* DET GAMLA
+            userTitle.innerText = document.getElementById("inputTitleBox").value;
+            userTitle.style.display = "block"
+            document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
+            //clearInput(inputTitleBox); */
         }
-        //return inputTitle;  Behövs ej?
-    }
-});
+        saveTitleToNote();
+        clearField(inputTitleBox);
+    }  
+});  
 
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
@@ -263,23 +336,28 @@ inputItemBox.addEventListener("keyup", function (e) {
             //addRemoveBtn();
         }
     }
+    saveContentToNote();
 });
 
 saveButton.addEventListener("click", () => { //clear text area vid tryck på save
-    clearField(newTextArea);
-});
+    //clearTextArea();
+    saveContentToNote();
+})
+
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
-    
-    showObject(newTextArea);
     showObject(saveButton);
+    createTextNote(); 
+    chooseAndOpenTextArea()
+
 });
 
-textSuggestionButton.addEventListener("click", () => {
+textTemplateButton.addEventListener("click", () => {
     modal();
-    openSuggestionTextArea();
     showObject(saveButton);
+    createTemplateTextNote();
+    chooseAndOpenTextArea()
 });
 
 newEmptyListButton.addEventListener("click", () => {
@@ -287,8 +365,9 @@ newEmptyListButton.addEventListener("click", () => {
     showObject(listHeading);
     hideObject(emptyNoteButton);
     hideObject(newEmptyListButton);
-    hideObject(textSuggestionButton);
+    hideObject(textTemplateButton);
     showObject(saveBtn);
+    createListNote(); 
 });
 
 modalBg.addEventListener("click", closeModal);
@@ -298,15 +377,3 @@ clearListBtn.addEventListener("click", ()=>{ //clears any items fron UL
         listNote.removeChild(listNote.firstChild);
     }
 });
-
-/*
-//Add todays date to list note//
-let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-
-//constructor for note-object in list form//
-function ListNote(inputtitle, inputlistItem, date){
-    listTitle = inputtitle;
-    listItem = inputlistItem;
-    listDate = date;
-};*/
