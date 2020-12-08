@@ -44,7 +44,7 @@ saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id=
 saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
 saveButton.textContent = "Save"; // ger den texten Save
 
-//CLEAR-BUTTONS
+//CLEAR-BUTTON
 let clearListBtn = document.createElement("button");
 clearListBtn.setAttribute("id", "clearList");
 clearListBtn.style.display = "none";
@@ -191,21 +191,20 @@ function closeModal(e) {
 }
 
 function chooseAndOpenTextArea() {
-    let noteObject = noteArray.pop();
-
+    let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    noteArray.push(noteObject); // lägger tillbaks note-objektet i arrayen, det var detta jag hade glömt lägga till när jag bugfixade!
+    
     showObject(newTextArea);
 
     if (noteObject.type === "text") {
         newTextArea.setAttribute("class", "text");
         innerModal.appendChild(newTextArea);
-        console.log("typ text");
     }
     else {
         newTextArea.setAttribute("class", "template");
         newTextArea.value = randomTextTemplate();
         innerModal.appendChild(newTextArea);
-        console.log("typ template");
     }
 }
 
@@ -344,29 +343,27 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
 
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
+    createTextNote();
     modal();
     showObject(saveButton);
-    createTextNote();
     chooseAndOpenTextArea()
-    console.log(noteArray);
-
 });
 
 textTemplateButton.addEventListener("click", () => {
+    createTemplateTextNote();
     modal();
     showObject(saveButton);
-    createTemplateTextNote();
     chooseAndOpenTextArea()
 });
 
 newEmptyListButton.addEventListener("click", () => {
+    createListNote();
     showObject(listTitle);
     showObject(listHeading);
     hideObject(emptyNoteButton);
     hideObject(newEmptyListButton);
     hideObject(textTemplateButton);
     showObject(saveButton);
-    createListNote();
 });
 
 modalBg.addEventListener("click", closeModal);
