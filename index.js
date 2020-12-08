@@ -85,9 +85,10 @@ inputTitle.style.display = "none";
 
 // TEXTAREAS
 let newTextArea = document.createElement("textarea");
+newTextArea.setAttribute("id", "freeText");
 newTextArea.style.display = "none";
 
-let newPromptTextArea = document.createElement("textarea");
+let newTemplateTextArea = document.createElement("textarea");
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -106,7 +107,7 @@ function addRemoveBtn() {
     for (let i = 0; i < items.length; i++) {
         document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
     }
-}
+} 
 
 /// ((( ALLA FEM FUNKTIONER HÄR UNDER SKULLE KUNNA ERSÄTTAS MED TVÅ, EN SOM VISAR OBJEKT, O EN SOM DÖLJER)))
 
@@ -163,8 +164,8 @@ function closeModal(e) {
  * Skapar en text area, lägger till ett textförslag och appendar den till container-div:en
  */
 function openSuggestionTextArea() {
-    newPromptTextArea.value = randomTextSuggestion();
-    innerModal.appendChild(newPromptTextArea);
+    newTemplateTextArea.value = randomTextSuggestion();
+    innerModal.appendChild(newTemplateTextArea);
 }
 
 /**
@@ -213,24 +214,15 @@ function randomTextSuggestion() {
 }
 
 function saveTitleToNote() {
-    //console.log(noteArray[0]);
     let noteTitle = noteArray.pop();
-    //console.log("innan add title " + test);
     noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
-    //console.log("innan push " + test);
     noteArray.push(noteTitle); 
-    
-    //console.log("detta är testet " + noteArray[0].title);
-    //console.log(noteArray);
 }
 
 function saveContentToNote() {
-    let test = noteArray.pop();
-    test.addContent();
-    noteArray.push(test);
-    //console.log(noteArray[0].content);
-    //noteArray[0].addContent();
-    //console.log(noteArray[0]);
+    let noteContent = noteArray.pop();
+    noteContent.addContent();
+    noteArray.push(noteContent);
 }
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -289,27 +281,29 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearInput(inputItemBox);
             showButton(saveBtn); //skicka med vilken button dete gäller till Ziggis function
-            addRemoveBtn();
+            //addRemoveBtn();
         }
     }
     saveContentToNote();
 });
 
 saveButton.addEventListener("click", () => { //clear text area vid tryck på save
-    clearTextArea();
+    //clearTextArea();
+    saveContentToNote();
 })
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
     showTextArea();
     showButton(saveButton);
-    createTextNote(); // här ligger Note-objekt konstruktorn
+    createTextNote(); 
 });
 
 textSuggestionButton.addEventListener("click", () => {
     modal();
     openSuggestionTextArea();
     showButton(saveButton);
+    createTemplateTextNote();
 });
 
 newEmptyListButton.addEventListener("click", () => {
@@ -318,30 +312,27 @@ newEmptyListButton.addEventListener("click", () => {
     hideButton(newEmptyListButton);
     hideButton(textSuggestionButton);
     showButton(saveBtn);
-    createListNote() // här ligger Note-objekt konstruktorn
+    createListNote(); 
 });
 
 modalBg.addEventListener("click", closeModal);
-
-/*
-//Add todays date to list note//
-
-
-//constructor for note-object in list form//
-function ListNote(inputtitle, inputlistItem, date){
-    listTitle = inputtitle;
-    listItem = inputlistItem;
-    listDate = date;
-};*/
-
 
 function Note(type) {
     this.date = date;
     this.type = type;
     this.title = " ";
-    this.content = " ";
+    this.content = "nothing";
     this.addContent = function () { 
-        this.content = document.getElementsByTagName("li"); // document.getElementById("myList").value; // Här måste vi fixa så det är dynamiskt för olika typer
+        if (this.type === "list") {
+            this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
+        }
+        else if (this.type === "text") {
+            this.content = newTextArea.value;
+        }
+        else {
+            this.content = newTemplateTextArea.value;
+        }
+        
     };
     this.addTitle = function () { 
         this.title = document.getElementById("inputTitleBox").value;
@@ -350,34 +341,12 @@ function Note(type) {
 
 function createTextNote() {
     noteArray.push(new Note("text"));
-    //console.log("Jag har skapat en Note av text-typ");
-    //console.log(noteArray);
+}
+
+function createTemplateTextNote() {
+    noteArray.push(new Note("template"));
 }
 
 function createListNote() {
     noteArray.push(new Note("list"));
-    //console.log("Jag har skapat en Note av list-typ");
-    //console.log(noteArray);
 }
-
-//// FUNKAR EJ; 
-
-/*
-
-emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
-    createTextNote();   // dessa fyra funktioner körs vid klick: dölj new note-knappen, öppna textarea, visa save-knappen
-    hideNewEmptyNoteButton();  
-    openTextArea(); 
-    showSaveButton(); 
-});
-
-const test = (note) => {console.log("hepp");  note.addContent().bind(note); console.log("mellan"); note.addTitle().bind(note); 
-    noteArray.push(note); }  // kolla på videon om arrow functions och this, grejer som inte alls funkar här
-
-saveButton.addEventListener('click', () => {
-    let popped = noteArray.pop();
-    console.log(popped);
-    test(popped);
-    } ); // lägger event listener på save-knappen så addNote-funktionen körs */
-
-    //Event for user to add list items//
