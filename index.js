@@ -102,10 +102,10 @@ function Note(type) {
             this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
         }
         else if (this.type === "text") {
-            this.content = document.getElementsByClassName("text").value;
+            this.content = document.querySelector(".text").value;
         }
         else {
-            this.content = document.getElementsByClassName("template").value;
+            this.content = document.querySelector(".template").value;
         }
 
     };
