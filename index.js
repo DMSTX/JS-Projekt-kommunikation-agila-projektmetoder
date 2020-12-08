@@ -2,7 +2,7 @@
 
 let noteArray = []; // skapar en array
 let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
+let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
 
 // ALLA VARIABLER ***************************************************************************************************************
 
@@ -89,7 +89,8 @@ inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
 inputTitle.style.display = "none";
 
-
+let newTextArea = document.createElement("textarea");
+newTextArea.style.display = "none";
 // ALLA FUNKTIONER ************************************************************************************************************
 
 /**
@@ -101,7 +102,7 @@ function Note(type) {
     this.type = type;
     this.title = " ";
     this.content = "nothing";
-    this.addContent = function () { 
+    this.addContent = function () {
         if (this.type === "list") {
             this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
         }
@@ -111,9 +112,9 @@ function Note(type) {
         else {
             this.content = document.getElementsByClassName("template").value;
         }
-        
+
     };
-    this.addTitle = function () { 
+    this.addTitle = function () {
         this.title = document.getElementById("inputTitleBox").value;
     };
 }
@@ -146,7 +147,7 @@ function clearField(field) {
     field.value = " ";
 }
 
-function clearList(){
+function clearList() {
 
 }
 
@@ -182,20 +183,24 @@ function showObject(object) {
 
 
 function modal() {
-    showObject(body.appendChild(modalBg)) ;
+    showObject(body.appendChild(modalBg));
     showObject(modalBg.appendChild(innerModal));
 }
 
 function closeModal(e) {
     if (e.target === modalBg) {
+        newTextArea.textContent = " ";
+        console.log("detta är innehållet: " + newTextArea.value);
+        innerModal.removeChild(newTextArea);
         hideObject(modalBg);
-        //newTextArea.value=""; // här borde väl en remove child ligga??
     }
 }
 
 function chooseAndOpenTextArea() {
     let noteObject = noteArray.pop();
-    let newTextArea = document.createElement("textarea");;
+
+    newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    showObject(newTextArea);
 
     if (noteObject.type === "text") {
         newTextArea.setAttribute("class", "text");
@@ -258,7 +263,7 @@ function randomTextTemplate() {
 function saveTitleToNote() {
     let noteTitle = noteArray.pop();
     noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
-    noteArray.push(noteTitle); 
+    noteArray.push(noteTitle);
 }
 
 function saveContentToNote() {
@@ -313,8 +318,8 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         saveTitleToNote();
         clearField(inputTitleBox);
-    }  
-});  
+    }
+});
 
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
@@ -348,7 +353,7 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     modal();
     showObject(saveButton);
-    createTextNote(); 
+    createTextNote();
     chooseAndOpenTextArea()
 
 });
@@ -367,13 +372,13 @@ newEmptyListButton.addEventListener("click", () => {
     hideObject(newEmptyListButton);
     hideObject(textTemplateButton);
     showObject(saveBtn);
-    createListNote(); 
+    createListNote();
 });
 
 modalBg.addEventListener("click", closeModal);
 
-clearListBtn.addEventListener("click", ()=>{ //clears any items fron UL
-    while(listNote.firstChild){
+clearListBtn.addEventListener("click", () => { //clears any items fron UL
+    while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
     }
 });
