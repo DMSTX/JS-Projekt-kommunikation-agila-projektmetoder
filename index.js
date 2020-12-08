@@ -38,6 +38,8 @@ let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
+
+
 // SAVE-BUTTONS
 let saveBtn = document.createElement("button");
 saveBtn.setAttribute("id", "listSaveBtn");
@@ -150,19 +152,17 @@ function clearList(){
 
 }
 
-//function to add remove button to every list item//
-/* Väntar med detta...// Sandra
+//function to add remove X to every list item//
 function addRemoveBtn() {
     let items = document.querySelectorAll(".myListItem");
-    let removeBtn = document.createElement("button");
-    removeBtn.setAttribute("class", "removeListItem");
-    removeBtn.innerText = "X";
-
+    let remove = document.createElement("i"); //skapar ett i-element till li(remove)
+    remove.setAttribute("class", "removeListItem");
+    remove.innerText = " X";
+    
     for (let i = 0; i < items.length; i++) {
-        document.getElementsByClassName("myListItem")[i].appendChild(removeBtn);
+        document.getElementsByClassName("myListItem")[i].appendChild(remove);
     }
 }
-*/
 
 /**
  * Döljer ett objekt genom att sätta display till none
@@ -333,7 +333,7 @@ inputItemBox.addEventListener("keyup", function (e) {
             clearField(inputItemBox);
             showObject(saveBtn);
             showObject(clearListBtn);
-            //addRemoveBtn();
+            addRemoveBtn();
         }
     }
     saveContentToNote();
@@ -372,8 +372,15 @@ newEmptyListButton.addEventListener("click", () => {
 
 modalBg.addEventListener("click", closeModal);
 
-clearListBtn.addEventListener("click", ()=>{ //clears any items fron UL
+clearListBtn.addEventListener("click", ()=>{ //clears all items from UL
     while(listNote.firstChild){
         listNote.removeChild(listNote.firstChild);
     }
+});
+
+let xList = document.querySelectorAll(".removeListItem");
+
+xList.addEventListener("click", () => {
+    console.log(listNote.childNodes);
+    //if(listNote.childNodes)
 });
