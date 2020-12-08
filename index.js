@@ -212,6 +212,27 @@ function randomTextSuggestion() {
     return text;
 }
 
+function saveTitleToNote() {
+    //console.log(noteArray[0]);
+    let noteTitle = noteArray.pop();
+    //console.log("innan add title " + test);
+    noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
+    //console.log("innan push " + test);
+    noteArray.push(noteTitle); 
+    
+    //console.log("detta är testet " + noteArray[0].title);
+    //console.log(noteArray);
+}
+
+function saveContentToNote() {
+    let test = noteArray.pop();
+    test.addContent();
+    noteArray.push(test);
+    //console.log(noteArray[0].content);
+    //noteArray[0].addContent();
+    //console.log(noteArray[0]);
+}
+
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
@@ -234,6 +255,7 @@ innerModal.appendChild(newTextArea);
 // ALLA EVENT LISTENERS ***********************************************************************************
 
 //function to add title chosen by user. Triggered when enter is released. 
+
 inputTitleBox.addEventListener("keyup", function (e) {
 
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
@@ -244,23 +266,12 @@ inputTitleBox.addEventListener("keyup", function (e) {
             userTitle.innerText = document.getElementById("inputTitleBox").value;
             userTitle.style.display = "block"
             document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
-            clearInput(inputTitleBox);
+            //clearInput(inputTitleBox);
         }
-    }
-});
-
-//function to add title to variable. Triggered when enter is released. 
-inputTitleBox.addEventListener("keyup", function (e) {
-    if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
-        if (inputTitle.length == 0) {
-            alert("Wow, so much empty")
-        }
-    }
-    noteArray[0].addTitle(inputTitle); /// hur fan kommer vi åt rätt index i arrayen??? 
-    console.log("nu är jag i skapa title");
-    // här ska inputTitle skickas till objektets title-key
-    return inputTitle;
-});
+        saveTitleToNote();
+        clearInput(inputTitleBox);
+    }  
+});  
 
 //Event for user to add list items in DIV secondContainer//
 inputItemBox.addEventListener("keyup", function (e) {
@@ -281,9 +292,7 @@ inputItemBox.addEventListener("keyup", function (e) {
             addRemoveBtn();
         }
     }
-    console.log(noteArray[0].content);
-    noteArray[0].addContent();
-    console.log(noteArray[0]);
+    saveContentToNote();
 });
 
 saveButton.addEventListener("click", () => { //clear text area vid tryck på save
