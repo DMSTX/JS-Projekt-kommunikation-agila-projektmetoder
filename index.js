@@ -281,11 +281,13 @@ container.appendChild(textTemplateButton); // Lägger till textTemplateButton i 
 // LISTOR 
 innerModal.appendChild(listTitle);
 innerModal.appendChild(listHeading);
-innerModal.appendChild(secondContainer);
-secondContainer.appendChild(listNote);
-secondContainer.appendChild(saveButton); // Lägger till save-knappen i container-div:en
-secondContainer.appendChild(clearListBtn);
+innerModal.appendChild(userTitle);
+innerModal.appendChild(listNote);
+innerModal.appendChild(saveButton);
+innerModal.appendChild(clearListBtn);
+
 listHeading.appendChild(inputItemBox); // List entry
+
 
 // dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
 listTitle.appendChild(inputTitleBox);
@@ -304,7 +306,6 @@ inputTitleBox.addEventListener("keyup", function (e) {
         else {
             userTitle.textContent = inputTitleBox.value.toUpperCase();
             showObject(userTitle);
-            innerModal.appendChild(userTitle);
             inputItemBox.focus();
 
             /* DET GAMLA
@@ -336,10 +337,10 @@ inputItemBox.addEventListener("keyup", function (e) {
             showObject(saveButton);
             showObject(clearListBtn);
             addRemoveBtn();
-            addEventToX(listNote);
         }
     }
     saveContentToNote();
+    
 });
 
 saveButton.addEventListener("click", () => { 
@@ -379,9 +380,11 @@ newEmptyListButton.addEventListener("click", () => {
 modalBg.addEventListener("click", closeModal);
 
 clearListBtn.addEventListener("click", () => { //clears any items fron UL
+    console.log("you clicked me")
+    console.log(listNote.firstChild);
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
-        clearField(inputTitle);x§
+        clearField(inputTitle);
     }
 });
 
