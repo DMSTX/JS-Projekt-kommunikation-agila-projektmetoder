@@ -2,7 +2,7 @@
 
 let noteArray = []; // skapar en array
 let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
+let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
 
 // ALLA VARIABLER ***************************************************************************************************************
 
@@ -38,20 +38,19 @@ let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
-
-
 // SAVE-BUTTONS
 let saveBtn = document.createElement("button");
 saveBtn.setAttribute("id", "listSaveBtn");
 saveBtn.style.display = "none";
 saveBtn.innerText = "Save";
 
+// SAVE-BUTTON
 let saveButton = document.createElement("button"); // skapar ett nytt button-element
 saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id="saveButton"
 saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
 saveButton.textContent = "Save"; // ger den texten Save
 
-//CLEAR-BUTTONS
+//CLEAR-BUTTON
 let clearListBtn = document.createElement("button");
 clearListBtn.setAttribute("id", "clearList");
 clearListBtn.style.display = "none";
@@ -91,7 +90,8 @@ inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
 inputTitle.style.display = "none";
 
-
+let newTextArea = document.createElement("textarea");
+newTextArea.style.display = "none";
 // ALLA FUNKTIONER ************************************************************************************************************
 
 /**
@@ -103,19 +103,19 @@ function Note(type) {
     this.type = type;
     this.title = " ";
     this.content = "nothing";
-    this.addContent = function () { 
+    this.addContent = function () {
         if (this.type === "list") {
             this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
         }
         else if (this.type === "text") {
-            this.content = document.getElementsByClassName("text").value;
+            this.content = document.querySelector(".text").value;
         }
         else {
-            this.content = document.getElementsByClassName("template").value;
+            this.content = document.querySelector(".template").value;
         }
-        
+
     };
-    this.addTitle = function () { 
+    this.addTitle = function () {
         this.title = document.getElementById("inputTitleBox").value;
     };
 }
@@ -148,7 +148,7 @@ function clearField(field) {
     field.value = " ";
 }
 
-function clearList(){
+function clearList() {
 
 }
 
@@ -162,6 +162,8 @@ function addRemoveBtn() {
     for (let i = 0; i < items.length; i++) {
         document.getElementsByClassName("myListItem")[i].appendChild(remove);
     }
+    //return items;
+    
 }
 
 /**
@@ -182,31 +184,33 @@ function showObject(object) {
 
 
 function modal() {
-    showObject(body.appendChild(modalBg)) ;
+    showObject(body.appendChild(modalBg));
     showObject(modalBg.appendChild(innerModal));
 }
 
 function closeModal(e) {
     if (e.target === modalBg) {
+        newTextArea.value = " ";
+        innerModal.removeChild(newTextArea);
         hideObject(modalBg);
-        //newTextArea.value=""; // här borde väl en remove child ligga??
     }
 }
 
 function chooseAndOpenTextArea() {
-    let noteObject = noteArray.pop();
-    let newTextArea = document.createElement("textarea");;
+    let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
+    newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    noteArray.push(noteObject); // lägger tillbaks note-objektet i arrayen, det var detta jag hade glömt lägga till när jag bugfixade!
+    
+    showObject(newTextArea);
 
     if (noteObject.type === "text") {
         newTextArea.setAttribute("class", "text");
         innerModal.appendChild(newTextArea);
-        console.log("typ text");
     }
     else {
         newTextArea.setAttribute("class", "template");
         newTextArea.value = randomTextTemplate();
         innerModal.appendChild(newTextArea);
-        console.log("typ template");
     }
 }
 
@@ -258,7 +262,7 @@ function randomTextTemplate() {
 function saveTitleToNote() {
     let noteTitle = noteArray.pop();
     noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
-    noteArray.push(noteTitle); 
+    noteArray.push(noteTitle);
 }
 
 function saveContentToNote() {
@@ -278,7 +282,6 @@ container.appendChild(textTemplateButton); // Lägger till textTemplateButton i 
 container.appendChild(listTitle);
 container.appendChild(listHeading);
 secondContainer.appendChild(listNote);
-secondContainer.appendChild(saveBtn);
 secondContainer.appendChild(clearListBtn);
 document.getElementById("listHeading").appendChild(inputItemBox);
 
@@ -313,8 +316,8 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         saveTitleToNote();
         clearField(inputTitleBox);
-    }  
-});  
+    }
+});
 
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
@@ -331,9 +334,10 @@ inputItemBox.addEventListener("keyup", function (e) {
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearField(inputItemBox);
-            showObject(saveBtn);
+            showObject(saveButton);
             showObject(clearListBtn);
             addRemoveBtn();
+            addEventToX(listNote);
         }
     }
     saveContentToNote();
@@ -346,41 +350,49 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
 
 
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
+    createTextNote();
     modal();
     showObject(saveButton);
-    createTextNote(); 
     chooseAndOpenTextArea()
-
 });
 
 textTemplateButton.addEventListener("click", () => {
+    createTemplateTextNote();
     modal();
     showObject(saveButton);
-    createTemplateTextNote();
     chooseAndOpenTextArea()
 });
 
 newEmptyListButton.addEventListener("click", () => {
+    createListNote();
     showObject(listTitle);
     showObject(listHeading);
     hideObject(emptyNoteButton);
     hideObject(newEmptyListButton);
     hideObject(textTemplateButton);
-    showObject(saveBtn);
-    createListNote(); 
+    showObject(saveButton);
 });
 
 modalBg.addEventListener("click", closeModal);
 
-clearListBtn.addEventListener("click", ()=>{ //clears all items from UL
-    while(listNote.firstChild){
+clearListBtn.addEventListener("click", () => { //clears any items fron UL
+    while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
+        clearField(inputTitle);x§
     }
 });
 
-let xList = document.querySelectorAll(".removeListItem");
+//test to set eventlistener to every X on items. Needs objects ti both li and X to work
+/*let xList; 
 
-xList.addEventListener("click", () => {
-    console.log(listNote.childNodes);
-    //if(listNote.childNodes)
-});
+function addEventToX (){
+    xList = document.querySelectorAll(".removeListItem");
+    
+    for(let i = 0; i < xList.length; i++){
+        
+        xList[i].addEventListener("click", function(){ //works to add eventlistener on each X
+            console.log("I work! But I do nothing...")  
+    });
+  }
+}
+*/
