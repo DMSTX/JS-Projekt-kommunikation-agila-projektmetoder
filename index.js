@@ -185,9 +185,9 @@ function modal() {
 function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
+        newTextArea.value = " ";
+        innerModal.removeChild(newTextArea); //la dessa efter if-satsen, behöver dock lite input vad tanken är här! (DAN)
     }
-    newTextArea.value = " ";
-    innerModal.removeChild(newTextArea); //la dessa efter if-satsen, behöver dock lite input vad tanken är här! (DAN)
 }
 
 function chooseAndOpenTextArea() {
@@ -282,8 +282,8 @@ secondContainer.appendChild(clearListBtn);
 listHeading.appendChild(inputItemBox); // List entry
 
 // dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
-//listTitle.appendChild(inputTitleBox);
-innerModal.appendChild(inputTitleBox);
+listTitle.appendChild(inputTitleBox);
+//innerModal.appendChild(inputTitleBox);
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
@@ -335,8 +335,7 @@ inputItemBox.addEventListener("keyup", function (e) {
     saveContentToNote();
 });
 
-saveButton.addEventListener("click", () => { //clear text area vid tryck på save
-    //clearTextArea();
+saveButton.addEventListener("click", () => { 
     saveContentToNote();
 })
 
@@ -344,15 +343,18 @@ saveButton.addEventListener("click", () => { //clear text area vid tryck på sav
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     createTextNote();
     modal();
+    showObject(listTitle);
     showObject(saveButton);
-    chooseAndOpenTextArea()
+    hideObject(listHeading);
+    chooseAndOpenTextArea();
 });
 
 textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
     modal();
+    showObject(listTitle);
     showObject(saveButton);
-    chooseAndOpenTextArea()
+    chooseAndOpenTextArea();
 });
 
 newEmptyListButton.addEventListener("click", () => {
@@ -360,6 +362,7 @@ newEmptyListButton.addEventListener("click", () => {
     modal();
     showObject(listTitle);
     showObject(listHeading);
+    hideObject(newTextArea);
     //hideObject(emptyNoteButton);
     //hideObject(newEmptyListButton); //ser inte dessa som nödvändiga (DAN)
     //hideObject(textTemplateButton);
