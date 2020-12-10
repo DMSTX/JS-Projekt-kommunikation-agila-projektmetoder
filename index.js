@@ -50,10 +50,11 @@ saveButton.style.display = "none"; // ger den visibility: none, så att den är 
 saveButton.textContent = "Save"; // ger den texten Save
 
 //CLEAR-BUTTON
-let resetNoteButton = document.createElement("button"); 
-resetNoteButton.setAttribute("id", "clearList"); 
-resetNoteButton.style.display = "none"; 
+let resetNoteButton = document.createElement("button");
+resetNoteButton.setAttribute("id", "clearList");
+resetNoteButton.style.display = "none";
 resetNoteButton.textContent = "Start Over";
+
 
 // FÄLT TILL ANTECKNINGAR
 let labelTitle = document.createElement("label");
@@ -85,8 +86,20 @@ inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
 inputTitle.style.display = "none";
 
+//TEXT AREA TILL TEXT O TEMPLATE
 let newTextArea = document.createElement("textarea");
 newTextArea.style.display = "none";
+
+//SPARADE NOTES 
+const savedNotesHeader = document.createElement("h2");
+savedNotesHeader.textContent = "Saved notes";
+savedNotesHeader.style.display = "none";
+
+const savedNotesDiv = document.createElement("div");
+savedNotesDiv.style.display = "none";
+
+let pArray = []
+
 // ALLA FUNKTIONER ************************************************************************************************************
 
 /**
@@ -180,12 +193,18 @@ function showObject(object) {
     object.style.display = "block";
 }
 
-
+/**
+ * Öppnar modal
+ */
 function modal() {
     showObject(body.appendChild(modalBg));
     showObject(modalBg.appendChild(innerModal));
 }
 
+/**
+ * Stänger modal och rensar fälten
+ * @param {eventet} e 
+ */
 function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
@@ -193,16 +212,17 @@ function closeModal(e) {
     }
 }
 
+/**
+ * Kollar vilken type en Note har och öppnar rätt textarea
+ */
 function chooseAndOpenTextArea() {
     let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    noteArray.push(noteObject); // lägger tillbaks note-objektet i arrayen, det var detta jag hade glömt lägga till när jag bugfixade!
-
+    noteArray.push(noteObject); //lägger tillbaks noten i note arrayen
     showObject(newTextArea);
 
     if (noteObject.type === "text") {
         newTextArea.setAttribute("class", "text");
-        
         innerModal.appendChild(newTextArea);
         innerModal.appendChild(saveButton);
         innerModal.appendChild(resetNoteButton);
@@ -262,24 +282,35 @@ function randomTextTemplate() {
     return text;
 }
 
+/**
+ * Tar senast skapade Note-objektet och sparar titel till dess title-keuy
+ */
 function saveTitleToNote() {
     let noteTitle = noteArray.pop();
-    noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
+    noteTitle.addTitle(userTitle);
     noteArray.push(noteTitle);
 }
 
+/**
+ * Tar senast skapade Note-objektet och sparar textinnehåll till dess content key
+ */
 function saveContentToNote() {
-    let noteContent = noteArray.pop();
-    noteContent.addContent();
-    noteArray.push(noteContent);
+    let note = noteArray.pop();
+    note.addContent();
+    noteArray.push(note);
 }
 
+/**
+ * Sparar noteArray till localStorage
+ */
 function saveToStorage() {
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
-    //listan och rubrik hänger med till andra notes - FIXA
 }
 
+/**
+ * Nollställer fälten i modalen
+ */
 function resetNote() {
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
@@ -294,6 +325,9 @@ function resetNote() {
     newTextArea.value = "";
 }
 
+/**
+ * Öppnar modal, visar knappar, sätter pekaren rätt
+ */
 function initModalAndShowObjects() {
     modal();
     showObject(resetNoteButton);
@@ -301,12 +335,35 @@ function initModalAndShowObjects() {
     inputTitleBox.focus();
 }
 
+/**
+ * Visar div med sparade notes från local storage
+ */
+function showSavedNoteTitles() {
+    showObject(savedNotesHeader);
+    showObject(savedNotesDiv);
+    
+    let savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
+    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
+
+    pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
+    let newP = pArray.pop(); // plockar ut senaste p-elementet
+    newP.textContent = lastNote.title + " " + lastNote.date; // sätter p-elementets innehåll till senaste notens titel o datum
+    newP.addEventListener("click", () => { console.log("Nu öppnas sparad anteckning") }); // ger p-elementet event listener för klick
+    
+    savedNotesDiv.appendChild(newP); // append:ar p-elementet till div:en med sparade anteckningar
+    pArray.push(newP); // lägger tillbaka p-elementet i sin array.
+}
+
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
 container.appendChild(newEmptyListButton);
-container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
-container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
+container.appendChild(emptyNoteButton);
+container.appendChild(textTemplateButton);
+
+// SPARADE NOTES
+container.appendChild(savedNotesHeader);
+container.appendChild(savedNotesDiv);
 
 // LISTOR 
 innerModal.appendChild(labelTitle);
@@ -315,12 +372,10 @@ innerModal.appendChild(labelListItem);
 labelListItem.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
-innerModal.appendChild(saveButton);
-
 
 // KNAPPAR FÖR SPARA OCH RESET
 innerModal.appendChild(saveButton);
-innerModal.appendChild (resetNoteButton);
+innerModal.appendChild(resetNoteButton);
 
 
 // ALLA EVENT LISTENERS ***********************************************************************************
@@ -328,7 +383,7 @@ innerModal.appendChild (resetNoteButton);
 //function to add title chosen by user. Triggered when enter is released. 
 
 inputTitleBox.addEventListener("keyup", function (e) {
-    
+
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
         if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
             alert("Wow, so much empty")
@@ -341,7 +396,6 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         saveTitleToNote();
         clearField(inputTitleBox);
-        
     }
 });
 
@@ -361,19 +415,18 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearField(inputItemBox);
             showObject(saveButton);
-            //showObject resetNoteButton);
+            showObject(resetNoteButton);
             //addRemoveBtn();
         }
     }
     saveContentToNote();
-
 });
 
 saveButton.addEventListener("click", () => {
     saveContentToNote();
     saveToStorage();
+    showSavedNoteTitles();
 })
-
 
 emptyNoteButton.addEventListener("click", () => {
     createTextNote();
