@@ -56,29 +56,20 @@ resetNoteButton.style.display = "none";
 resetNoteButton.textContent = "Start Over";
 
 // FÄLT TILL LISTOR 
-let listTitle = document.createElement("h3"); //sub-heading//
-listTitle.setAttribute("id", "listTitle");
-listTitle.innerText = "Add your Title:";
-listTitle.style.display = "none"; // display = 'block' from eventlistener (DAN)
 
 let inputTitleBox = document.createElement("input"); //input field for user title//
 inputTitleBox.setAttribute("id", "inputTitleBox");
 inputTitleBox.setAttribute("type", "text");
-inputTitleBox.setAttribute("placeholder", "Title");
+inputTitleBox.setAttribute("placeholder", "Add Title and press Enter");
 
 let userTitle = document.createElement("h4");
 userTitle.setAttribute("class", "userTitle");
 userTitle.style.display = "none";
 
-let listHeading = document.createElement("h3"); //subheading//
-listHeading.setAttribute("id", "listHeading");
-listHeading.innerText = "Add your entry:";
-listHeading.style.display = "none"; //display = 'block' from eventlistener (DAN)
-
 let inputItemBox = document.createElement("input"); //input field for user list items
 inputItemBox.setAttribute("id", "inputListBox");
 inputItemBox.setAttribute("type", "text");
-inputItemBox.setAttribute("placeholder", "List Entry");
+inputItemBox.setAttribute("placeholder", "Add to-do and press Enter");
 inputItemBox.attributes.required = true; //!oklart om denna gör något!//
 
 let listNote = document.createElement("ul"); //unordered list
@@ -280,7 +271,7 @@ function saveContentToNote() {
 function saveToStorage() {
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
-    //listan och rubrk hänger med till andra notes - FIXA
+    //listan och rubrik hänger med till andra notes - FIXA
 }
 
 function resetNote() {
@@ -302,12 +293,12 @@ container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i
 container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
 // LISTOR 
-innerModal.appendChild(listTitle);
-innerModal.appendChild(listHeading);
+innerModal.appendChild(inputTitleBox);
+innerModal.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
-listHeading.appendChild(inputItemBox); // List entry
-listTitle.appendChild(inputTitleBox);
+innerModal.appendChild(saveButton);
+
 
 // KNAPPAR FÖR SPARA OCH RESET
 innerModal.appendChild(saveButton);
@@ -319,7 +310,7 @@ innerModal.appendChild (resetNoteButton);
 //function to add title chosen by user. Triggered when enter is released. 
 
 inputTitleBox.addEventListener("keyup", function (e) {
-
+    
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
         if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
             alert("Wow, so much empty")
@@ -332,6 +323,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         saveTitleToNote();
         clearField(inputTitleBox);
+        
     }
 });
 
@@ -368,9 +360,10 @@ saveButton.addEventListener("click", () => {
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     createTextNote();
     modal();
-    showObject(listTitle);
+
+    showObject(userTitle);
     hideObject(listNote);
-    hideObject(listHeading);
+    hideObject(inputItemBox);
     chooseAndOpenTextArea();
     inputTitleBox.focus();
     showObject(saveButton);
@@ -380,11 +373,12 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
 textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
     modal();
-    showObject(listTitle);
-    hideObject(listNote);
-    hideObject(listHeading);
+    
     chooseAndOpenTextArea();
     inputTitleBox.focus();
+    hideObject(inputItemBox);
+    hideObject(listNote);
+    chooseAndOpenTextArea();
     showObject(saveButton);
     showObject(resetNoteButton);
 });
@@ -392,8 +386,9 @@ textTemplateButton.addEventListener("click", () => {
 newEmptyListButton.addEventListener("click", () => {
     createListNote();
     modal();
-    showObject(listTitle);
-    showObject(listHeading);
+    
+    hideObject(newTextArea);
+    showObject(inputItemBox);
     showObject(listNote); // men nu visas den tidigare skrivna listan, kolla i clear modal
     hideObject(newTextArea);
     inputTitleBox.focus();
