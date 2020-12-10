@@ -50,10 +50,10 @@ saveButton.style.display = "none"; // ger den visibility: none, så att den är 
 saveButton.textContent = "Save"; // ger den texten Save
 
 //CLEAR-BUTTON
-let clearListBtn = document.createElement("button");
-clearListBtn.setAttribute("id", "clearList");
-clearListBtn.style.display = "none";
-clearListBtn.textContent = "Start Over";
+let resetNoteButton = document.createElement("button"); 
+resetNoteButton.setAttribute("id", "clearList"); 
+resetNoteButton.style.display = "none"; 
+resetNoteButton.textContent = "Start Over";
 
 // FÄLT TILL LISTOR 
 
@@ -184,10 +184,7 @@ function modal() {
 function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
-        newTextArea.value = " ";
-        userTitle.value ="";
-        innerModal.removeChild(newTextArea); //skapar ett error i consol om man är inne i listan
-
+        resetNote()
     }
 }
 
@@ -195,7 +192,7 @@ function chooseAndOpenTextArea() {
     let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
     noteArray.push(noteObject); // lägger tillbaks note-objektet i arrayen, det var detta jag hade glömt lägga till när jag bugfixade!
-    
+
     showObject(newTextArea);
 
     if (noteObject.type === "text") {
@@ -203,14 +200,14 @@ function chooseAndOpenTextArea() {
         
         innerModal.appendChild(newTextArea);
         innerModal.appendChild(saveButton);
-        innerModal.appendChild(clearListBtn);
+        innerModal.appendChild(resetNoteButton);
     }
     else {
         newTextArea.setAttribute("class", "template");
         newTextArea.value = randomTextTemplate();
         innerModal.appendChild(newTextArea);
         innerModal.appendChild(saveButton);
-        innerModal.appendChild(clearListBtn);
+        innerModal.appendChild(resetNoteButton);
     }
 }
 
@@ -271,10 +268,21 @@ function saveContentToNote() {
     noteArray.push(noteContent);
 }
 
-function saveToStorage (){
+function saveToStorage() {
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
     //listan och rubrik hänger med till andra notes - FIXA
+}
+
+function resetNote() {
+    while (listNote.firstChild) {
+        listNote.removeChild(listNote.firstChild);
+    }
+    clearTitle(userTitle);
+    newTextArea.value = "";
+    if (newTextArea.classList.contains("template")) {
+        newTextArea.value = randomTextTemplate();
+    }
 }
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -290,9 +298,11 @@ innerModal.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
 innerModal.appendChild(saveButton);
-innerModal.appendChild(clearListBtn);
 
-//listHeading.appendChild(inputItemBox); // List entry
+
+// KNAPPAR FÖR SPARA OCH RESET
+innerModal.appendChild(saveButton);
+innerModal.appendChild (resetNoteButton);
 
 
 // ALLA EVENT LISTENERS ***********************************************************************************
@@ -333,15 +343,15 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearField(inputItemBox);
             showObject(saveButton);
-            showObject(clearListBtn);
+            //showObject resetNoteButton);
             //addRemoveBtn();
         }
     }
     saveContentToNote();
-    
+
 });
 
-saveButton.addEventListener("click", () => { 
+saveButton.addEventListener("click", () => {
     saveContentToNote();
     saveToStorage();
 })
@@ -350,13 +360,14 @@ saveButton.addEventListener("click", () => {
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     createTextNote();
     modal();
-    
-    showObject(saveButton);
-    showObject(clearListBtn);
+
+    showObject(userTitle);
+    hideObject(listNote);
+    hideObject(inputItemBox);
     chooseAndOpenTextArea();
     inputTitleBox.focus();
-    keepPlaceholder();
-    hideObject(inputItemBox);
+    showObject(saveButton);
+    showObject (resetNoteButton);
 });
 
 textTemplateButton.addEventListener("click", () => {
@@ -365,9 +376,11 @@ textTemplateButton.addEventListener("click", () => {
     
     chooseAndOpenTextArea();
     inputTitleBox.focus();
-    showObject(saveButton);
-    showObject(clearListBtn);
     hideObject(inputItemBox);
+    hideObject(listNote);
+    chooseAndOpenTextArea();
+    showObject(saveButton);
+    showObject(resetNoteButton);
 });
 
 newEmptyListButton.addEventListener("click", () => {
@@ -375,34 +388,34 @@ newEmptyListButton.addEventListener("click", () => {
     modal();
     
     hideObject(newTextArea);
-    showObject(saveButton);
-    showObject(clearListBtn);
     showObject(inputItemBox);
+    showObject(listNote); // men nu visas den tidigare skrivna listan, kolla i clear modal
+    hideObject(newTextArea);
     inputTitleBox.focus();
+    showObject(saveButton);
+    showObject (resetNoteButton);
 });
 
 modalBg.addEventListener("click", closeModal);
 
-//add clear for type "text"
-clearListBtn.addEventListener("click", (e) => { //clears any items fron UL
-    while (listNote.firstChild) {
-        listNote.removeChild(listNote.firstChild);
-        
-    }
-    clearTitle(userTitle); 
-    newTextArea.value="";
+resetNoteButton.addEventListener("click", resetNote);
+
+document.addEventListener("DOMContentLoaded", () => {
+    createListNote();
+    createTextNote();
+    createTemplateTextNote();
 });
 
 //test to set eventlistener to every X on items. Needs objects for both li and X to work
-/*let xList; 
+/*let xList;
 
 function addEventToX (){
     xList = document.querySelectorAll(".removeListItem");
-    
+
     for(let i = 0; i < xList.length; i++){
-        
+
         xList[i].addEventListener("click", function(){ //works to add eventlistener on each X
-            console.log("I work! But I do nothing...")  
+            console.log("I work! But I do nothing...")
     });
   }
 }
