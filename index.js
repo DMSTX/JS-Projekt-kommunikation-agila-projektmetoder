@@ -9,7 +9,6 @@ let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getD
 // KONSTANTER
 const body = document.querySelector("body");
 const container = document.getElementById("container"); // sparar container i en variabel
-const secondContainer = document.getElementById("secondContainer") //sparar secondContainer i en variabel
 const modalBg = document.createElement("div"); // modalens transperenta bakgrund
 modalBg.setAttribute("id", "modalBgBox");
 const innerModal = document.createElement("div");// inre divbox i modalen
@@ -80,7 +79,7 @@ let inputItemBox = document.createElement("input"); //input field for user list 
 inputItemBox.setAttribute("id", "inputListBox");
 inputItemBox.setAttribute("type", "text");
 inputItemBox.setAttribute("placeholder", "List Entry");
-inputItemBox.attributes.required = "required"; //!oklart om denna gör något!//
+inputItemBox.attributes.required = true; //!oklart om denna gör något!//
 
 let listNote = document.createElement("ul"); //unordered list
 listNote.setAttribute("class", "myList"); //om id, numereriskt som ökar för varje lista?
@@ -148,10 +147,12 @@ function clearField(field) {
     field.value = " ";
 }
 
-function clearList() {
+function clearTitle(element) {
+    element.textContent = "";
 
 }
 
+/*
 //function to add remove X to every list item//
 function addRemoveBtn() {
     let items = document.querySelectorAll(".myListItem");
@@ -165,6 +166,7 @@ function addRemoveBtn() {
     //return items;
     
 }
+*/
 
 /**
  * Döljer ett objekt genom att sätta display till none
@@ -192,7 +194,10 @@ function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
         newTextArea.value = " ";
-        innerModal.removeChild(newTextArea); //la dessa efter if-satsen, behöver dock lite input vad tanken är här! (DAN)
+        //innerModal.removeChild(userTitle);
+        userTitle.value ="";
+        innerModal.removeChild(newTextArea); 
+
     }
 }
 
@@ -271,6 +276,12 @@ function saveContentToNote() {
     noteArray.push(noteContent);
 }
 
+function saveToStorage (){
+    let noteBook = JSON.stringify(noteArray);
+    localStorage.setItem("Notes", noteBook);
+    //listan och rubrk hänger med till andra notes - FIXA
+}
+
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
@@ -307,12 +318,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
             userTitle.textContent = inputTitleBox.value.toUpperCase();
             showObject(userTitle);
             inputItemBox.focus();
-
-            /* DET GAMLA
-            userTitle.innerText = document.getElementById("inputTitleBox").value;
-            userTitle.style.display = "block"
-            document.getElementsByClassName("myList")[0].appendChild(userTitle); //puts title before el-element
-            //clearInput(inputTitleBox); */
+            newTextArea.focus();
         }
         saveTitleToNote();
         clearField(inputTitleBox);
@@ -335,8 +341,8 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearField(inputItemBox);
             showObject(saveButton);
-            showObject(clearListBtn);
-            addRemoveBtn();
+            //showObject(clearListBtn);
+            //addRemoveBtn();
         }
     }
     saveContentToNote();
@@ -345,6 +351,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 
 saveButton.addEventListener("click", () => { 
     saveContentToNote();
+    saveToStorage();
 })
 
 
@@ -353,8 +360,10 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
     modal();
     showObject(listTitle);
     showObject(saveButton);
+    showObject(clearListBtn);
     hideObject(listHeading);
     chooseAndOpenTextArea();
+    inputTitleBox.focus();
 });
 
 textTemplateButton.addEventListener("click", () => {
@@ -362,7 +371,9 @@ textTemplateButton.addEventListener("click", () => {
     modal();
     showObject(listTitle);
     showObject(saveButton);
+    showObject(clearListBtn);
     chooseAndOpenTextArea();
+    inputTitleBox.focus();
 });
 
 newEmptyListButton.addEventListener("click", () => {
@@ -371,24 +382,26 @@ newEmptyListButton.addEventListener("click", () => {
     showObject(listTitle);
     showObject(listHeading);
     hideObject(newTextArea);
-    //hideObject(emptyNoteButton);
-    //hideObject(newEmptyListButton); //ser inte dessa som nödvändiga (DAN)
-    //hideObject(textTemplateButton);
     showObject(saveButton);
+    showObject(clearListBtn);
+    inputTitleBox.focus();
 });
 
 modalBg.addEventListener("click", closeModal);
 
+//add clear for type "text"
 clearListBtn.addEventListener("click", () => { //clears any items fron UL
-    console.log("you clicked me")
-    console.log(listNote.firstChild);
+    //console.log("you clicked me")
+    
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
-        clearField(inputTitle);
+        
     }
+    clearTitle(userTitle); 
+    newTextArea.value="";
 });
 
-//test to set eventlistener to every X on items. Needs objects ti both li and X to work
+//test to set eventlistener to every X on items. Needs objects for both li and X to work
 /*let xList; 
 
 function addEventToX (){
