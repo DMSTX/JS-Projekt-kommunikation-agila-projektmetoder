@@ -55,21 +55,26 @@ resetNoteButton.setAttribute("id", "clearList");
 resetNoteButton.style.display = "none"; 
 resetNoteButton.textContent = "Start Over";
 
-// FÄLT TILL LISTOR 
+// FÄLT TILL ANTECKNINGAR
+let labelTitle = document.createElement("label");
+labelTitle.setAttribute("for", "inputTitleBox");
+labelTitle.textContent = "TITLE ";
 
 let inputTitleBox = document.createElement("input"); //input field for user title//
 inputTitleBox.setAttribute("id", "inputTitleBox");
 inputTitleBox.setAttribute("type", "text");
-inputTitleBox.setAttribute("placeholder", "Add Title and press Enter");
 
 let userTitle = document.createElement("h4");
 userTitle.setAttribute("class", "userTitle");
 userTitle.style.display = "none";
 
+let labelListItem = document.createElement("label");
+labelListItem.setAttribute("for", "inputListBox");
+labelListItem.textContent = "TO-DO ";
+
 let inputItemBox = document.createElement("input"); //input field for user list items
 inputItemBox.setAttribute("id", "inputListBox");
 inputItemBox.setAttribute("type", "text");
-inputItemBox.setAttribute("placeholder", "Add to-do and press Enter");
 inputItemBox.attributes.required = true; //!oklart om denna gör något!//
 
 let listNote = document.createElement("ul"); //unordered list
@@ -143,7 +148,7 @@ function clearTitle(element) {
 
 }
 
-/*
+/* ---IF WE HAVE TIME---
 //function to add remove X to every list item//
 function addRemoveBtn() {
     let items = document.querySelectorAll(".myListItem");
@@ -204,7 +209,8 @@ function chooseAndOpenTextArea() {
     }
     else {
         newTextArea.setAttribute("class", "template");
-        newTextArea.value = randomTextTemplate();
+        userTitle.textContent = randomTextTemplate(); //RANDOM TEXT AS TITLE?
+        //newTextArea.value = randomTextTemplate();
         innerModal.appendChild(newTextArea);
         innerModal.appendChild(saveButton);
         innerModal.appendChild(resetNoteButton);
@@ -278,11 +284,14 @@ function resetNote() {
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
     }
+    //clearTitle(userTitle);  FLYTTAT NEDERST I FUNCTION
+    //newTextArea.value = "";
+    if (newTextArea.classList.contains("template")) {
+        userTitle.textContent = randomTextTemplate();
+        //newTextArea.value = randomTextTemplate();
+    }
     clearTitle(userTitle);
     newTextArea.value = "";
-    if (newTextArea.classList.contains("template")) {
-        newTextArea.value = randomTextTemplate();
-    }
 }
 
 function initModalAndShowObjects() {
@@ -300,8 +309,10 @@ container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i
 container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
 // LISTOR 
-innerModal.appendChild(inputTitleBox);
-innerModal.appendChild(inputItemBox);
+innerModal.appendChild(labelTitle);
+labelTitle.appendChild(inputTitleBox);
+innerModal.appendChild(labelListItem);
+labelListItem.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
 innerModal.appendChild(saveButton);
@@ -368,22 +379,32 @@ emptyNoteButton.addEventListener("click", () => {
     createTextNote();
     chooseAndOpenTextArea();
     initModalAndShowObjects()
+    showObject(inputTitleBox);
+    showObject(labelTitle);
     hideObject(inputItemBox);
     hideObject(listNote);
+    hideObject(labelListItem);
 });
 
 textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
     chooseAndOpenTextArea();
+    showObject(userTitle);
     initModalAndShowObjects()
+    hideObject(inputTitleBox);
+    hideObject(labelTitle);
     hideObject(inputItemBox);
     hideObject(listNote);
+    hideObject(labelListItem);
 });
 
 newEmptyListButton.addEventListener("click", () => {
     createListNote();
     initModalAndShowObjects()
     hideObject(newTextArea);
+    showObject(labelTitle);
+    showObject(inputTitleBox);
+    showObject(labelListItem);
     showObject(inputItemBox);
     showObject(listNote);
 });
@@ -391,6 +412,8 @@ newEmptyListButton.addEventListener("click", () => {
 modalBg.addEventListener("click", closeModal);
 
 resetNoteButton.addEventListener("click", resetNote);
+
+localStorage.clear();
 
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
