@@ -56,7 +56,6 @@ resetNoteButton.style.display = "none";
 resetNoteButton.textContent = "Start Over";
 
 // FÄLT TILL LISTOR 
-
 let inputTitleBox = document.createElement("input"); //input field for user title//
 inputTitleBox.setAttribute("id", "inputTitleBox");
 inputTitleBox.setAttribute("type", "text");
@@ -80,8 +79,19 @@ inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
 inputTitle.style.display = "none";
 
+//TEXT AREA TILL TEXT O TEMPLATE
 let newTextArea = document.createElement("textarea");
 newTextArea.style.display = "none";
+
+//HEADER TILL LISTA ÖVER SPARADE NOTES 
+const savedNotesHeader = document.createElement("h2");
+savedNotesHeader.textContent = "My notes";
+savedNotesHeader.style.display = "none";
+
+// DIV FÖR SPARADE NOTES 
+const savedNotesDiv = document.createElement("div");
+savedNotesDiv.style.display = "none";
+
 // ALLA FUNKTIONER ************************************************************************************************************
 
 /**
@@ -175,7 +185,6 @@ function showObject(object) {
     object.style.display = "block";
 }
 
-
 function modal() {
     showObject(body.appendChild(modalBg));
     showObject(modalBg.appendChild(innerModal));
@@ -191,16 +200,14 @@ function closeModal(e) {
 function chooseAndOpenTextArea() {
     let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    noteArray.push(noteObject); // lägger tillbaks note-objektet i arrayen, det var detta jag hade glömt lägga till när jag bugfixade!
-
+    noteArray.push(noteObject); //lägger tillbaks noten i note arrayen
     showObject(newTextArea);
 
     if (noteObject.type === "text") {
         newTextArea.setAttribute("class", "text");
-        
         innerModal.appendChild(newTextArea);
         innerModal.appendChild(saveButton);
-        innerModal.appendChild(resetNoteButton);
+        innerModal.appendChild(resetNoteButton); 
     }
     else {
         newTextArea.setAttribute("class", "template");
@@ -271,7 +278,6 @@ function saveContentToNote() {
 function saveToStorage() {
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
-    //listan och rubrik hänger med till andra notes - FIXA
 }
 
 function resetNote() {
@@ -292,6 +298,17 @@ function initModalAndShowObjects() {
     inputTitleBox.focus();
 }
 
+function showSavedNotes() {
+    showObject(savedNotesHeader);
+    showObject(savedNotesDiv);
+    let savedNotes = JSON.parse(localStorage.getItem("Notes"));
+    
+    for (let i = 0; i < savedNotes.length; i++) {
+        savedNotesDiv.textContent += savedNotes[i].title + " " + savedNotes[i].date;
+    }
+
+}
+
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
@@ -299,13 +316,15 @@ container.appendChild(newEmptyListButton);
 container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
 container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
+// RUBRIKEN FÖR SPARADE NOTES
+container.appendChild(savedNotesHeader);
+container.appendChild(savedNotesDiv);
+
 // LISTOR 
 innerModal.appendChild(inputTitleBox);
 innerModal.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
-innerModal.appendChild(saveButton);
-
 
 // KNAPPAR FÖR SPARA OCH RESET
 innerModal.appendChild(saveButton);
@@ -330,7 +349,6 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         saveTitleToNote();
         clearField(inputTitleBox);
-        
     }
 });
 
@@ -350,19 +368,18 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearField(inputItemBox);
             showObject(saveButton);
-            //showObject resetNoteButton);
+            showObject(resetNoteButton);
             //addRemoveBtn();
         }
     }
     saveContentToNote();
-
 });
 
 saveButton.addEventListener("click", () => {
     saveContentToNote();
     saveToStorage();
+    showSavedNotes();
 })
-
 
 emptyNoteButton.addEventListener("click", () => {
     createTextNote();
