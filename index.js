@@ -193,11 +193,7 @@ function modal() {
 function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
-        newTextArea.value = " ";
-        //innerModal.removeChild(userTitle);
-        userTitle.value = "";
-        innerModal.removeChild(newTextArea);
-
+        resetNote()
     }
 }
 
@@ -310,15 +306,13 @@ innerModal.appendChild(listTitle);
 innerModal.appendChild(listHeading);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
+listHeading.appendChild(inputItemBox); // List entry
+listTitle.appendChild(inputTitleBox);
+
+// KNAPPAR FÖR SPARA OCH RESET
 innerModal.appendChild(saveButton);
 innerModal.appendChild (resetNoteButton);
 
-listHeading.appendChild(inputItemBox); // List entry
-
-
-// dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
-listTitle.appendChild(inputTitleBox);
-//innerModal.appendChild(inputTitleBox);
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
@@ -375,17 +369,20 @@ emptyNoteButton.addEventListener("click", () => { // lägger till en eventlisten
     createTextNote();
     modal();
     showObject(listTitle);
-    showObject(saveButton);
-    showObject (resetNoteButton);
+    hideObject(listNote);
     hideObject(listHeading);
     chooseAndOpenTextArea();
     inputTitleBox.focus();
+    showObject(saveButton);
+    showObject (resetNoteButton);
 });
 
 textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
     modal();
     showObject(listTitle);
+    hideObject(listNote);
+    hideObject(listHeading);
     chooseAndOpenTextArea();
     inputTitleBox.focus();
     showObject(saveButton);
@@ -397,10 +394,11 @@ newEmptyListButton.addEventListener("click", () => {
     modal();
     showObject(listTitle);
     showObject(listHeading);
+    showObject(listNote); // men nu visas den tidigare skrivna listan, kolla i clear modal
     hideObject(newTextArea);
+    inputTitleBox.focus();
     showObject(saveButton);
     showObject (resetNoteButton);
-    inputTitleBox.focus();
 });
 
 modalBg.addEventListener("click", closeModal);
