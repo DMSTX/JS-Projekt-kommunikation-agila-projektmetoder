@@ -50,9 +50,9 @@ saveButton.style.display = "none"; // ger den visibility: none, så att den är 
 saveButton.textContent = "Save"; // ger den texten Save
 
 //CLEAR-BUTTON
-let resetNoteButton = document.createElement("button"); 
-resetNoteButton.setAttribute("id", "clearList"); 
-resetNoteButton.style.display = "none"; 
+let resetNoteButton = document.createElement("button");
+resetNoteButton.setAttribute("id", "clearList");
+resetNoteButton.style.display = "none";
 resetNoteButton.textContent = "Start Over";
 
 // FÄLT TILL LISTOR 
@@ -83,14 +83,15 @@ inputTitle.style.display = "none";
 let newTextArea = document.createElement("textarea");
 newTextArea.style.display = "none";
 
-//HEADER TILL LISTA ÖVER SPARADE NOTES 
+//SPARADE NOTES 
 const savedNotesHeader = document.createElement("h2");
-savedNotesHeader.textContent = "My notes";
+savedNotesHeader.textContent = "Saved notes";
 savedNotesHeader.style.display = "none";
 
-// DIV FÖR SPARADE NOTES 
 const savedNotesDiv = document.createElement("div");
 savedNotesDiv.style.display = "none";
+
+let pArray = []
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -217,7 +218,7 @@ function chooseAndOpenTextArea() {
         newTextArea.setAttribute("class", "text");
         innerModal.appendChild(newTextArea);
         innerModal.appendChild(saveButton);
-        innerModal.appendChild(resetNoteButton); 
+        innerModal.appendChild(resetNoteButton);
     }
     else {
         newTextArea.setAttribute("class", "template");
@@ -278,7 +279,7 @@ function randomTextTemplate() {
  */
 function saveTitleToNote() {
     let noteTitle = noteArray.pop();
-    noteTitle.addTitle(userTitle); 
+    noteTitle.addTitle(userTitle);
     noteArray.push(noteTitle);
 }
 
@@ -329,22 +330,25 @@ function initModalAndShowObjects() {
 function showSavedNoteTitles() {
     showObject(savedNotesHeader);
     showObject(savedNotesDiv);
-    let savedNotes = JSON.parse(localStorage.getItem("Notes"));
     
-    for (let i = 0; i < savedNotes.length; i++) {
-        let newP = document.createElement("p")
-        newP.textContent = savedNotes[i].title + " " + savedNotes[i].date;
-        newP.addEventListener("click", () => {console.log("Nu öppnas sparad anteckning")});
-        savedNotesDiv.appendChild(newP);
-    }
+    let savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
+    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
+
+    pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
+    let newP = pArray.pop(); // plockar ut senaste p-elementet
+    newP.textContent = lastNote.title + " " + lastNote.date; // sätter p-elementets innehåll till senaste notens titel o datum
+    newP.addEventListener("click", () => { console.log("Nu öppnas sparad anteckning") }); // ger p-elementet event listener för klick
+    
+    savedNotesDiv.appendChild(newP); // append:ar p-elementet till div:en med sparade anteckningar
+    pArray.push(newP); // lägger tillbaka p-elementet i sin array.
 }
 
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
 container.appendChild(newEmptyListButton);
-container.appendChild(emptyNoteButton); 
-container.appendChild(textTemplateButton); 
+container.appendChild(emptyNoteButton);
+container.appendChild(textTemplateButton);
 
 // SPARADE NOTES
 container.appendChild(savedNotesHeader);
@@ -358,7 +362,7 @@ innerModal.appendChild(listNote);
 
 // KNAPPAR FÖR SPARA OCH RESET
 innerModal.appendChild(saveButton);
-innerModal.appendChild (resetNoteButton);
+innerModal.appendChild(resetNoteButton);
 
 
 // ALLA EVENT LISTENERS ***********************************************************************************
@@ -366,7 +370,7 @@ innerModal.appendChild (resetNoteButton);
 //function to add title chosen by user. Triggered when enter is released. 
 
 inputTitleBox.addEventListener("keyup", function (e) {
-    
+
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
         if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
             alert("Wow, so much empty")
