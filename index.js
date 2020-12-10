@@ -104,7 +104,6 @@ let counter = 0;
 function Note(type) {
     this.date = date;
     this.type = type;
-    this.isSaved = false;
     this.title = " ";
     this.content = "nothing";
     this.addContent = function () {
@@ -292,8 +291,6 @@ function saveTitleToNote() {
 function saveContentToNote() {
     let note = noteArray.pop();
     note.addContent();
-    note.isSaved = true;
-    console.log(note.isSaved);
     noteArray.push(note);
 }
 
@@ -336,6 +333,13 @@ function showSavedNoteTitles() {
     showObject(savedNotesHeader);
     showObject(savedNotesDiv);
     
+    /*
+    Här behövs det kollas ifall det är ett objekt eller är utskrivet. 
+    aka om titel och datum redan har en p och är utskrivna så 
+    ska de inte skrivas ut igen. För nu skrivs titel o datum ut vid andra 
+    save-trycket , utan att vara kopplade till ett objekt.
+    */
+
     counter ++; // denna är global, används för att ge unika id till p-elementen
 
     savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
@@ -353,9 +357,21 @@ function showSavedNoteTitles() {
 }
 
 function openSavedNote(e) {
+    
     initModalAndShowObjects();
-    userTitle.textContent = savedNotes[e.target.id - 1].title;
-    newTextArea.value = savedNotes[e.target.id - 1].content;
+    if (savedNotes[e.target.id - 1].type === "list") {
+        userTitle.textContent = savedNotes[e.target.id - 1].title;
+        //Hur gör vi här för att visa ul?? 
+        hideObject(newTextArea);
+        showObject(inputItemBox);
+        showObject(listNote);
+    }
+    else {
+        hideObject(inputItemBox);
+        hideObject(listNote);
+        userTitle.textContent = savedNotes[e.target.id - 1].title;
+        newTextArea.value = savedNotes[e.target.id - 1].content;
+    }
 }
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -424,10 +440,10 @@ inputItemBox.addEventListener("keyup", function (e) {
     saveContentToNote();
 });
 
-saveButton.addEventListener("click", () => {
+saveButton.addEventListener("click", (e) => {
     saveContentToNote();
     saveToStorage();
-    showSavedNoteTitles();
+    showSavedNoteTitles(); 
 })
 
 emptyNoteButton.addEventListener("click", () => {
