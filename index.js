@@ -210,12 +210,17 @@ function chooseAndOpenTextArea() {
 
     if (noteObject.type === "text") {
         newTextArea.setAttribute("class", "text");
+        
         innerModal.appendChild(newTextArea);
+        innerModal.appendChild(saveButton);
+        innerModal.appendChild(resetNoteButton);
     }
     else {
         newTextArea.setAttribute("class", "template");
         newTextArea.value = randomTextTemplate();
         innerModal.appendChild(newTextArea);
+        innerModal.appendChild(saveButton);
+        innerModal.appendChild(resetNoteButton);
     }
 }
 
@@ -381,10 +386,10 @@ textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
     modal();
     showObject(listTitle);
-    showObject(saveButton);
-    showObject (resetNoteButton);
     chooseAndOpenTextArea();
     inputTitleBox.focus();
+    showObject(saveButton);
+    showObject(resetNoteButton);
 });
 
 newEmptyListButton.addEventListener("click", () => {
