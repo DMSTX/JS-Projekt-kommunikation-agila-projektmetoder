@@ -285,6 +285,13 @@ function resetNote() {
     }
 }
 
+function initModalAndShowObjects() {
+    modal();
+    showObject(resetNoteButton);
+    showObject(saveButton);
+    inputTitleBox.focus();
+}
+
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
@@ -357,43 +364,28 @@ saveButton.addEventListener("click", () => {
 })
 
 
-emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
+emptyNoteButton.addEventListener("click", () => {
     createTextNote();
-    modal();
-
-    showObject(userTitle);
-    hideObject(listNote);
-    hideObject(inputItemBox);
     chooseAndOpenTextArea();
-    inputTitleBox.focus();
-    showObject(saveButton);
-    showObject (resetNoteButton);
+    initModalAndShowObjects()
+    hideObject(inputItemBox);
+    hideObject(listNote);
 });
 
 textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
-    modal();
-    
     chooseAndOpenTextArea();
-    inputTitleBox.focus();
+    initModalAndShowObjects()
     hideObject(inputItemBox);
     hideObject(listNote);
-    chooseAndOpenTextArea();
-    showObject(saveButton);
-    showObject(resetNoteButton);
 });
 
 newEmptyListButton.addEventListener("click", () => {
     createListNote();
-    modal();
-    
+    initModalAndShowObjects()
     hideObject(newTextArea);
     showObject(inputItemBox);
-    showObject(listNote); // men nu visas den tidigare skrivna listan, kolla i clear modal
-    hideObject(newTextArea);
-    inputTitleBox.focus();
-    showObject(saveButton);
-    showObject (resetNoteButton);
+    showObject(listNote);
 });
 
 modalBg.addEventListener("click", closeModal);
