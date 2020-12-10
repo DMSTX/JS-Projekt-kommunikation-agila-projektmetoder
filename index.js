@@ -413,7 +413,7 @@ modalBg.addEventListener("click", closeModal);
 
 resetNoteButton.addEventListener("click", resetNote);
 
-localStorage.clear();
+
 
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
