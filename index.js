@@ -185,11 +185,18 @@ function showObject(object) {
     object.style.display = "block";
 }
 
+/**
+ * Öppnar modal
+ */
 function modal() {
     showObject(body.appendChild(modalBg));
     showObject(modalBg.appendChild(innerModal));
 }
 
+/**
+ * Stänger modal och rensar fälten
+ * @param {eventet} e 
+ */
 function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
@@ -197,6 +204,9 @@ function closeModal(e) {
     }
 }
 
+/**
+ * Kollar vilken type en Note har och öppnar rätt textarea
+ */
 function chooseAndOpenTextArea() {
     let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
@@ -263,23 +273,35 @@ function randomTextTemplate() {
     return text;
 }
 
+/**
+ * Tar senast skapade Note-objektet och sparar titel till dess title-keuy
+ */
 function saveTitleToNote() {
     let noteTitle = noteArray.pop();
-    noteTitle.addTitle(userTitle);  // komma ihåg att använda samma titelfält för alla textboxar så de e samma variabel här
+    noteTitle.addTitle(userTitle); 
     noteArray.push(noteTitle);
 }
 
+/**
+ * Tar senast skapade Note-objektet och sparar textinnehåll till dess content key
+ */
 function saveContentToNote() {
-    let noteContent = noteArray.pop();
-    noteContent.addContent();
-    noteArray.push(noteContent);
+    let note = noteArray.pop();
+    note.addContent();
+    noteArray.push(note);
 }
 
+/**
+ * Sparar noteArray till localStorage
+ */
 function saveToStorage() {
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
 }
 
+/**
+ * Nollställer fälten i modalen
+ */
 function resetNote() {
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
@@ -291,6 +313,9 @@ function resetNote() {
     }
 }
 
+/**
+ * Öppnar modal, visar knappar, sätter pekaren rätt
+ */
 function initModalAndShowObjects() {
     modal();
     showObject(resetNoteButton);
@@ -298,25 +323,30 @@ function initModalAndShowObjects() {
     inputTitleBox.focus();
 }
 
-function showSavedNotes() {
+/**
+ * Visar div med sparade notes från local storage
+ */
+function showSavedNoteTitles() {
     showObject(savedNotesHeader);
     showObject(savedNotesDiv);
     let savedNotes = JSON.parse(localStorage.getItem("Notes"));
     
     for (let i = 0; i < savedNotes.length; i++) {
-        savedNotesDiv.textContent += savedNotes[i].title + " " + savedNotes[i].date;
+        let newP = document.createElement("p")
+        newP.textContent = savedNotes[i].title + " " + savedNotes[i].date;
+        newP.addEventListener("click", () => {console.log("Nu öppnas sparad anteckning")});
+        savedNotesDiv.appendChild(newP);
     }
-
 }
 
 // ALLA APPEND CHILD **************************************************************************************
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR
 container.appendChild(newEmptyListButton);
-container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i container-div:en
-container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
+container.appendChild(emptyNoteButton); 
+container.appendChild(textTemplateButton); 
 
-// RUBRIKEN FÖR SPARADE NOTES
+// SPARADE NOTES
 container.appendChild(savedNotesHeader);
 container.appendChild(savedNotesDiv);
 
@@ -378,7 +408,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 saveButton.addEventListener("click", () => {
     saveContentToNote();
     saveToStorage();
-    showSavedNotes();
+    showSavedNoteTitles();
 })
 
 emptyNoteButton.addEventListener("click", () => {
