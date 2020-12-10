@@ -56,29 +56,20 @@ clearListBtn.style.display = "none";
 clearListBtn.textContent = "Start Over";
 
 // FÄLT TILL LISTOR 
-let listTitle = document.createElement("h3"); //sub-heading//
-listTitle.setAttribute("id", "listTitle");
-listTitle.innerText = "Add your Title:";
-listTitle.style.display = "none"; // display = 'block' from eventlistener (DAN)
 
 let inputTitleBox = document.createElement("input"); //input field for user title//
 inputTitleBox.setAttribute("id", "inputTitleBox");
 inputTitleBox.setAttribute("type", "text");
-inputTitleBox.setAttribute("placeholder", "Title");
+inputTitleBox.setAttribute("placeholder", "Add Title and press Enter");
 
 let userTitle = document.createElement("h4");
 userTitle.setAttribute("class", "userTitle");
 userTitle.style.display = "none";
 
-let listHeading = document.createElement("h3"); //subheading//
-listHeading.setAttribute("id", "listHeading");
-listHeading.innerText = "Add your entry:";
-listHeading.style.display = "none"; //display = 'block' from eventlistener (DAN)
-
 let inputItemBox = document.createElement("input"); //input field for user list items
 inputItemBox.setAttribute("id", "inputListBox");
 inputItemBox.setAttribute("type", "text");
-inputItemBox.setAttribute("placeholder", "List Entry");
+inputItemBox.setAttribute("placeholder", "Add to-do and press Enter");
 inputItemBox.attributes.required = true; //!oklart om denna gör något!//
 
 let listNote = document.createElement("ul"); //unordered list
@@ -194,9 +185,8 @@ function closeModal(e) {
     if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
         hideObject(modalBg);
         newTextArea.value = " ";
-        //innerModal.removeChild(userTitle);
         userTitle.value ="";
-        innerModal.removeChild(newTextArea); 
+        innerModal.removeChild(newTextArea); //skapar ett error i consol om man är inne i listan
 
     }
 }
@@ -284,7 +274,7 @@ function saveContentToNote() {
 function saveToStorage (){
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
-    //listan och rubrk hänger med till andra notes - FIXA
+    //listan och rubrik hänger med till andra notes - FIXA
 }
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -295,26 +285,22 @@ container.appendChild(emptyNoteButton); // Lägger till new empty note-knappen i
 container.appendChild(textTemplateButton); // Lägger till textTemplateButton i container-div:en
 
 // LISTOR 
-innerModal.appendChild(listTitle);
-innerModal.appendChild(listHeading);
+innerModal.appendChild(inputTitleBox);
+innerModal.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
 innerModal.appendChild(saveButton);
 innerModal.appendChild(clearListBtn);
 
-listHeading.appendChild(inputItemBox); // List entry
+//listHeading.appendChild(inputItemBox); // List entry
 
-
-// dessa två är i konflikt med varandra, och gör att title box inte syns när man ska skapa list
-listTitle.appendChild(inputTitleBox);
-//innerModal.appendChild(inputTitleBox);
 
 // ALLA EVENT LISTENERS ***********************************************************************************
 
 //function to add title chosen by user. Triggered when enter is released. 
 
 inputTitleBox.addEventListener("keyup", function (e) {
-
+    
     if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
         if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
             alert("Wow, so much empty")
@@ -327,6 +313,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
         }
         saveTitleToNote();
         clearField(inputTitleBox);
+        
     }
 });
 
@@ -346,7 +333,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 
             clearField(inputItemBox);
             showObject(saveButton);
-            //showObject(clearListBtn);
+            showObject(clearListBtn);
             //addRemoveBtn();
         }
     }
@@ -363,41 +350,41 @@ saveButton.addEventListener("click", () => {
 emptyNoteButton.addEventListener("click", () => { // lägger till en eventlistener på New note-knappen
     createTextNote();
     modal();
-    showObject(listTitle);
+    
     showObject(saveButton);
     showObject(clearListBtn);
-    hideObject(listHeading);
     chooseAndOpenTextArea();
     inputTitleBox.focus();
+    keepPlaceholder();
+    hideObject(inputItemBox);
 });
 
 textTemplateButton.addEventListener("click", () => {
     createTemplateTextNote();
     modal();
-    showObject(listTitle);
+    
     chooseAndOpenTextArea();
     inputTitleBox.focus();
     showObject(saveButton);
     showObject(clearListBtn);
+    hideObject(inputItemBox);
 });
 
 newEmptyListButton.addEventListener("click", () => {
     createListNote();
     modal();
-    showObject(listTitle);
-    showObject(listHeading);
+    
     hideObject(newTextArea);
     showObject(saveButton);
     showObject(clearListBtn);
+    showObject(inputItemBox);
     inputTitleBox.focus();
 });
 
 modalBg.addEventListener("click", closeModal);
 
 //add clear for type "text"
-clearListBtn.addEventListener("click", () => { //clears any items fron UL
-    //console.log("you clicked me")
-    
+clearListBtn.addEventListener("click", (e) => { //clears any items fron UL
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
         
