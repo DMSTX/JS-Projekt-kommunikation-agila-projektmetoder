@@ -91,7 +91,9 @@ savedNotesHeader.style.display = "none";
 const savedNotesDiv = document.createElement("div");
 savedNotesDiv.style.display = "none";
 
-let pArray = []
+let pArray = [];
+let savedNotes = [];
+let counter = 0;
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -102,6 +104,7 @@ let pArray = []
 function Note(type) {
     this.date = date;
     this.type = type;
+    this.isSaved = false;
     this.title = " ";
     this.content = "nothing";
     this.addContent = function () {
@@ -289,6 +292,8 @@ function saveTitleToNote() {
 function saveContentToNote() {
     let note = noteArray.pop();
     note.addContent();
+    note.isSaved = true;
+    console.log(note.isSaved);
     noteArray.push(note);
 }
 
@@ -331,16 +336,26 @@ function showSavedNoteTitles() {
     showObject(savedNotesHeader);
     showObject(savedNotesDiv);
     
-    let savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
+    counter ++; // denna är global, används för att ge unika id till p-elementen
+
+    savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
     let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
 
     pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
     let newP = pArray.pop(); // plockar ut senaste p-elementet
     newP.textContent = lastNote.title + " " + lastNote.date; // sätter p-elementets innehåll till senaste notens titel o datum
-    newP.addEventListener("click", () => { console.log("Nu öppnas sparad anteckning") }); // ger p-elementet event listener för klick
+    savedNotes.push(lastNote); // lägger tillbaka lastNote i savedNotes
+    newP.setAttribute("id", counter); // ger varje p ett id
+    newP.addEventListener("click", (e) => { openSavedNote(e) }); // ger p-elementet event listener för klick
     
     savedNotesDiv.appendChild(newP); // append:ar p-elementet till div:en med sparade anteckningar
     pArray.push(newP); // lägger tillbaka p-elementet i sin array.
+}
+
+function openSavedNote(e) {
+    initModalAndShowObjects();
+    userTitle.textContent = savedNotes[e.target.id - 1].title;
+    newTextArea.value = savedNotes[e.target.id - 1].content;
 }
 
 // ALLA APPEND CHILD **************************************************************************************
