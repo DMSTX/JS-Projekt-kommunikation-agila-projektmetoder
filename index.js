@@ -400,11 +400,13 @@ modalBg.addEventListener("click", closeModal);
 
 resetNoteButton.addEventListener("click", resetNote);
 
+/* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
     createListNote();
     createTextNote();
     createTemplateTextNote();
 });
+*/
 
 //test to set eventlistener to every X on items. Needs objects for both li and X to work
 /*let xList;
