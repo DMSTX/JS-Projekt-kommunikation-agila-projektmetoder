@@ -109,7 +109,7 @@ let pArray = []
 function Note(type) {
     this.date = date;
     this.type = type;
-    this.title = " ";
+    this.title = "";
     this.content = "nothing";
     this.addContent = function () {
         if (this.type === "list") {
