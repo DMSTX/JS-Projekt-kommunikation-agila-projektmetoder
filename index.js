@@ -3,6 +3,8 @@
 let noteArray = []; // skapar en array
 let today = new Date();
 let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
+let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
+let currentUser = ""; // needs user name from a login-input field. add document.getElement....
 
 // ALLA VARIABLER ***************************************************************************************************************
 
@@ -109,6 +111,7 @@ let pArray = []
 function Note(type) {
     this.date = date;
     this.type = type;
+    this.user = "";
     this.title = "";
     this.content = "nothing";
     this.addContent = function () {
@@ -121,10 +124,12 @@ function Note(type) {
         else {
             this.content = document.querySelector(".template").value;
         }
-
     };
     this.addTitle = function () {
         this.title = document.getElementById("inputTitleBox").value;
+    };
+    this.addUser = function() {  //used in saveButton eventlistener
+        this.user = currentUser;
     };
 }
 
@@ -301,6 +306,15 @@ function saveContentToNote() {
 }
 
 /**
+ * Tar senast skapade Note-object och sparar user till dess user key
+ */
+function saveUserToNote(){
+    let user = noteArray.pop();
+    user.addUser();
+    noteArray.push(user);
+}
+
+/**
  * Sparar noteArray till localStorage
  */
 function saveToStorage() {
@@ -423,6 +437,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 });
 
 saveButton.addEventListener("click", () => {
+    saveUserToNote();
     saveContentToNote();
     saveToStorage();
     showSavedNoteTitles();
