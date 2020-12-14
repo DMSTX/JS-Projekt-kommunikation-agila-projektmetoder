@@ -86,10 +86,11 @@ newTextArea.style.display = "none";
 //SPARADE NOTES 
 const savedNotesHeader = document.createElement("h2");
 savedNotesHeader.textContent = "Saved notes";
-savedNotesHeader.style.display = "none";
 
 const savedNotesDiv = document.createElement("div");
-savedNotesDiv.style.display = "none";
+let noSavedNotesMessage = document.createElement("p");
+noSavedNotesMessage.textContent = "When you save a note it will show up here!";
+savedNotesDiv.appendChild(noSavedNotesMessage);
 
 let pArray = [];
 let savedNotes = [];
@@ -148,12 +149,11 @@ function createListNote() {
 * Tar bort innehållet i ett fält 
 */
 function clearField(field) {
-    field.value = " ";
+    field.value = "";
 }
 
 function clearTitle(element) {
     element.textContent = "";
-
 }
 
 /*
@@ -289,9 +289,9 @@ function saveTitleToNote() {
  * Tar senast skapade Note-objektet och sparar textinnehåll till dess content key
  */
 function saveContentToNote() {
-    let note = noteArray.pop();
+    let note = noteArray.pop(); // här behöver vi ha kontakt med ett specifikt objekt, INTE POP för helvede mvh ziggi som skapade pop
     note.addContent();
-    noteArray.push(note);
+    noteArray.push(note); // behöver det här ändras så vi stoppar tillbaka på specifik plats, lr kan det va såhär?
 }
 
 /**
@@ -310,6 +310,7 @@ function resetNote() {
         listNote.removeChild(listNote.firstChild);
     }
     clearTitle(userTitle);
+    clearField(inputTitleBox);
     newTextArea.value = "";
     if (newTextArea.classList.contains("template")) {
         newTextArea.value = randomTextTemplate();
@@ -327,33 +328,34 @@ function initModalAndShowObjects() {
 }
 
 /**
- * Visar div med sparade notes från local storage
+ * Tar bort default-meddelandet och skapar nytt p-element om det är en ny note
+ * 
  */
-function showSavedNoteTitles() {
-    showObject(savedNotesHeader);
-    showObject(savedNotesDiv);
-    
-    /*
-    Här behövs det kollas ifall det är ett objekt eller är utskrivet. 
-    aka om titel och datum redan har en p och är utskrivna så 
-    ska de inte skrivas ut igen. För nu skrivs titel o datum ut vid andra 
-    save-trycket , utan att vara kopplade till ett objekt.
-    */
+function showSavedNoteTitles(e) {
+    if (JSON.parse(localStorage.getItem("Notes")) != null) {
+        hideObject(noSavedNotesMessage);
+    }
+    console.log(savedNotes);
+    createPForSavedNote();
+}
 
-    counter ++; // denna är global, används för att ge unika id till p-elementen
-
+/**
+ * Skapar ett p-element med titel och datum från senast skapade Note
+ */
+function createPForSavedNote() {
     savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
     let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
-
+    
+    counter ++; // denna är global, används för att ge unika id till p-elementen
     pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
     let newP = pArray.pop(); // plockar ut senaste p-elementet
     newP.textContent = lastNote.title + " " + lastNote.date; // sätter p-elementets innehåll till senaste notens titel o datum
-    savedNotes.push(lastNote); // lägger tillbaka lastNote i savedNotes
     newP.setAttribute("id", counter); // ger varje p ett id
     newP.addEventListener("click", (e) => { openSavedNote(e) }); // ger p-elementet event listener för klick
-    
     savedNotesDiv.appendChild(newP); // append:ar p-elementet till div:en med sparade anteckningar
     pArray.push(newP); // lägger tillbaka p-elementet i sin array.
+    
+    savedNotes.push(lastNote); // lägger tillbaka lastNote i savedNotes
 }
 
 function openSavedNote(e) {
@@ -443,7 +445,7 @@ inputItemBox.addEventListener("keyup", function (e) {
 saveButton.addEventListener("click", (e) => {
     saveContentToNote();
     saveToStorage();
-    showSavedNoteTitles(); 
+    showSavedNoteTitles(e); // HÄR  
 })
 
 emptyNoteButton.addEventListener("click", () => {
