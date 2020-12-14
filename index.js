@@ -335,7 +335,7 @@ function showSavedNoteTitles(e) {
     if (JSON.parse(localStorage.getItem("Notes")) != null) {
         hideObject(noSavedNotesMessage);
     }
-    console.log(savedNotes);
+    updateSavedNotes(); // testar här
     createPForSavedNote();
 }
 
@@ -343,8 +343,9 @@ function showSavedNoteTitles(e) {
  * Skapar ett p-element med titel och datum från senast skapade Note
  */
 function createPForSavedNote() {
-    savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
-    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
+    updateSavedNotes(); // testar här
+
+    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel // HÄR SKA VI HA "THIS NOTE" ist ju! 
     
     counter ++; // denna är global, används för att ge unika id till p-elementen
     pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
@@ -359,7 +360,8 @@ function createPForSavedNote() {
 }
 
 function openSavedNote(e) {
-    
+    updateSavedNotes(); // testar här
+
     initModalAndShowObjects();
     if (savedNotes[e.target.id - 1].type === "list") {
         userTitle.textContent = savedNotes[e.target.id - 1].title;
@@ -374,6 +376,11 @@ function openSavedNote(e) {
         userTitle.textContent = savedNotes[e.target.id - 1].title;
         newTextArea.value = savedNotes[e.target.id - 1].content;
     }
+}
+
+//testfunktion
+function updateSavedNotes() {
+    savedNotes = JSON.parse(localStorage.getItem("Notes"));
 }
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -414,7 +421,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
             inputItemBox.focus();
             newTextArea.focus();
         }
-        saveTitleToNote();
+        saveTitleToNote(); // om vi hade kontakt med objektet hade vi kunnat köra objekt.addTitle(userTitle) istället
         clearField(inputTitleBox);
     }
 });
