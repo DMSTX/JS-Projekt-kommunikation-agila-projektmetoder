@@ -96,6 +96,8 @@ let pArray = [];
 let savedNotes = [];
 let counter = 0;
 
+let listItem;
+
 // ALLA FUNKTIONER ************************************************************************************************************
 
 /**
@@ -106,10 +108,15 @@ function Note(type) {
     this.date = date;
     this.type = type;
     this.title = " ";
-    this.content = "nothing";
+    this.content = undefined;
     this.addContent = function () {
-        if (this.type === "list") {
-            this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
+        if (this.type === "list") {  
+            let arrayOfListItems = listNote.childNodes;
+            this.content = [];
+            
+            for (let i = 0; i < arrayOfListItems.length; i++ ) {
+                this.content.push(arrayOfListItems[i].textContent); 
+            }
         }
         else if (this.type === "text") {
             this.content = document.querySelector(".text").value;
@@ -363,18 +370,30 @@ function openSavedNote(e) {
     updateSavedNotes(); // testar här
 
     initModalAndShowObjects();
-    if (savedNotes[e.target.id - 1].type === "list") {
-        userTitle.textContent = savedNotes[e.target.id - 1].title;
-        //Hur gör vi här för att visa ul?? 
+
+    let x = savedNotes[e.target.id - 1];
+
+    
+    if (x.type === "list") {
+        userTitle.textContent = x.title;
+
+        for(let i = 0; i < x.content.length ; i++) {
+            listItem = document.createElement("li");
+            listItem.textContent = x.content[i];
+            listNote.appendChild(listItem); 
+        }
+ 
+        hideObject(resetNoteButton);
         hideObject(newTextArea);
         showObject(inputItemBox);
         showObject(listNote);
     }
     else {
+        hideObject(resetNoteButton);
         hideObject(inputItemBox);
         hideObject(listNote);
-        userTitle.textContent = savedNotes[e.target.id - 1].title;
-        newTextArea.value = savedNotes[e.target.id - 1].content;
+        userTitle.textContent = x.title;
+        newTextArea.value = x.content;
     }
 }
 
@@ -428,7 +447,7 @@ inputTitleBox.addEventListener("keyup", function (e) {
 
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
-    let listItem = "";
+    
 
     if (e.which === 13 || e.key === 13) {   //firefox .which, chrome .key//
         if (inputItemBox.value.length == 0) {  //checks if input is empty
@@ -437,7 +456,7 @@ inputItemBox.addEventListener("keyup", function (e) {
         else {
             listItem = document.createElement("li");
             listItem.setAttribute("class", "myListItem");
-            listItem.innerText = document.getElementById("inputListBox").value;
+            listItem.textContent = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearField(inputItemBox);
@@ -446,13 +465,13 @@ inputItemBox.addEventListener("keyup", function (e) {
             //addRemoveBtn();
         }
     }
-    saveContentToNote();
+    //saveContentToNote(); // här sparar den 
 });
 
 saveButton.addEventListener("click", (e) => {
     saveContentToNote();
     saveToStorage();
-    showSavedNoteTitles(e); // HÄR  
+    showSavedNoteTitles(e);   
 })
 
 emptyNoteButton.addEventListener("click", () => {
