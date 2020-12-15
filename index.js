@@ -41,15 +41,15 @@ textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya butt
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
 // SAVE BUTTONS
-const saveTextNoteButton = document.createElement("button");
-saveTextNoteButton.setAttribute("id", "textNoteButton");
-saveTextNoteButton.style.display = "none";
-saveTextNoteButton.textContent = "Save";
+const newTextNoteButton = document.createElement("button");
+newTextNoteButton.setAttribute("id", "textNoteButton");
+newTextNoteButton.style.display = "none";
+newTextNoteButton.textContent = "Save";
 
-const saveTemplateNoteButton = document.createElement("button");
-saveTemplateNoteButton.setAttribute("id", "templateNoteButton");
-saveTemplateNoteButton.style.display = "none";
-saveTemplateNoteButton.textContent = "Save";
+const newTemplateNoteButton = document.createElement("button");
+newTemplateNoteButton.setAttribute("id", "templateNoteButton");
+newTemplateNoteButton.style.display = "none";
+newTemplateNoteButton.textContent = "Save";
 
 const saveListNoteButton = document.createElement("button");
 saveListNoteButton.setAttribute("id", "listNoteButton");
@@ -159,8 +159,31 @@ function Note(type, title, user) { // skicka in content, user, title som paramet
             this.content = document.querySelector(".template").value;
         }
     };
+}
 
 
+function newTextNote() {
+    noteArray.push(new Note("text", userTitle.textContent, currentUser));
+    
+    let newNote = noteArray.pop();
+    newNote.addContent();
+    noteArray.push(newNote);
+}
+
+function newTemplateNote() {
+    noteArray.push(new Note("template", userTitle.textContent, currentUser));
+    
+    let newNote = noteArray.pop();
+    newNote.addContent();
+    noteArray.push(newNote);
+}
+
+function newListNote() {
+    noteArray.push(new Note("list", userTitle.textContent, currentUser));
+    
+    let newNote = noteArray.pop();
+    newNote.addContent();
+    noteArray.push(newNote);
 }
 
 /**
@@ -247,15 +270,6 @@ function randomTextTemplate() {
 }
 
 /**
- * Tar senast skapade Note-objektet och sparar textinnehåll till dess content key
- */
-function saveContentToNote() {
-    let note = noteArray.pop(); // här behöver vi ha kontakt med ett specifikt objekt, INTE POP för helvede mvh ziggi som skapade pop
-    note.addContent();
-    noteArray.push(note); // behöver det här ändras så vi stoppar tillbaka på specifik plats, lr kan det va såhär?
-}
-
-/**
  * Sparar noteArray till localStorage
  */
 function saveToStorage() {
@@ -270,8 +284,7 @@ function resetNote() {
     while (listNote.firstChild) {
         listNote.removeChild(listNote.firstChild);
     }
-    //clearTitle(userTitle);  FLYTTAT NEDERST I FUNCTION
-    //newTextArea.value = "";
+
     if (newTextArea.classList.contains("template")) {
         userTitle.textContent = randomTextTemplate();
     }
@@ -288,8 +301,8 @@ function initModalAndHideObjects() {
     showObject(resetNoteButton);
     inputTitleBox.focus();
     hideObject(saveListNoteButton);
-    hideObject(saveTemplateNoteButton);
-    hideObject(saveTextNoteButton);
+    hideObject(newTemplateNoteButton);
+    hideObject(newTextNoteButton);
     hideObject(inputTitleBox);
     hideObject(labelTitle);
     hideObject(inputItemBox);
@@ -312,29 +325,28 @@ function showSavedNoteTitles(e) {
  * Skapar ett p-element med titel och datum från senast skapade Note
  */
 function createPForSavedNote() {
-
     updateSavedNotes();
-    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel // HÄR SKA VI HA "THIS NOTE" ist ju! 
+    let lastNote = savedNotes.pop(); 
 
-    counter++; // denna är global, används för att ge unika id till p-elementen
-    pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
+    pArray.push(document.createElement("p"));
 
-    let newP = pArray.pop(); // plockar ut senaste p-elementet
-    newP.textContent = lastNote.title + " " + lastNote.date; // sätter p-elementets innehåll till senaste notens titel o datum
-    newP.setAttribute("id", counter); // ger varje p ett id
-    newP.addEventListener("click", (e) => { openSavedNote(e) }); // ger p-elementet event listener för klick
+    let newP = pArray.pop(); 
+    newP.textContent = lastNote.title + " " + lastNote.date; 
+    newP.setAttribute("id", counter); 
+    newP.addEventListener("click", (e) => { openSavedNote(e) }); 
 
-    savedNotesDiv.appendChild(newP); // append:ar p-elementet till div:en med sparade anteckningar
-    pArray.push(newP); // lägger tillbaka p-elementet i sin array.
+    savedNotesDiv.appendChild(newP); 
+    pArray.push(newP); 
 
-    savedNotes.push(lastNote); // lägger tillbaka lastNote i savedNotes
+    savedNotes.push(lastNote); 
+    counter++;
 }
 
 function openSavedNote(e) {
     updateSavedNotes();
     initModalAndHideObjects();
 
-    x = savedNotes[e.target.id - 1]; // här sparar vi objektet som vi klickat på 
+    x = savedNotes[e.target.id]; // här sparar vi objektet som vi klickat på 
 
     if (x.type === "list") {
         userTitle.textContent = x.title;
@@ -407,35 +419,6 @@ function addListItemToList(e) {
     }
 }
 
-function saveTextNote() {
-    let testTitle = userTitle.textContent;
-    let testUser = currentUser;
-    noteArray.push(new Note("text", testTitle, testUser ));
-    
-    let testObjekt = noteArray.pop();
-    testObjekt.addContent();
-    noteArray.push(testObjekt);
-}
-
-function saveTemplateNote() {
-    let testTitle = userTitle.textContent;
-    let testUser = currentUser;
-    noteArray.push(new Note("template", testTitle, testUser ));
-    
-    let testObjekt = noteArray.pop();
-    testObjekt.addContent();
-    noteArray.push(testObjekt);
-}
-
-function saveListNote() {
-    let testTitle = userTitle.textContent;
-    let testUser = currentUser;
-    noteArray.push(new Note("list", testTitle, testUser ));
-    
-    let testObjekt = noteArray.pop();
-    testObjekt.addContent();
-    noteArray.push(testObjekt);
-}
 
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -465,8 +448,8 @@ innerModal.appendChild(newTextArea);
 
 
 // KNAPPAR FÖR SPARA OCH RESET
-innerModal.appendChild(saveTextNoteButton);
-innerModal.appendChild(saveTemplateNoteButton);
+innerModal.appendChild(newTextNoteButton);
+innerModal.appendChild(newTemplateNoteButton);
 innerModal.appendChild(saveListNoteButton);
 innerModal.appendChild(resetNoteButton);
 innerModal.appendChild(saveEditedTextButton);
@@ -482,32 +465,32 @@ inputTitleBox.addEventListener("keyup", (e) => { addTitleToNote(e) });
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", (e) => { addListItemToList(e)});
 
-saveTextNoteButton.addEventListener("click", (e) => {
-    saveTextNote();
+newTextNoteButton.addEventListener("click", (e) => {
+    newTextNote();
     saveToStorage();
     showSavedNoteTitles(e);
 })
 
-saveTemplateNoteButton.addEventListener("click", (e) => {
-    saveTemplateNote();
+newTemplateNoteButton.addEventListener("click", (e) => {
+    newTemplateNote();
     saveToStorage();
     showSavedNoteTitles(e);
 })
 
 saveListNoteButton.addEventListener("click", (e) => {
-    saveListNote();
+    newListNote();
     saveToStorage();
     showSavedNoteTitles(e);
 })
 
 saveEditedTextButton.addEventListener("click", () => { 
     //x.content = document.querySelector(".text").value; <<<<< Detta gör att det typ sparas, men inte riktigt?
-    console.log(x.content);
+    console.log(x);
 })
 
 saveEditedTemplateButton.addEventListener("click", () => { 
     //x.content = document.querySelector(".template").value; <<<<< Detta gör att det typ sparas, men inte riktigt?
-    console.log(x.content);
+    console.log(x);
 
 })
 
@@ -516,7 +499,7 @@ saveEditedListButton.addEventListener("click", () => {
     for (let i = 0; i < arrayOfListItems.length; i++) {
         x.content.push(arrayOfListItems[i].textContent);
     } */
-    console.log(x.content);
+    console.log(x);
 })
 
 
@@ -526,7 +509,7 @@ emptyNoteButton.addEventListener("click", () => {
     newTextArea.setAttribute("class", "text");
     initModalAndHideObjects();
     showObject(newTextArea);
-    showObject(saveTextNoteButton);
+    showObject(newTextNoteButton);
     showObject(inputTitleBox);
     showObject(labelTitle);
 });
@@ -539,7 +522,7 @@ textTemplateButton.addEventListener("click", () => {
     
     initModalAndHideObjects();
     showObject(newTextArea);
-    showObject(saveTemplateNoteButton);
+    showObject(newTemplateNoteButton);
     showObject(userTitle);
 });
 
@@ -557,8 +540,6 @@ newEmptyListButton.addEventListener("click", () => {
 modalBg.addEventListener("click", closeModal);
 
 resetNoteButton.addEventListener("click", resetNote);
-
-
 
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
