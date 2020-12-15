@@ -229,8 +229,8 @@ function showObject(object) {
  * Öppnar modal
  */
 function modal() {
-    showObject(body.appendChild(modalBg));
-    showObject(modalBg.appendChild(innerModal));
+    showObject(modalBg);
+    showObject(innerModal); 
 }
 
 /**
@@ -526,6 +526,10 @@ container.appendChild(textTemplateButton);
 container.appendChild(savedNotesHeader);
 container.appendChild(savedNotesDiv);
 
+// MODAL
+body.appendChild(modalBg);
+modalBg.appendChild(innerModal)
+
 // LISTOR 
 innerModal.appendChild(labelTitle);
 labelTitle.appendChild(inputTitleBox);
@@ -534,8 +538,10 @@ labelListItem.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
 
+innerModal.appendChild(newTextArea);
+
+
 // KNAPPAR FÖR SPARA OCH RESET
-//innerModal.appendChild(saveButton); // kolla hur detta blir med tre separata knappar
 innerModal.appendChild(saveTextNoteButton); // TEST HÄR
 innerModal.appendChild(saveTemplateNoteButton);
 innerModal.appendChild(saveListNoteButton);
@@ -576,42 +582,36 @@ saveListNoteButton.addEventListener("click", (e) => {
     showSavedNoteTitles(e);
 }) */
 
-emptyNoteButton.addEventListener("click", () => {
-    //createTextNote(); // BORT
-    //chooseAndOpenTextArea(); // egen funktion för tomt textfält
+emptyNoteButton.addEventListener("click", () => {    
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    showObject(newTextArea);
     newTextArea.setAttribute("class", "text");
-    innerModal.appendChild(newTextArea);
-    //innerModal.appendChild(saveButton);
-    innerModal.appendChild(resetNoteButton);
+    showObject(saveTextNoteButton);
+    showObject(newTextArea);
 
     initModalAndShowObjects();
 
-    showObject(saveTextNoteButton);
     showObject(inputTitleBox);
     showObject(labelTitle);
+    
     hideObject(inputItemBox);
     hideObject(listNote);
     hideObject(labelListItem);
 });
 
-textTemplateButton.addEventListener("click", () => {
-    //createTemplateTextNote(); // BORT
-    //chooseAndOpenTextArea(); // egen funktion för template textfält
+textTemplateButton.addEventListener("click", () => {    
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    showObject(newTextArea);
     newTextArea.setAttribute("class", "template");
-    innerModal.appendChild(newTextArea);
-    //innerModal.appendChild(saveButton);
-    innerModal.appendChild(resetNoteButton);
     showObject(saveTemplateNoteButton);
+    showObject(newTextArea);
 
-    
     initModalAndShowObjects();
-    showObject(userTitle);
+    
+    userTitle.textContent = randomTextTemplate();
+    showObject(userTitle);  
+    
     hideObject(inputTitleBox);
     hideObject(labelTitle);
+    
     hideObject(inputItemBox);
     hideObject(listNote);
     hideObject(labelListItem);
