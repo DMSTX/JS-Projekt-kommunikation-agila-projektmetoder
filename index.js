@@ -95,12 +95,17 @@ newTextArea.style.display = "none";
 //SPARADE NOTES 
 const savedNotesHeader = document.createElement("h2");
 savedNotesHeader.textContent = "Saved notes";
-savedNotesHeader.style.display = "none";
 
 const savedNotesDiv = document.createElement("div");
-savedNotesDiv.style.display = "none";
+let noSavedNotesMessage = document.createElement("p");
+noSavedNotesMessage.textContent = "When you save a note it will show up here!";
+savedNotesDiv.appendChild(noSavedNotesMessage);
 
-let pArray = []
+let pArray = [];
+let savedNotes = [];
+let counter = 0;
+
+let listItem;
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -111,12 +116,17 @@ let pArray = []
 function Note(type) {
     this.date = date;
     this.type = type;
+    this.content = undefined;
     this.user = "";
     this.title = "";
-    this.content = "nothing";
     this.addContent = function () {
-        if (this.type === "list") {
-            this.content = document.getElementsByTagName("li"); // sparas i en HTML-collection
+        if (this.type === "list") {  
+            let arrayOfListItems = listNote.childNodes;
+            this.content = [];
+            
+            for (let i = 0; i < arrayOfListItems.length; i++ ) {
+                this.content.push(arrayOfListItems[i].textContent); 
+            }
         }
         else if (this.type === "text") {
             this.content = document.querySelector(".text").value;
@@ -163,7 +173,6 @@ function clearField(field) {
 
 function clearTitle(element) {
     element.textContent = "";
-
 }
 
 /* ---IF WE HAVE TIME---
@@ -300,9 +309,9 @@ function saveTitleToNote() {
  * Tar senast skapade Note-objektet och sparar textinnehåll till dess content key
  */
 function saveContentToNote() {
-    let note = noteArray.pop();
+    let note = noteArray.pop(); // här behöver vi ha kontakt med ett specifikt objekt, INTE POP för helvede mvh ziggi som skapade pop
     note.addContent();
-    noteArray.push(note);
+    noteArray.push(note); // behöver det här ändras så vi stoppar tillbaka på specifik plats, lr kan det va såhär?
 }
 
 /**
@@ -350,22 +359,72 @@ function initModalAndShowObjects() {
 }
 
 /**
- * Visar div med sparade notes från local storage
+ * Tar bort default-meddelandet och skapar nytt p-element om det är en ny note
+ * 
  */
-function showSavedNoteTitles() {
-    showObject(savedNotesHeader);
-    showObject(savedNotesDiv);
-    
-    let savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
-    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
+function showSavedNoteTitles(e) {
+    if (JSON.parse(localStorage.getItem("Notes")) != null) {
+        hideObject(noSavedNotesMessage);
+    }
+    createPForSavedNote();
+}
 
+/**
+ * Skapar ett p-element med titel och datum från senast skapade Note
+ */
+function createPForSavedNote() {
+
+    updateSavedNotes();
+    let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel // HÄR SKA VI HA "THIS NOTE" ist ju! 
+    
+    counter ++; // denna är global, används för att ge unika id till p-elementen
     pArray.push(document.createElement("p")); // skapar nytt p-element o sparar i array
+    
     let newP = pArray.pop(); // plockar ut senaste p-elementet
     newP.textContent = lastNote.title + " " + lastNote.date; // sätter p-elementets innehåll till senaste notens titel o datum
-    newP.addEventListener("click", () => { console.log("Nu öppnas sparad anteckning") }); // ger p-elementet event listener för klick
-    
+    newP.setAttribute("id", counter); // ger varje p ett id
+    newP.addEventListener("click", (e) => { openSavedNote(e) }); // ger p-elementet event listener för klick
     savedNotesDiv.appendChild(newP); // append:ar p-elementet till div:en med sparade anteckningar
     pArray.push(newP); // lägger tillbaka p-elementet i sin array.
+    
+    savedNotes.push(lastNote); // lägger tillbaka lastNote i savedNotes
+}
+
+function openSavedNote(e) {
+    updateSavedNotes();
+    initModalAndShowObjects();
+
+    let x = savedNotes[e.target.id - 1];
+    
+    if (x.type === "list") {
+        userTitle.textContent = x.title;
+
+        for(let i = 0; i < x.content.length ; i++) {
+            listItem = document.createElement("li");
+            listItem.textContent = x.content[i];
+            listNote.appendChild(listItem); 
+        }
+ 
+        hideObject(resetNoteButton);
+        hideObject(newTextArea);
+        showObject(inputItemBox);
+        showObject(listNote);
+    }
+    else {
+        hideObject(resetNoteButton);
+        hideObject(inputItemBox);
+        hideObject(listNote);
+        
+        console.log(x.title);
+        userTitle.textContent = x.title;
+        
+        console.log(x.content);
+        newTextArea.value = x.content;
+    }
+}
+
+function updateSavedNotes() {
+    savedNotes = JSON.parse(localStorage.getItem("Notes"));
 }
 
 // ALLA APPEND CHILD **************************************************************************************
@@ -408,14 +467,14 @@ inputTitleBox.addEventListener("keyup", function (e) {
             inputItemBox.focus();
             newTextArea.focus();
         }
-        saveTitleToNote();
+        saveTitleToNote(); // om vi hade kontakt med objektet hade vi kunnat köra objekt.addTitle(userTitle) istället
         clearField(inputTitleBox);
     }
 });
 
 //Event for user to add list items//
 inputItemBox.addEventListener("keyup", function (e) {
-    let listItem = "";
+    
 
     if (e.which === 13 || e.key === 13) {   //firefox .which, chrome .key//
         if (inputItemBox.value.length == 0) {  //checks if input is empty
@@ -424,7 +483,7 @@ inputItemBox.addEventListener("keyup", function (e) {
         else {
             listItem = document.createElement("li");
             listItem.setAttribute("class", "myListItem");
-            listItem.innerText = document.getElementById("inputListBox").value;
+            listItem.textContent = document.getElementById("inputListBox").value;
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearField(inputItemBox);
@@ -433,14 +492,14 @@ inputItemBox.addEventListener("keyup", function (e) {
             //addRemoveBtn();
         }
     }
-    saveContentToNote();
+    //saveContentToNote(); // här sparar den 
 });
 
-saveButton.addEventListener("click", () => {
+saveButton.addEventListener("click", (e) => {
     saveUserToNote();
     saveContentToNote();
     saveToStorage();
-    showSavedNoteTitles();
+    showSavedNoteTitles(e);   
 })
 
 emptyNoteButton.addEventListener("click", () => {
