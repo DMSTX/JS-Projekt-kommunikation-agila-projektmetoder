@@ -13,6 +13,7 @@ const body = document.querySelector("body");
 const container = document.getElementById("container"); // sparar container i en variabel
 const modalBg = document.createElement("div"); // modalens transperenta bakgrund
 modalBg.setAttribute("id", "modalBgBox");
+modalBg.style.display = "none";
 const innerModal = document.createElement("div");// inre divbox i modalen
 
 // Stajling på modaler som kommer flyttas till CSS-dok när vi har det
@@ -39,18 +40,7 @@ let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
-/* // SAVE-BUTTONS
-let saveBtn = document.createElement("button");
-saveBtn.setAttribute("id", "listSaveBtn");
-saveBtn.style.display = "none";
-saveBtn.innerText = "Save"; */
-
-// SAVE-BUTTON
-/* let saveButton = document.createElement("button"); // skapar ett nytt button-element
-saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id="saveButton"
-saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
-saveButton.textContent = "Save"; // ger den texten Save */
-
+// SAVE BUTTONS
 const saveTextNoteButton = document.createElement("button");
 saveTextNoteButton.setAttribute("id", "textNoteButton");
 saveTextNoteButton.style.display = "none";
@@ -151,14 +141,6 @@ function Note(type, title, user) { // skicka in content, user, title som paramet
             this.content = document.querySelector(".template").value;
         }
     };
-
-    /* 
-    this.addTitle = function () {
-        this.title = document.getElementById("inputTitleBox").value; // ta bort denna metod
-    };
-    this.addUser = function () {  //used in saveButton eventlistener
-        this.user = currentUser; // ta bort denna metod
-    }; */
 }
 
 /**
@@ -192,22 +174,6 @@ function clearField(field) {
 function clearTitle(element) {
     element.textContent = "";
 }
-
-/* ---IF WE HAVE TIME---
-//function to add remove X to every list item//
-function addRemoveBtn() {
-    let items = document.querySelectorAll(".myListItem");
-    let remove = document.createElement("i"); //skapar ett i-element till li(remove)
-    remove.setAttribute("class", "removeListItem");
-    remove.innerText = " X";
-    
-    for (let i = 0; i < items.length; i++) {
-        document.getElementsByClassName("myListItem")[i].appendChild(remove);
-    }
-    //return items;
-    
-}
-*/
 
 /**
  * Döljer ett objekt genom att sätta display till none
@@ -243,31 +209,6 @@ function closeModal(e) {
         resetNote()
     }
 }
-
-/**
- * Kollar vilken type en Note har och öppnar rätt textarea
- */
-/* function chooseAndOpenTextArea() {
-    let noteObject = noteArray.pop(); //plockar ut senaste note-objektet ur array
-    newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    noteArray.push(noteObject); //lägger tillbaks noten i note arrayen
-    showObject(newTextArea);
-
-    if (noteObject.type === "text") {
-        newTextArea.setAttribute("class", "text");
-        innerModal.appendChild(newTextArea);
-        innerModal.appendChild(saveButton);
-        innerModal.appendChild(resetNoteButton);
-    }
-    else {
-        newTextArea.setAttribute("class", "template");
-        userTitle.textContent = randomTextTemplate(); //RANDOM TEXT AS TITLE?
-        //newTextArea.value = randomTextTemplate();
-        innerModal.appendChild(newTextArea);
-        innerModal.appendChild(saveButton);
-        innerModal.appendChild(resetNoteButton);
-    }
-} */
 
 /**
  * Slumpar fram ett av 10 textförslag
@@ -360,7 +301,6 @@ function resetNote() {
     //newTextArea.value = "";
     if (newTextArea.classList.contains("template")) {
         userTitle.textContent = randomTextTemplate();
-        //newTextArea.value = randomTextTemplate();
     }
     clearTitle(userTitle);
     newTextArea.value = "";
@@ -372,7 +312,6 @@ function resetNote() {
 function initModalAndHideObjects() {
     modal();
     showObject(resetNoteButton);
-    //showObject(saveButton);
     inputTitleBox.focus();
     hideObject(saveListNoteButton);
     hideObject(saveTemplateNoteButton);
@@ -431,21 +370,30 @@ function openSavedNote(e) {
             listNote.appendChild(listItem);
         }
 
-        hideObject(resetNoteButton);
         hideObject(newTextArea);
+        showObject(labelTitle);
+        showObject(inputTitleBox);
+        showObject(labelListItem)
         showObject(inputItemBox);
         showObject(listNote);
+        showObject(saveListNoteButton);
     }
-    else {
-        hideObject(resetNoteButton);
-        hideObject(inputItemBox);
-        hideObject(listNote);
+    else if (x.type === "template"){
 
         userTitle.textContent = x.title;
-        
-        console.log(x.content);
         showObject(newTextArea);
         newTextArea.value = x.content;
+        showObject(saveTemplateNoteButton);
+    }
+    else {
+        showObject(labelTitle);
+        showObject(inputTitleBox);
+        
+        userTitle.textContent = x.title;
+
+        showObject(newTextArea);
+        newTextArea.value = x.content;
+        showObject(saveTextNoteButton);
     }
 }
 
@@ -464,7 +412,6 @@ function addTitleToNote(e) {
             inputItemBox.focus();
             newTextArea.focus();
         }
-        //saveTitleToNote(); // om vi hade kontakt med objektet hade vi kunnat köra objekt.addTitle(userTitle) istället
         clearField(inputTitleBox);
     }
 }
@@ -481,12 +428,9 @@ function addListItemToList(e) {
             document.getElementsByClassName("myList")[0].appendChild(listItem);
 
             clearField(inputItemBox);
-            //showObject(saveButton);
             showObject(resetNoteButton);
-            //addRemoveBtn();
         }
     }
-    //saveContentToNote(); // här sparar den 
 }
 
 function saveTextNote() {
@@ -585,14 +529,6 @@ saveListNoteButton.addEventListener("click", (e) => {
     showSavedNoteTitles(e);
 })
 
-
-/* saveButton.addEventListener("click", (e) => { // Tre separata Save-knappar! 
-    saveUserToNote(); // 
-    saveContentToNote();
-    saveToStorage();
-    showSavedNoteTitles(e);
-}) */
-
 emptyNoteButton.addEventListener("click", () => {    
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
     
@@ -617,8 +553,8 @@ textTemplateButton.addEventListener("click", () => {
 });
 
 newEmptyListButton.addEventListener("click", () => {
-    //createListNote(); // BORT
     initModalAndHideObjects();
+    hideObject(newTextArea);
     showObject(saveListNoteButton);
     showObject(labelTitle);
     showObject(inputTitleBox);
@@ -653,5 +589,21 @@ function addEventToX (){
             console.log("I work! But I do nothing...")
     });
   }
+}
+*/
+
+/* ---IF WE HAVE TIME---
+//function to add remove X to every list item//
+function addRemoveBtn() {
+    let items = document.querySelectorAll(".myListItem");
+    let remove = document.createElement("i"); //skapar ett i-element till li(remove)
+    remove.setAttribute("class", "removeListItem");
+    remove.innerText = " X";
+    
+    for (let i = 0; i < items.length; i++) {
+        document.getElementsByClassName("myListItem")[i].appendChild(remove);
+    }
+    //return items;
+    
 }
 */
