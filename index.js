@@ -369,11 +369,19 @@ function resetNote() {
 /**
  * Öppnar modal, visar knappar, sätter pekaren rätt
  */
-function initModalAndShowObjects() {
+function initModalAndHideObjects() {
     modal();
     showObject(resetNoteButton);
     //showObject(saveButton);
     inputTitleBox.focus();
+    hideObject(saveListNoteButton);
+    hideObject(saveTemplateNoteButton);
+    hideObject(saveTextNoteButton);
+    hideObject(inputTitleBox);
+    hideObject(labelTitle);
+    hideObject(inputItemBox);
+    hideObject(listNote);
+    hideObject(labelListItem);
 }
 
 /**
@@ -410,7 +418,7 @@ function createPForSavedNote() {
 
 function openSavedNote(e) {
     updateSavedNotes();
-    initModalAndShowObjects();
+    initModalAndHideObjects();
 
     let x = savedNotes[e.target.id - 1];
 
@@ -434,6 +442,9 @@ function openSavedNote(e) {
         hideObject(listNote);
 
         userTitle.textContent = x.title;
+        
+        console.log(x.content);
+        showObject(newTextArea);
         newTextArea.value = x.content;
     }
 }
@@ -584,46 +595,31 @@ saveListNoteButton.addEventListener("click", (e) => {
 
 emptyNoteButton.addEventListener("click", () => {    
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    
     newTextArea.setAttribute("class", "text");
-    showObject(saveTextNoteButton);
+    initModalAndHideObjects();
     showObject(newTextArea);
-
-    initModalAndShowObjects();
-
+    showObject(saveTextNoteButton);
     showObject(inputTitleBox);
     showObject(labelTitle);
-    
-    hideObject(inputItemBox);
-    hideObject(listNote);
-    hideObject(labelListItem);
 });
 
 textTemplateButton.addEventListener("click", () => {    
     newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    
     newTextArea.setAttribute("class", "template");
-    showObject(saveTemplateNoteButton);
-    showObject(newTextArea);
-
-    initModalAndShowObjects();
-    
     userTitle.textContent = randomTextTemplate();
-    showObject(userTitle);  
     
-    hideObject(inputTitleBox);
-    hideObject(labelTitle);
-    
-    hideObject(inputItemBox);
-    hideObject(listNote);
-    hideObject(labelListItem);
+    initModalAndHideObjects();
+    showObject(newTextArea);
+    showObject(saveTemplateNoteButton);
+    showObject(userTitle);
 });
 
 newEmptyListButton.addEventListener("click", () => {
     //createListNote(); // BORT
-
+    initModalAndHideObjects();
     showObject(saveListNoteButton);
-
-    initModalAndShowObjects();
-    hideObject(newTextArea);
     showObject(labelTitle);
     showObject(inputTitleBox);
     showObject(labelListItem);
