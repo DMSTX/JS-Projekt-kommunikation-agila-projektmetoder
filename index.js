@@ -14,6 +14,7 @@ const container = document.getElementById("container"); // sparar container i en
 const modalBg = document.createElement("div"); // modalens transperenta bakgrund
 modalBg.setAttribute("id", "modalBgBox");
 const innerModal = document.createElement("div");// inre divbox i modalen
+innerModal.setAttribute("id", "popUp");
 
 // Stajling på modaler som kommer flyttas till CSS-dok när vi har det
 modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
@@ -95,10 +96,10 @@ newTextArea.style.display = "none";
 //SPARADE NOTES 
 const savedNotesHeader = document.createElement("h2");
 savedNotesHeader.textContent = "Saved notes";
-savedNotesHeader.style.display = "none";
 
 const savedNotesDiv = document.createElement("div");
 savedNotesDiv.style.display = "none";
+savedNotesDiv.setAttribute("id", "myNotes");
 
 let pArray = []
 
@@ -354,7 +355,7 @@ function initModalAndShowObjects() {
  */
 function showSavedNoteTitles() {
     showObject(savedNotesHeader);
-    showObject(savedNotesDiv);
+    savedNotesDiv.style = "flex";
     
     let savedNotes = JSON.parse(localStorage.getItem("Notes")); // tar ut sparade anteckningar ur local storage
     let lastNote = savedNotes.pop(); // sparar senaste anteckningen i variabel
@@ -376,8 +377,8 @@ container.appendChild(emptyNoteButton);
 container.appendChild(textTemplateButton);
 
 // SPARADE NOTES
-container.appendChild(savedNotesHeader);
-container.appendChild(savedNotesDiv);
+savedNotesDiv.appendChild(savedNotesHeader);
+body.appendChild(savedNotesDiv);
 
 // LISTOR 
 innerModal.appendChild(labelTitle);
