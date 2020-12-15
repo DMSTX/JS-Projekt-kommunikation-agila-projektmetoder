@@ -272,7 +272,7 @@ function randomTextTemplate() {
 /**
  * Sparar noteArray till localStorage
  */
-function saveToStorage() {
+function saveToStorage() { 
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
 }
@@ -484,13 +484,16 @@ saveListNoteButton.addEventListener("click", (e) => {
 })
 
 saveEditedTextButton.addEventListener("click", () => { 
-    //x.content = document.querySelector(".text").value; <<<<< Detta gör att det typ sparas, men inte riktigt?
+    //x.content = document.querySelector(".text").value;  <<< verkar sparas i x, men inte i noteArray eller localStorage? 
     console.log(x);
+    saveToStorage();
 })
 
 saveEditedTemplateButton.addEventListener("click", () => { 
     //x.content = document.querySelector(".template").value; <<<<< Detta gör att det typ sparas, men inte riktigt?
     console.log(x);
+    saveToStorage();
+
 
 })
 
@@ -500,6 +503,7 @@ saveEditedListButton.addEventListener("click", () => {
         x.content.push(arrayOfListItems[i].textContent);
     } */
     console.log(x);
+    saveToStorage();
 })
 
 
