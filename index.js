@@ -419,6 +419,7 @@ function openSavedNote(e) {
         userTitle.textContent = x.title;
         
         console.log(x.content);
+        showObject(newTextArea);
         newTextArea.value = x.content;
     }
 }
