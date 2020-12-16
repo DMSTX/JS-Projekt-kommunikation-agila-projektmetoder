@@ -16,17 +16,6 @@ modalBg.setAttribute("id", "modalBgBox");
 const innerModal = document.createElement("div");// inre divbox i modalen
 innerModal.setAttribute("id", "popUp");
 
-// Stajling på modaler som kommer flyttas till CSS-dok när vi har det
-modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
-modalBg.style.width = "100%";
-modalBg.style.height = "100vh";
-modalBg.style.position = "absolute";
-modalBg.style.top = "0px";
-modalBg.style.padding = "100px";
-innerModal.style.backgroundColor = "white";
-innerModal.style.width = "50%";
-innerModal.style.padding = "20px";
-
 // KNAPPAR FÖR DE OLIKA ANTECKNINGSTYPERNA
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");

@@ -18,7 +18,8 @@ body{
     background-size: auto;
 }
 
-button{
+#newEmptyListButton, #emptyNoteButton, #textTemplateButton, 
+#saveButton, #clearList {
     width: 20rem;
     background-color: transparent;
     border: 2px solid black;
@@ -33,6 +34,26 @@ button{
     margin: 5px;
     transition-duration: 0.4s;
     box-shadow: 2px 2px 2px;
+}
+
+@media only screen and (max-width: 650px) {
+    #saveButton, #clearList {
+         
+        width: 10rem;
+        background-color: transparent;
+        border: 2px solid black;
+        border-radius: 3px;
+        color: black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-family: Brushstroke, cursive;
+        font-size: 24px;
+        margin: 5px;
+        transition-duration: 0.4s;
+        box-shadow: 2px 2px 2px;
+    }
 }
 
 button:hover{
@@ -56,9 +77,23 @@ footer{
     width: 100%;
 }
 
+#modalBgBox {
+    padding-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: transparent;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+}
+
 #popUp {
     margin: 0 auto;
-    background-color: transparent; 
+    background-color: #ebede8; 
+    width: 50%;
+    padding: 20px;
     font-family: Brushstroke, cursive;
     border: 2px solid black;
     border-radius: 5px;
