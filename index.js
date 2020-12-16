@@ -4,7 +4,7 @@ let noteArray = []; // skapar en array
 let today = new Date();
 let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
 let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
-let currentUser = "Ziggi"; // needs user name from a login-input field. add document.getElement....
+let currentUser = ""; // needs user name from a login-input field. add document.getElement....
 
 // ALLA VARIABLER ***************************************************************************************************************
 
@@ -346,7 +346,7 @@ function openSavedNote(e) {
     updateSavedNotes();
     initModalAndHideObjects();
 
-    x = savedNotes[e.target.id]; // här sparar vi objektet som vi klickat på 
+    x = noteArray[e.target.id]; // här sparar vi objektet som vi klickat på 
 
     if (x.type === "list") {
         userTitle.textContent = x.title;
@@ -484,12 +484,14 @@ saveListNoteButton.addEventListener("click", (e) => {
 })
 
 saveEditedTextButton.addEventListener("click", () => { 
+    x.addContent();
     //x.content = document.querySelector(".text").value;  <<< verkar sparas i x, men inte i noteArray eller localStorage? 
     console.log(x);
     saveToStorage();
 })
 
 saveEditedTemplateButton.addEventListener("click", () => { 
+    x.addContent();
     //x.content = document.querySelector(".template").value; <<<<< Detta gör att det typ sparas, men inte riktigt?
     console.log(x);
     saveToStorage();
@@ -498,6 +500,7 @@ saveEditedTemplateButton.addEventListener("click", () => {
 })
 
 saveEditedListButton.addEventListener("click", () => {
+   x.addContent();
     /* let arrayOfListItems = listNote.childNodes; <<<<< Detta gör att det typ sparas, men inte riktigt?
     for (let i = 0; i < arrayOfListItems.length; i++) {
         x.content.push(arrayOfListItems[i].textContent);
