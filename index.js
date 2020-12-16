@@ -33,6 +33,12 @@ textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya butt
 textTemplateButton.setAttribute("class", "pageButtons");
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
+//LOGIN-BUTTON
+let loginButton = document.createElement("button");
+loginButton.setAttribute("id", "loginButton");
+loginButton.setAttribute("class", "pageButtons");
+loginButton.textContent = "Login";
+
 //FÄLT TILL USER LOGIN
 let labelUser = document.createElement("label");
 labelUser.setAttribute("for", "inputUser");
@@ -43,40 +49,43 @@ userInput.setAttribute("id", "userInput");
 userInput.setAttribute("type", "text");
 userInput.required = true;
 
-//LOGIN-BUTTON
-let loginButton = document.createElement("button");
-loginButton.setAttribute("id", "loginButton");
-loginButton.textContent = "Login";
+
 
 // SAVE BUTTONS
 const newTextNoteButton = document.createElement("button");
 newTextNoteButton.setAttribute("id", "textNoteButton");
+newTextNoteButton.setAttribute("class", "modalButtons");
 newTextNoteButton.style.display = "none";
 newTextNoteButton.textContent = "Save";
 
 const newTemplateNoteButton = document.createElement("button");
 newTemplateNoteButton.setAttribute("id", "templateNoteButton");
+newTemplateNoteButton.setAttribute("class", "modalButtons");
 newTemplateNoteButton.style.display = "none";
 newTemplateNoteButton.textContent = "Save";
 
 const saveListNoteButton = document.createElement("button");
 saveListNoteButton.setAttribute("id", "listNoteButton");
+saveListNoteButton.setAttribute("class", "modalButtons");
 saveListNoteButton.style.display = "none";
 saveListNoteButton.textContent = "Save";
 
 // SPARA REDIGERAD ANTECKNING 
 const saveEditedTextButton = document.createElement("button");
 saveEditedTextButton.setAttribute("id", "saveEditedTextButton");
+saveEditedTextButton.setAttribute("class", "modalButtons");
 saveEditedTextButton.style.display = "none";
 saveEditedTextButton.textContent = "Save";
 
 const saveEditedTemplateButton = document.createElement("button");
 saveEditedTemplateButton.setAttribute("id", "saveEditedTemplateButton");
+saveEditedTemplateButton.setAttribute("class", "modalButtons");
 saveEditedTemplateButton.style.display = "none";
 saveEditedTemplateButton.textContent = "Save";
 
 const saveEditedListButton = document.createElement("button");
 saveEditedListButton.setAttribute("id", "saveEditedListButton");
+saveEditedListButton.setAttribute("class", "modalButtons");
 saveEditedListButton.style.display = "none";
 saveEditedListButton.textContent = "Save";
 
@@ -124,16 +133,16 @@ newTextArea.style.display = "none";
 
 //SPARADE NOTES 
 const savedNotesHeader = document.createElement("h2");
-savedNotesHeader.textContent = "Saved notes";
+savedNotesHeader.textContent = "When you save a note it will show up here!";
 
 const savedNotesDiv = document.createElement("div");
 
 /*savedNotesDiv.style.display = "none";*/
 savedNotesDiv.setAttribute("id", "myNotes");
 
-let noSavedNotesMessage = document.createElement("p");
+/*let noSavedNotesMessage = document.createElement("p");
 noSavedNotesMessage.textContent = "When you save a note it will show up here!";
-savedNotesDiv.appendChild(noSavedNotesMessage);
+savedNotesDiv.appendChild(noSavedNotesMessage);*/
 
 let pArray = [];
 let savedNotes = [];
