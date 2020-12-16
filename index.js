@@ -15,29 +15,22 @@ const modalBg = document.createElement("div"); // modalens transperenta bakgrund
 modalBg.setAttribute("id", "modalBgBox");
 modalBg.style.display = "none";
 const innerModal = document.createElement("div");// inre divbox i modalen
-
-// Stajling på modaler som kommer flyttas till CSS-dok när vi har det
-modalBg.style.backgroundColor = "rgba(0,0,0,0.4)"; /* Black w/ opacity */
-modalBg.style.width = "100%";
-modalBg.style.height = "100vh";
-modalBg.style.position = "absolute";
-modalBg.style.top = "0px";
-modalBg.style.padding = "100px";
-innerModal.style.backgroundColor = "white";
-innerModal.style.width = "50%";
-innerModal.style.padding = "20px";
+innerModal.setAttribute("id", "popUp");
 
 // KNAPPAR FÖR DE OLIKA ANTECKNINGSTYPERNA
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");
+newEmptyListButton.setAttribute("class", "pageButtons");
 newEmptyListButton.textContent = "New empty list";
 
 let emptyNoteButton = document.createElement("button"); // skapar ett nytt button-element
 emptyNoteButton.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
+emptyNoteButton.setAttribute("class", "pageButtons");
 emptyNoteButton.textContent = "New empty note"; // sätter knappens text till New empty note
 
 let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
+textTemplateButton.setAttribute("class", "pageButtons");
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
 //FÄLT TILL USER LOGIN
@@ -90,6 +83,7 @@ saveEditedListButton.textContent = "Save";
 //CLEAR-BUTTON
 let resetNoteButton = document.createElement("button");
 resetNoteButton.setAttribute("id", "clearList");
+resetNoteButton.setAttribute("class", "modalButtons");
 resetNoteButton.style.display = "none";
 resetNoteButton.textContent = "Start Over";
 
@@ -133,6 +127,10 @@ const savedNotesHeader = document.createElement("h2");
 savedNotesHeader.textContent = "Saved notes";
 
 const savedNotesDiv = document.createElement("div");
+
+/*savedNotesDiv.style.display = "none";*/
+savedNotesDiv.setAttribute("id", "myNotes");
+
 let noSavedNotesMessage = document.createElement("p");
 noSavedNotesMessage.textContent = "When you save a note it will show up here!";
 savedNotesDiv.appendChild(noSavedNotesMessage);
@@ -340,6 +338,7 @@ function initModalAndHideObjects() {
  * Tar bort default-meddelandet och skapar nytt p-element om det är en ny note
  * 
  */
+
 function showSavedNoteTitles(e) {
     if (JSON.parse(localStorage.getItem("Notes")) != null) {
         hideObject(noSavedNotesMessage);
@@ -360,6 +359,7 @@ function createPForSavedNote() {
     newP.textContent = lastNote.title + " " + lastNote.date; 
     newP.setAttribute("id", counter); 
     newP.addEventListener("click", (e) => { openSavedNote(e) }); 
+
 
     savedNotesDiv.appendChild(newP); 
     pArray.push(newP); 
@@ -455,19 +455,21 @@ container.appendChild(userInput);
 container.appendChild(loginButton);
 
 // KNAPPARNA FÖR OLIKA ANTECKNINGAR *** !! Should be removed when we use login
-container.appendChild(newEmptyListButton);
+/*container.appendChild(newEmptyListButton);
 container.appendChild(emptyNoteButton);
-container.appendChild(textTemplateButton);
+container.appendChild(textTemplateButton);*/
 
 // SPARADE NOTES
-container.appendChild(savedNotesHeader);
-container.appendChild(savedNotesDiv);
-
+/*container.appendChild(savedNotesHeader);
+container.appendChild(savedNotesDiv);*/
+savedNotesDiv.appendChild(savedNotesHeader);
+body.appendChild(savedNotesDiv);
 // MODAL
 body.appendChild(modalBg);
 modalBg.appendChild(innerModal)
 
 // LISTOR 
+
 innerModal.appendChild(labelTitle);
 labelTitle.appendChild(inputTitleBox);
 innerModal.appendChild(labelListItem);
@@ -587,9 +589,9 @@ loginButton.addEventListener("click", () =>{
         container.appendChild(textTemplateButton);
         
         //***To be un-commented later****
-        //hideObject(labelUser);
-        //hideObject(userInput);
-        //hideObject(loginButton);
+        hideObject(labelUser);
+        hideObject(userInput);
+        hideObject(loginButton);
 
         //also show saved notes here and filter notes per user
     }
