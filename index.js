@@ -19,14 +19,17 @@ innerModal.setAttribute("id", "popUp");
 // KNAPPAR FÖR DE OLIKA ANTECKNINGSTYPERNA
 let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
 newEmptyListButton.setAttribute("id", "newEmptyListButton");
+newEmptyListButton.setAttribute("class", "pageButtons");
 newEmptyListButton.textContent = "New empty list";
 
 let emptyNoteButton = document.createElement("button"); // skapar ett nytt button-element
 emptyNoteButton.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
+emptyNoteButton.setAttribute("class", "pageButtons");
 emptyNoteButton.textContent = "New empty note"; // sätter knappens text till New empty note
 
 let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
+textTemplateButton.setAttribute("class", "pageButtons");
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
 // SAVE-BUTTONS
@@ -38,12 +41,14 @@ saveBtn.innerText = "Save";
 // SAVE-BUTTON
 let saveButton = document.createElement("button"); // skapar ett nytt button-element
 saveButton.setAttribute("id", "saveButton"); // ger detta nya button-element id="saveButton"
+saveButton.setAttribute("class", "modalButtons");
 saveButton.style.display = "none"; // ger den visibility: none, så att den är osynlig
 saveButton.textContent = "Save"; // ger den texten Save
 
 //CLEAR-BUTTON
 let resetNoteButton = document.createElement("button");
 resetNoteButton.setAttribute("id", "clearList");
+resetNoteButton.setAttribute("class", "modalButtons");
 resetNoteButton.style.display = "none";
 resetNoteButton.textContent = "Start Over";
 
