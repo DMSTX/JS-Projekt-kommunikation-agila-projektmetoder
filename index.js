@@ -40,6 +40,21 @@ let textTemplateButton = document.createElement("button");
 textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
 textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
 
+//FÄLT TILL USER LOGIN
+let labelUser = document.createElement("label");
+labelUser.setAttribute("for", "inputUser");
+labelUser.textContent = "USER NAME";
+
+let userInput = document.createElement("input");
+userInput.setAttribute("id", "userInput");
+userInput.setAttribute("type", "text");
+userInput.required = true;
+
+//LOGIN-BUTTON
+let loginButton = document.createElement("button");
+loginButton.setAttribute("id", "loginButton");
+loginButton.textContent = "Login";
+
 // SAVE BUTTONS
 const newTextNoteButton = document.createElement("button");
 newTextNoteButton.setAttribute("id", "textNoteButton");
@@ -222,6 +237,17 @@ function closeModal(e) {
         hideObject(modalBg);
         resetNote()
     }
+}
+
+function validateUser (){
+    let userInput = document.getElementById("userInput").value;
+
+    for (let i = 0; i < userList.length; i++){
+        if (userInput === userList[i]){
+            return true;
+        } 
+    }; 
+    return false;    
 }
 
 /**
@@ -423,7 +449,12 @@ function addListItemToList(e) {
 
 // ALLA APPEND CHILD **************************************************************************************
 
-// KNAPPARNA FÖR OLIKA ANTECKNINGAR
+//USER LOGIN
+container.appendChild(labelUser);
+container.appendChild(userInput);
+container.appendChild(loginButton);
+
+// KNAPPARNA FÖR OLIKA ANTECKNINGAR *** !! Should be removed when we use login
 container.appendChild(newEmptyListButton);
 container.appendChild(emptyNoteButton);
 container.appendChild(textTemplateButton);
@@ -547,6 +578,28 @@ newEmptyListButton.addEventListener("click", () => {
 modalBg.addEventListener("click", closeModal);
 
 resetNoteButton.addEventListener("click", resetNote);
+
+loginButton.addEventListener("click", () =>{  
+    let value = validateUser();
+    if(value){
+        container.appendChild(newEmptyListButton);
+        container.appendChild(emptyNoteButton);
+        container.appendChild(textTemplateButton);
+        
+        //***To be un-commented later****
+        //hideObject(labelUser);
+        //hideObject(userInput);
+        //hideObject(loginButton);
+
+        //also show saved notes here and filter notes per user
+    }
+    else{
+        alert("Something went wrong please try again");
+        clearField(userInput);
+        userInput.focus();
+    } 
+});
+
 
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
