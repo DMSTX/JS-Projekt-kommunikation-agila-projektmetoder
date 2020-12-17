@@ -141,7 +141,8 @@ const savedNotesDiv = document.createElement("div");
 savedNotesDiv.setAttribute("id", "myNotes");
 
 let noSavedNotesMessage = document.createElement("p");
-noSavedNotesMessage.textContent = "When you save a note it will show up here!";
+//noSavedNotesMessage.textContent = "When you save a note it will show up here!";
+
 savedNotesDiv.appendChild(noSavedNotesMessage);
 
 let pArray = [];
@@ -414,7 +415,6 @@ function openSavedNote(e) {
         userTitle.textContent = x.title;
         showObject(newTextArea);
         newTextArea.value = x.content;
-        showObject(saveEditedTextButton);
     }
 }
 
@@ -472,7 +472,7 @@ container.appendChild(textTemplateButton);*/
 /*container.appendChild(savedNotesHeader);
 container.appendChild(savedNotesDiv);*/
 savedNotesDiv.appendChild(savedNotesHeader);
-body.appendChild(savedNotesDiv);
+//body.appendChild(savedNotesDiv);
 // MODAL
 body.appendChild(modalBg);
 modalBg.appendChild(innerModal)
@@ -596,13 +596,15 @@ loginButton.addEventListener("click", () =>{
         container.appendChild(newEmptyListButton);
         container.appendChild(emptyNoteButton);
         container.appendChild(textTemplateButton);
+        body.appendChild(savedNotesDiv);
+        //savedNotesDiv.appendChild(savedNotesHeader);
         
         //***To be un-commented later****
         hideObject(labelUser);
         hideObject(userInput);
         hideObject(loginButton);
 
-        //also show saved notes here and filter notes per user
+        //functioni to filter saved notes by user
     }
     else{
         alert("Something went wrong please try again");
