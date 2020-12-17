@@ -322,15 +322,13 @@ function init() {
         while (listNote.firstChild) {
             listNote.removeChild(listNote.firstChild);
         }
-
-        if (textArea.classList.contains("template")) {
-            userTitle.textContent = randomTextTemplate();
-        }
-
         clearTitle(userTitle);
         clearField(textArea);
         clearField(inputTitleBox);
         clearField(inputItemBox);
+        if (textArea.classList.contains("template")) {
+            userTitle.textContent = randomTextTemplate();
+        }
     }
 
     /**
