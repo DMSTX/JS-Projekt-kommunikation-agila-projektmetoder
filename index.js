@@ -2,12 +2,14 @@
 
 let noteArray = []; // skapar en array
 let today = new Date();
-let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate(); //datum under 10 skrivs ut lite fult men ok
+let date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " | " + ('0'+today.getHours()).substr(-2) + ":" + ('0' + today.getMinutes()).slice(-2);
+('0' + today.getMinutes()).slice(-2);
 let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
 let currentUser = ""; // needs user name from a login-input field. add document.getElement....
 
 // ALLA VARIABLER ***************************************************************************************************************
-
+function init() {
+    console.log("init körs");
 // KONSTANTER
 const body = document.querySelector("body");
 const container = document.getElementById("container"); // sparar container i en variabel
@@ -612,7 +614,12 @@ loginButton.addEventListener("click", () => {
     }
 });
 
+}
 
+window.addEventListener('DOMContentLoaded', (event) => {
+    console.log("dom loaded");
+    init();
+  });
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
     createListNote();
