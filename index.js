@@ -7,7 +7,8 @@ let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
 let currentUser = ""; // needs user name from a login-input field. add document.getElement....
 
 // ALLA VARIABLER ***************************************************************************************************************
-
+function init() {
+    console.log("init körs");
 // KONSTANTER
 const body = document.querySelector("body");
 const container = document.getElementById("container"); // sparar container i en variabel
@@ -613,7 +614,12 @@ loginButton.addEventListener("click", () =>{
     } 
 });
 
+}
 
+window.addEventListener('DOMContentLoaded', (event) => {
+    console.log("dom loaded");
+    init();
+  });
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
 document.addEventListener("DOMContentLoaded", () => {
     createListNote();
