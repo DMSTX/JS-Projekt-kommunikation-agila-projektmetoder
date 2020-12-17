@@ -17,21 +17,21 @@ modalBg.style.display = "none";
 const innerModal = document.createElement("div");// inre divbox i modalen
 innerModal.setAttribute("id", "popUp");
 
-// KNAPPAR FÖR DE OLIKA ANTECKNINGSTYPERNA
-let newEmptyListButton = document.createElement("button"); //button is created to initialize new list
-newEmptyListButton.setAttribute("id", "newEmptyListButton");
-newEmptyListButton.setAttribute("class", "pageButtons");
-newEmptyListButton.textContent = "New empty list";
+// ÖPPNA NY ANTECKNING-BUTTONS
+let openNewListNoteBtn = document.createElement("button"); //button is created to initialize new list
+openNewListNoteBtn.setAttribute("id", "newEmptyListButton");
+openNewListNoteBtn.setAttribute("class", "pageButtons");
+openNewListNoteBtn.textContent = "New empty list";
 
-let emptyNoteButton = document.createElement("button"); // skapar ett nytt button-element
-emptyNoteButton.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
-emptyNoteButton.setAttribute("class", "pageButtons");
-emptyNoteButton.textContent = "New empty note"; // sätter knappens text till New empty note
+let openNewTextNoteBtn = document.createElement("button"); // skapar ett nytt button-element
+openNewTextNoteBtn.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
+openNewTextNoteBtn.setAttribute("class", "pageButtons");
+openNewTextNoteBtn.textContent = "New empty note"; // sätter knappens text till New empty note
 
-let textTemplateButton = document.createElement("button");
-textTemplateButton.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
-textTemplateButton.setAttribute("class", "pageButtons");
-textTemplateButton.textContent = "New note with text Template"; // sätter knappens text
+let openNewTemplateNoteBtn = document.createElement("button");
+openNewTemplateNoteBtn.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
+openNewTemplateNoteBtn.setAttribute("class", "pageButtons");
+openNewTemplateNoteBtn.textContent = "New note with text Template"; // sätter knappens text
 
 //LOGIN-BUTTON
 let loginButton = document.createElement("button");
@@ -49,53 +49,50 @@ userInput.setAttribute("id", "userInput");
 userInput.setAttribute("type", "text");
 userInput.required = true;
 
+// SKAPA NOTE-OBJEKT OCH SPARA DET-BUTTONS
+const saveNewTextNoteBtn = document.createElement("button");
+saveNewTextNoteBtn.setAttribute("id", "textNoteButton");
+saveNewTextNoteBtn.setAttribute("class", "modalButtons");
+saveNewTextNoteBtn.style.display = "none"; // NONE
+saveNewTextNoteBtn.textContent = "Save";
 
+const saveNewTemplateNoteBtn = document.createElement("button");
+saveNewTemplateNoteBtn.setAttribute("id", "templateNoteButton");
+saveNewTemplateNoteBtn.setAttribute("class", "modalButtons");
+saveNewTemplateNoteBtn.style.display = "none"; // NONE
+saveNewTemplateNoteBtn.textContent = "Save";
 
-// SAVE BUTTONS
-const newTextNoteButton = document.createElement("button");
-newTextNoteButton.setAttribute("id", "textNoteButton");
-newTextNoteButton.setAttribute("class", "modalButtons");
-newTextNoteButton.style.display = "none";
-newTextNoteButton.textContent = "Save";
+const saveNewListNoteBtn = document.createElement("button");
+saveNewListNoteBtn.setAttribute("id", "listNoteButton");
+saveNewListNoteBtn.setAttribute("class", "modalButtons");
+saveNewListNoteBtn.style.display = "none"; // NONE
+saveNewListNoteBtn.textContent = "Save";
 
-const newTemplateNoteButton = document.createElement("button");
-newTemplateNoteButton.setAttribute("id", "templateNoteButton");
-newTemplateNoteButton.setAttribute("class", "modalButtons");
-newTemplateNoteButton.style.display = "none";
-newTemplateNoteButton.textContent = "Save";
+// SPARA REDIGERAD ANTECKNING-BUTTONS
+const saveEditedTextBtn = document.createElement("button");
+saveEditedTextBtn.setAttribute("id", "saveEditedTextButton");
+saveEditedTextBtn.setAttribute("class", "modalButtons");
+saveEditedTextBtn.style.display = "none"; // NONE
+saveEditedTextBtn.textContent = "Save";
 
-const saveListNoteButton = document.createElement("button");
-saveListNoteButton.setAttribute("id", "listNoteButton");
-saveListNoteButton.setAttribute("class", "modalButtons");
-saveListNoteButton.style.display = "none";
-saveListNoteButton.textContent = "Save";
+const saveEditedTemplateBtn = document.createElement("button");
+saveEditedTemplateBtn.setAttribute("id", "saveEditedTemplateButton");
+saveEditedTemplateBtn.setAttribute("class", "modalButtons");
+saveEditedTemplateBtn.style.display = "none"; // NONE
+saveEditedTemplateBtn.textContent = "Save";
 
-// SPARA REDIGERAD ANTECKNING 
-const saveEditedTextButton = document.createElement("button");
-saveEditedTextButton.setAttribute("id", "saveEditedTextButton");
-saveEditedTextButton.setAttribute("class", "modalButtons");
-saveEditedTextButton.style.display = "none";
-saveEditedTextButton.textContent = "Save";
-
-const saveEditedTemplateButton = document.createElement("button");
-saveEditedTemplateButton.setAttribute("id", "saveEditedTemplateButton");
-saveEditedTemplateButton.setAttribute("class", "modalButtons");
-saveEditedTemplateButton.style.display = "none";
-saveEditedTemplateButton.textContent = "Save";
-
-const saveEditedListButton = document.createElement("button");
-saveEditedListButton.setAttribute("id", "saveEditedListButton");
-saveEditedListButton.setAttribute("class", "modalButtons");
-saveEditedListButton.style.display = "none";
-saveEditedListButton.textContent = "Save";
+const saveEditedListBtn = document.createElement("button");
+saveEditedListBtn.setAttribute("id", "saveEditedListButton");
+saveEditedListBtn.setAttribute("class", "modalButtons");
+saveEditedListBtn.style.display = "none"; // NONE
+saveEditedListBtn.textContent = "Save";
 
 //CLEAR-BUTTON
 let resetNoteButton = document.createElement("button");
 resetNoteButton.setAttribute("id", "clearList");
 resetNoteButton.setAttribute("class", "modalButtons");
-resetNoteButton.style.display = "none";
+resetNoteButton.style.display = "none"; // NONE
 resetNoteButton.textContent = "Start Over";
-
 
 // FÄLT TILL ANTECKNINGAR
 let labelTitle = document.createElement("label");
@@ -108,7 +105,7 @@ inputTitleBox.setAttribute("type", "text");
 
 let userTitle = document.createElement("h4");
 userTitle.setAttribute("class", "userTitle");
-userTitle.style.display = "none";
+userTitle.style.display = "none"; // NONE
 
 let labelListItem = document.createElement("label");
 labelListItem.setAttribute("for", "inputListBox");
@@ -117,41 +114,34 @@ labelListItem.textContent = "TO-DO ";
 let inputItemBox = document.createElement("input"); //input field for user list items
 inputItemBox.setAttribute("id", "inputListBox");
 inputItemBox.setAttribute("type", "text");
-inputItemBox.attributes.required = true; //!oklart om denna gör något!//
+inputItemBox.attributes.required = true;
 
 let listNote = document.createElement("ul"); //unordered list
-listNote.setAttribute("class", "myList"); //om id, numereriskt som ökar för varje lista?
+listNote.setAttribute("class", "myList");
 
-let inputTitle = document.createElement("h4"); //skapar en titel som user valt
+let inputTitle = document.createElement("h4");
 inputTitle.setAttribute("class", "userTitle");
 inputTitle.setAttribute("id", "myTitle");
-inputTitle.style.display = "none";
+inputTitle.style.display = "none";  // NONE
 
 //TEXT AREA TILL TEXT O TEMPLATE
-let newTextArea = document.createElement("textarea");
-newTextArea.style.display = "none";
+let textArea = document.createElement("textarea");
+textArea.style.display = "none"; // NONE
 
 //SPARADE NOTES 
-const savedNotesHeader = document.createElement("h2");
-savedNotesHeader.textContent = "Saved notes";
-
 const savedNotesDiv = document.createElement("div");
-
-/*savedNotesDiv.style.display = "none";*/
 savedNotesDiv.setAttribute("id", "myNotes");
 
-let noSavedNotesMessage = document.createElement("p");
-//noSavedNotesMessage.textContent = "When you save a note it will show up here!";
+let savedNotesMessage = document.createElement("h3");
+savedNotesMessage.textContent = "When you save a note it will show up here!";
 
-savedNotesDiv.appendChild(noSavedNotesMessage);
-
+// VARIABLER FÖR ATT REDIGERA NOTES
 let pArray = [];
 let savedNotes = [];
 let counter = 0;
+let noteObject; // borde byta namn, används i OpenSavedNote, och vidare i spara redigareade notes
 
 let listItem;
-
-let x; // borde byta namn, används i OpenSavedNote, och vidare i spara redigareade notes
 
 // ALLA FUNKTIONER ************************************************************************************************************
 
@@ -165,7 +155,7 @@ function Note(type, title, user) { // skicka in content, user, title som paramet
     this.user = user;
     this.title = title;
     this.content = undefined;
-    
+
     this.addContent = function () {
         if (this.type === "list") {
             let arrayOfListItems = listNote.childNodes;
@@ -187,7 +177,7 @@ function Note(type, title, user) { // skicka in content, user, title som paramet
 
 function newTextNote() {
     noteArray.push(new Note("text", userTitle.textContent, currentUser));
-    
+
     let newNote = noteArray.pop();
     newNote.addContent();
     noteArray.push(newNote);
@@ -195,7 +185,7 @@ function newTextNote() {
 
 function newTemplateNote() {
     noteArray.push(new Note("template", userTitle.textContent, currentUser));
-    
+
     let newNote = noteArray.pop();
     newNote.addContent();
     noteArray.push(newNote);
@@ -203,7 +193,7 @@ function newTemplateNote() {
 
 function newListNote() {
     noteArray.push(new Note("list", userTitle.textContent, currentUser));
-    
+
     let newNote = noteArray.pop();
     newNote.addContent();
     noteArray.push(newNote);
@@ -247,15 +237,15 @@ function closeModal(e) {
     }
 }
 
-function validateUser (){
+function validateUser() {
     let userInput = document.getElementById("userInput").value;
 
-    for (let i = 0; i < userList.length; i++){
-        if (userInput === userList[i]){
+    for (let i = 0; i < userList.length; i++) {
+        if (userInput === userList[i]) {
             return true;
-        } 
-    }; 
-    return false;    
+        }
+    };
+    return false;
 }
 
 /**
@@ -306,7 +296,7 @@ function randomTextTemplate() {
 /**
  * Sparar noteArray till localStorage
  */
-function saveToStorage() { 
+function saveToStorage() {
     let noteBook = JSON.stringify(noteArray);
     localStorage.setItem("Notes", noteBook);
 }
@@ -319,39 +309,79 @@ function resetNote() {
         listNote.removeChild(listNote.firstChild);
     }
 
-    if (newTextArea.classList.contains("template")) {
+    if (textArea.classList.contains("template")) {
         userTitle.textContent = randomTextTemplate();
     }
     clearTitle(userTitle);
-    newTextArea.value = "";
+    textArea.value = "";
 }
 
 /**
- * Öppnar modal, visar knappar, sätter pekaren rätt
+ * Öppnar modal och sätter pekaren i titelfältet
  */
-function initModalAndHideObjects() {
+function initModal() {
     showObject(modalBg);
-    showObject(innerModal); ;
+    showObject(innerModal);;
     showObject(resetNoteButton);
     inputTitleBox.focus();
-    hideObject(saveListNoteButton);
-    hideObject(newTemplateNoteButton);
-    hideObject(newTextNoteButton);
+}
+
+/**
+ * Döljer knappar och fält
+ */
+function hideModalObjects() {
+    //Spara ny-knapparna
+    hideObject(saveNewListNoteBtn);
+    hideObject(saveNewTemplateNoteBtn);
+    hideObject(saveNewTextNoteBtn);
+
+    //Spara edited-knapparna
+    hideObject(saveEditedListBtn);
+    hideObject(saveEditedTemplateBtn);
+    hideObject(saveEditedTextBtn);
+
+    //Titel-input och label
     hideObject(inputTitleBox);
     hideObject(labelTitle);
+
+    //List-item input och innehåll
     hideObject(inputItemBox);
     hideObject(listNote);
     hideObject(labelListItem);
+
+    //Textarea
+    hideObject(textArea);
+}
+
+function showListObjects() {
+    showObject(labelTitle);
+    showObject(inputTitleBox);
+    showObject(labelListItem)
+    showObject(inputItemBox);
+    showObject(listNote);
+}
+
+function showTemplateObjects() {
+    showObject(textArea);
+    showObject(userTitle);
+    textArea.focus();
+}
+
+function showTextObjects() {
+    showObject(inputTitleBox);
+    showObject(labelTitle);
+    showObject(textArea);
+    showObject(userTitle);
+    inputTitleBox.focus();
 }
 
 /**
- * Tar bort default-meddelandet och skapar nytt p-element om det är en ny note
+ * Visar sparade notes
  * 
  */
-
 function showSavedNoteTitles(e) {
     if (JSON.parse(localStorage.getItem("Notes")) != null) {
-        hideObject(noSavedNotesMessage);
+        savedNotesMessage.textContent = "Saved notes";
     }
     createPForSavedNote();
 }
@@ -361,60 +391,52 @@ function showSavedNoteTitles(e) {
  */
 function createPForSavedNote() {
     updateSavedNotes();
-    let lastNote = savedNotes.pop(); 
+    let lastNote = savedNotes.pop();
 
     pArray.push(document.createElement("p"));
 
-    let newP = pArray.pop(); 
-    newP.textContent = lastNote.title + " " + lastNote.date; 
-    newP.setAttribute("id", counter); 
-    newP.addEventListener("click", (e) => { openSavedNote(e) }); 
+    let newP = pArray.pop();
+    newP.textContent = lastNote.title + " " + lastNote.date;
+    newP.setAttribute("id", counter);
+    newP.addEventListener("click", (e) => { openSavedNote(e) });
 
 
-    savedNotesDiv.appendChild(newP); 
-    pArray.push(newP); 
+    savedNotesDiv.appendChild(newP);
+    pArray.push(newP);
 
-    savedNotes.push(lastNote); 
+    savedNotes.push(lastNote);
     counter++;
 }
 
 function openSavedNote(e) {
-    updateSavedNotes();
-    initModalAndHideObjects();
+    initModal();
+    hideModalObjects();
 
-    x = noteArray[e.target.id]; // här sparar vi objektet som vi klickat på 
+    noteObject = noteArray[e.target.id]; // här sparar vi objektet som vi klickat på 
 
-    if (x.type === "list") {
-        userTitle.textContent = x.title;
+    if (noteObject.type === "list") {
+        userTitle.textContent = noteObject.title;
 
-        for (let i = 0; i < x.content.length; i++) {
+        for (let i = 0; i < noteObject.content.length; i++) {
             listItem = document.createElement("li");
-            listItem.textContent = x.content[i];
+            listItem.textContent = noteObject.content[i];
             listNote.appendChild(listItem);
         }
 
-        hideObject(newTextArea);
-        showObject(labelTitle);
-        showObject(inputTitleBox);
-        showObject(labelListItem)
-        showObject(inputItemBox);
-        showObject(listNote);
-        showObject(saveEditedListButton);
+        showListObjects()
+        showObject(saveEditedListBtn);
     }
-    else if (x.type === "template"){
-
-        userTitle.textContent = x.title;
-        showObject(newTextArea);
-        newTextArea.value = x.content;
-        showObject(saveEditedTemplateButton);
-
+    else if (noteObject.type === "template") {
+        userTitle.textContent = noteObject.title;
+        textArea.value = noteObject.content;
+        showTemplateObjects();
+        showObject(saveEditedTemplateBtn);
     }
     else {
-        showObject(labelTitle);
-        showObject(inputTitleBox);
-        userTitle.textContent = x.title;
-        showObject(newTextArea);
-        newTextArea.value = x.content;
+        userTitle.textContent = noteObject.title;
+        textArea.value = noteObject.content;
+        showTextObjects();
+        showObject(saveEditedTextBtn);
     }
 }
 
@@ -431,7 +453,7 @@ function addTitleToNote(e) {
             userTitle.textContent = inputTitleBox.value.toUpperCase();
             showObject(userTitle);
             inputItemBox.focus();
-            newTextArea.focus();
+            textArea.focus();
         }
         clearField(inputTitleBox);
     }
@@ -454,8 +476,6 @@ function addListItemToList(e) {
     }
 }
 
-
-
 // ALLA APPEND CHILD **************************************************************************************
 
 //USER LOGIN
@@ -463,22 +483,19 @@ container.appendChild(labelUser);
 container.appendChild(userInput);
 container.appendChild(loginButton);
 
-// KNAPPARNA FÖR OLIKA ANTECKNINGAR *** !! Should be removed when we use login
-/*container.appendChild(newEmptyListButton);
-container.appendChild(emptyNoteButton);
-container.appendChild(textTemplateButton);*/
-
-// SPARADE NOTES
-/*container.appendChild(savedNotesHeader);
-container.appendChild(savedNotesDiv);*/
+// DESSA SKA BORT HÄRIFRÅN NÄR VI ANVÄNDER LOGIN, FÖR DÅ APPENDAS DE I DEN
+/* container.appendChild(openNewListNoteBtn);
+container.appendChild(openNewTemplateNoteBtn);
+container.appendChild(openNewTextNoteBtn);
+body.appendChild(savedNotesDiv);
 savedNotesDiv.appendChild(savedNotesHeader);
-//body.appendChild(savedNotesDiv);
+savedNotesDiv.appendChild(noSavedNotesMessage);  */
+
 // MODAL
 body.appendChild(modalBg);
 modalBg.appendChild(innerModal)
 
 // LISTOR 
-
 innerModal.appendChild(labelTitle);
 labelTitle.appendChild(inputTitleBox);
 innerModal.appendChild(labelListItem);
@@ -486,17 +503,17 @@ labelListItem.appendChild(inputItemBox);
 innerModal.appendChild(userTitle);
 innerModal.appendChild(listNote);
 
-innerModal.appendChild(newTextArea);
-
+//TEXT AREA
+innerModal.appendChild(textArea);
 
 // KNAPPAR FÖR SPARA OCH RESET
-innerModal.appendChild(newTextNoteButton);
-innerModal.appendChild(newTemplateNoteButton);
-innerModal.appendChild(saveListNoteButton);
+innerModal.appendChild(saveNewTextNoteBtn);
+innerModal.appendChild(saveNewTemplateNoteBtn);
+innerModal.appendChild(saveNewListNoteBtn);
 innerModal.appendChild(resetNoteButton);
-innerModal.appendChild(saveEditedTextButton);
-innerModal.appendChild(saveEditedTemplateButton);
-innerModal.appendChild(saveEditedListButton);
+innerModal.appendChild(saveEditedTextBtn);
+innerModal.appendChild(saveEditedTemplateBtn);
+innerModal.appendChild(saveEditedListBtn);
 
 
 // ALLA EVENT LISTENERS ***********************************************************************************
@@ -505,112 +522,94 @@ innerModal.appendChild(saveEditedListButton);
 inputTitleBox.addEventListener("keyup", (e) => { addTitleToNote(e) });
 
 //Event for user to add list items//
-inputItemBox.addEventListener("keyup", (e) => { addListItemToList(e)});
+inputItemBox.addEventListener("keyup", (e) => { addListItemToList(e) });
 
-newTextNoteButton.addEventListener("click", (e) => {
+saveNewTextNoteBtn.addEventListener("click", (e) => {
     newTextNote();
     saveToStorage();
     showSavedNoteTitles(e);
 })
 
-newTemplateNoteButton.addEventListener("click", (e) => {
+saveNewTemplateNoteBtn.addEventListener("click", (e) => {
     newTemplateNote();
     saveToStorage();
     showSavedNoteTitles(e);
 })
 
-saveListNoteButton.addEventListener("click", (e) => {
+saveNewListNoteBtn.addEventListener("click", (e) => {
     newListNote();
     saveToStorage();
     showSavedNoteTitles(e);
 })
 
-saveEditedTextButton.addEventListener("click", () => { 
-    x.addContent();
-    //x.content = document.querySelector(".text").value;  <<< verkar sparas i x, men inte i noteArray eller localStorage? 
-    console.log(x);
+saveEditedTextBtn.addEventListener("click", () => {
+    noteObject.addContent();
     saveToStorage();
 })
 
-saveEditedTemplateButton.addEventListener("click", () => { 
-    x.addContent();
-    //x.content = document.querySelector(".template").value; <<<<< Detta gör att det typ sparas, men inte riktigt?
-    console.log(x);
+saveEditedTemplateBtn.addEventListener("click", () => {
+    noteObject.addContent();
     saveToStorage();
-
-
 })
 
-saveEditedListButton.addEventListener("click", () => {
-   x.addContent();
-    /* let arrayOfListItems = listNote.childNodes; <<<<< Detta gör att det typ sparas, men inte riktigt?
-    for (let i = 0; i < arrayOfListItems.length; i++) {
-        x.content.push(arrayOfListItems[i].textContent);
-    } */
-    console.log(x);
+saveEditedListBtn.addEventListener("click", () => {
+    noteObject.addContent();
     saveToStorage();
 })
 
 
-emptyNoteButton.addEventListener("click", () => {    
-    newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    
-    newTextArea.setAttribute("class", "text");
-    initModalAndHideObjects();
-    showObject(newTextArea);
-    showObject(newTextNoteButton);
-    showObject(inputTitleBox);
-    showObject(labelTitle);
+openNewTextNoteBtn.addEventListener("click", () => {
+    textArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    textArea.setAttribute("class", "text");
+    initModal();
+    hideModalObjects();
+    showTextObjects();
+    showObject(saveNewTextNoteBtn);
 });
 
-textTemplateButton.addEventListener("click", () => {    
-    newTextArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-    
-    newTextArea.setAttribute("class", "template");
+openNewTemplateNoteBtn.addEventListener("click", () => {
+    textArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+    textArea.setAttribute("class", "template");
     userTitle.textContent = randomTextTemplate();
-    
-    initModalAndHideObjects();
-    showObject(newTextArea);
-    showObject(newTemplateNoteButton);
-    showObject(userTitle);
+    initModal();
+    hideModalObjects();
+    showTemplateObjects();
+    showObject(saveNewTemplateNoteBtn);
 });
 
-newEmptyListButton.addEventListener("click", () => {
-    initModalAndHideObjects();
-    hideObject(newTextArea);
-    showObject(saveListNoteButton);
-    showObject(labelTitle);
-    showObject(inputTitleBox);
-    showObject(labelListItem);
-    showObject(inputItemBox);
-    showObject(listNote);
+openNewListNoteBtn.addEventListener("click", () => {
+    initModal();
+    hideModalObjects();
+    showListObjects();
+    showObject(saveNewListNoteBtn);
 });
 
 modalBg.addEventListener("click", closeModal);
 
 resetNoteButton.addEventListener("click", resetNote);
 
-loginButton.addEventListener("click", () =>{  
+loginButton.addEventListener("click", () => {
     let value = validateUser();
-    if(value){
-        container.appendChild(newEmptyListButton);
-        container.appendChild(emptyNoteButton);
-        container.appendChild(textTemplateButton);
+    if (value) {
+        // DESSA SKA KOMMENTERAS BORT IFALL MAN INTE VILL ANVÄNDA LOGIN
+        container.appendChild(openNewListNoteBtn);
+        container.appendChild(openNewTextNoteBtn);
+        container.appendChild(openNewTemplateNoteBtn);
         body.appendChild(savedNotesDiv);
-        //savedNotesDiv.appendChild(savedNotesHeader);
-        
+        savedNotesDiv.appendChild(savedNotesMessage);
+
         //***To be un-commented later****
         hideObject(labelUser);
         hideObject(userInput);
         hideObject(loginButton);
 
-        //functioni to filter saved notes by user
+        //function to filter saved notes by user
     }
-    else{
+    else {
         alert("Something went wrong please try again");
         clearField(userInput);
         userInput.focus();
-    } 
+    }
 });
 
 
@@ -644,11 +643,11 @@ function addRemoveBtn() {
     let remove = document.createElement("i"); //skapar ett i-element till li(remove)
     remove.setAttribute("class", "removeListItem");
     remove.innerText = " X";
-    
+
     for (let i = 0; i < items.length; i++) {
         document.getElementsByClassName("myListItem")[i].appendChild(remove);
     }
     //return items;
-    
+
 }
 */
