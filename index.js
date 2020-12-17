@@ -316,7 +316,9 @@ function resetNote() {
         userTitle.textContent = randomTextTemplate();
     }
     clearTitle(userTitle);
-    textArea.value = "";
+    clearField(textArea);
+    clearField(inputTitleBox);
+    clearField(inputItemBox);
 }
 
 /**
