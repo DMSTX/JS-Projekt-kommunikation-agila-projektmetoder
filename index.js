@@ -133,16 +133,16 @@ newTextArea.style.display = "none";
 
 //SPARADE NOTES 
 const savedNotesHeader = document.createElement("h2");
-savedNotesHeader.textContent = "When you save a note it will show up here!";
+savedNotesHeader.textContent = "Saved notes";
 
 const savedNotesDiv = document.createElement("div");
 
 /*savedNotesDiv.style.display = "none";*/
 savedNotesDiv.setAttribute("id", "myNotes");
 
-/*let noSavedNotesMessage = document.createElement("p");
+let noSavedNotesMessage = document.createElement("p");
 noSavedNotesMessage.textContent = "When you save a note it will show up here!";
-savedNotesDiv.appendChild(noSavedNotesMessage);*/
+savedNotesDiv.appendChild(noSavedNotesMessage);
 
 let pArray = [];
 let savedNotes = [];
