@@ -49,7 +49,7 @@ labelUser.textContent = "";
 let userInput = document.createElement("input");
 userInput.setAttribute("id", "userInput");
 userInput.setAttribute("type", "text");
-userInput.value = "Who goes there?";
+userInput.setAttribute("placeholder", "Input username");
 userInput.required = true;
 
 // SKAPA NOTE-OBJEKT OCH SPARA DET-BUTTONS
