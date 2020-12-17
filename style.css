@@ -74,6 +74,15 @@ input {
     border-radius: 3px;
 }
 
+#userInput {
+    width: 20rem;
+    background-color: transparent;
+    text-align: center;
+    font-family: Brushstroke, cursive;
+    font-size: 24px;
+    box-shadow: 2px 2px 2px;
+}
+
 textarea {
     box-sizing: border-box;
     margin: 5px;
