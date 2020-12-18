@@ -3,6 +3,7 @@
 let noteArray = []; // skapar en array
 let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
 let currentUser = ""; // needs user name from a login-input field. add document.getElement....
+let userNotes;
 
 // ALLA VARIABLER ***************************************************************************************************************
 function init() {
@@ -466,15 +467,15 @@ function init() {
         savedNotes.push(lastNote);
         counter++;
     }
-
-    /**
-     * Skapar ett p-element med titel och datum för notes hämtade från Local storage
-     */
+    
     function showAllStoredNotes() {
         updateSavedNotes();
-        for (let i = 0; i < savedNotes.length; i++){
+        filterByUser();
+        
+        for (let i = 0; i < userNotes.length; i++){  
             pArray.push(document.createElement("p"));
-            let lastNote = savedNotes[i];
+            let lastNote = userNotes[i];
+            console.log("kallas" + lastNote);
 
             let newP = pArray.pop();
             newP.textContent = lastNote.title + " " + lastNote.date;
@@ -484,6 +485,7 @@ function init() {
             savedNotesDiv.appendChild(newP);
             pArray.push(newP);
             counter++;
+
         }    
     }
 
@@ -575,6 +577,7 @@ function init() {
      * Fyller noteArray med Notes från local Storage
      */
     function fillNoteArray(){
+
         if(JSON.parse(localStorage.getItem("Notes")) != null){
             let prevNotes = JSON.parse(localStorage.getItem("Notes"));
             
@@ -595,14 +598,12 @@ function init() {
                     }
                     noteArray[k].addContent();
                     resetNote();
-                
                     
                 }else{
                     textArea.setAttribute("class", typeName);
                     let contentID = prevNotes[k].content;
                     textArea.value = contentID;
                     noteArray[k].addContent();
-                    
                 }
 
             }
@@ -634,6 +635,13 @@ function init() {
             clearField(userInput);
             userInput.focus();
         }
+    }
+
+    
+    function filterByUser(){
+        userNotes = noteArray.filter(checkUser =>{
+            return checkUser.user.includes(currentUser)
+        });
     }
 
 
@@ -816,7 +824,6 @@ function init() {
         if (JSON.parse(localStorage.getItem("Notes")) != null) {
             savedNotesMessage.textContent = "Saved notes";
         }
-
         showAllStoredNotes();
     });
 
@@ -825,41 +832,3 @@ function init() {
 window.addEventListener('DOMContentLoaded', (event) => {
     init();
 });
-/* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
-document.addEventListener("DOMContentLoaded", () => {
-    createListNote();
-    createTextNote();
-    createTemplateTextNote();
-});
-*/
-
-//test to set eventlistener to every X on items. Needs objects for both li and X to work
-/*let xList;
-
-function addEventToX (){
-    xList = document.querySelectorAll(".removeListItem");
-
-    for(let i = 0; i < xList.length; i++){
-
-        xList[i].addEventListener("click", function(){ //works to add eventlistener on each X
-            console.log("I work! But I do nothing...")
-    });
-  }
-}
-*/
-
-/* ---IF WE HAVE TIME---
-//function to add remove X to every list item//
-function addRemoveBtn() {
-    let items = document.querySelectorAll(".myListItem");
-    let remove = document.createElement("i"); //skapar ett i-element till li(remove)
-    remove.setAttribute("class", "removeListItem");
-    remove.innerText = " X";
-
-    for (let i = 0; i < items.length; i++) {
-        document.getElementsByClassName("myListItem")[i].appendChild(remove);
-    }
-    //return items;
-
-}
-*/
