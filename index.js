@@ -825,6 +825,7 @@ function init() {
             savedNotesMessage.textContent = "Saved notes";
         }
         resetNote();
+        clearTitle(userTitle);
         showAllStoredNotes();
     });
 
