@@ -193,7 +193,9 @@ function init() {
         }
     }
 
-
+    /**
+     * Skapar nytt Note-objekt av text-typ
+     */
     function newTextNote() {
         noteArray.push(new Note("text", userTitle.textContent, currentUser));
 
@@ -202,6 +204,9 @@ function init() {
         noteArray.push(newNote);
     }
 
+    /**
+     * Skapar nytt Note-objekt av template-typ
+     */
     function newTemplateNote() {
         noteArray.push(new Note("template", userTitle.textContent, currentUser));
 
@@ -210,6 +215,9 @@ function init() {
         noteArray.push(newNote);
     }
 
+    /**
+     * Skapar nytt Note-objekt av list-typ
+     */
     function newListNote() {
         noteArray.push(new Note("list", userTitle.textContent, currentUser));
 
@@ -219,12 +227,17 @@ function init() {
     }
 
     /**
-    * Tar bort innehållet i ett fält 
-    */
+     * Tar bort innehållet i ett fält
+     * @param {Input-fält} field 
+     */
     function clearField(field) {
         field.value = "";
     }
 
+    /**
+     * Tar bort innehållet i ett fält
+     * @param {TextContent-fält} element 
+     */
     function clearTitle(element) {
         element.textContent = "";
     }
@@ -256,6 +269,9 @@ function init() {
         }
     }
 
+    /**
+     * Kollar att användare får logga in
+     */
     function validateUser() {
         let userInput = document.getElementById("userInput").value;
 
@@ -376,6 +392,9 @@ function init() {
         hideObject(savedNotice);
     }
 
+    /**
+     * Visar de objekt som ska finnas i modal vid lista
+     */
     function showListObjects() {
         showObject(labelTitle);
         showObject(inputTitleBox);
@@ -384,12 +403,18 @@ function init() {
         showObject(listNote);
     }
 
+    /**
+     * Visar de objekt som ska finnas i modal vid template
+     */
     function showTemplateObjects() {
         showObject(textArea);
         showObject(userTitle);
         textArea.focus();
     }
 
+    /**
+     * Visar de objekt som ska finnas i modal vid text
+     */
     function showTextObjects() {
         showObject(inputTitleBox);
         showObject(labelTitle);
@@ -399,6 +424,9 @@ function init() {
     }
 
 
+    /**
+     * Bekräftelse-meddelande när note sparats
+     */
     function notificationTimeout () {
         setTimeout(function (){savedNotice.textContent="";},3000);
         savedNotice.textContent = "Saved...";
@@ -416,7 +444,7 @@ function init() {
     }
 
     /**
-     * Skapar ett p-element med titel och datum från senast skapade Note
+     * Skapar ett p-element med titel och datum för nyskapad Note
      */
     function createPForSavedNote() {
         updateSavedNotes();
@@ -436,16 +464,16 @@ function init() {
 
         savedNotes.push(lastNote);
         counter++;
-        console.log("kallas nånstans");
     }
 
+    /**
+     * Skapar ett p-element med titel och datum för notes hämtade från Local storage
+     */
     function showAllStoredNotes() {
         updateSavedNotes();
-        console.log(savedNotes.length);
         for (let i = 0; i < savedNotes.length; i++){
             pArray.push(document.createElement("p"));
             let lastNote = savedNotes[i];
-            console.log("nu kallas jag" + i);
 
             let newP = pArray.pop();
             newP.textContent = lastNote.title + " " + lastNote.date;
@@ -455,10 +483,13 @@ function init() {
             savedNotesDiv.appendChild(newP);
             pArray.push(newP);
             counter++;
-            //something needs to be cleared/reset here to prevent double output
         }    
     }
 
+    /**
+     * Öppnar en sparad Note
+     * @param {eventet} e 
+     */
     function openSavedNote(e) {
         initModal();
         hideModalObjects();
@@ -492,14 +523,21 @@ function init() {
         }
     }
 
+    /**
+     * Uppdaterar arrayen med Notes hämtade från local Storage
+     */
     function updateSavedNotes() {
         savedNotes = JSON.parse(localStorage.getItem("Notes"));
     }
 
+    /**
+     * Läser in och skriver ut titel i modal
+     * @param {eventet} e 
+     */
     function addTitleToNote(e) {
         if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
             if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
-                alert("Wow, so much empty")
+                alert("Title cannot be empty!")
             }
             else {
                 userTitle.textContent = inputTitleBox.value.toUpperCase();
@@ -511,10 +549,14 @@ function init() {
         }
     }
 
+    /**
+     * Läser in och skriver ut list-items i modal
+     * @param {eventet} e 
+     */
     function addListItemToList(e) {
         if (e.which === 13 || e.key === 13) {   //firefox .which, chrome .key//
             if (inputItemBox.value.length == 0) {  //checks if input is empty
-                alert("Wow, so much empty")
+                alert("This field cannot be empty!")
             }
             else {
                 listItem = document.createElement("li");
@@ -528,19 +570,18 @@ function init() {
         }
     }
 
+    /**
+     * Fyller noteArray med Notes från local Storage
+     */
     function fillNoteArray(){
-        console.log("kallas 1");
         if(JSON.parse(localStorage.getItem("Notes")) != null){
-            console.log("kallas 2");
             let prevNotes = JSON.parse(localStorage.getItem("Notes"));
             
             for(let i = 0; i < prevNotes.length; i++){
-                console.log("kallas 3");
                 noteArray.push(new Note(prevNotes[i].type, prevNotes[i].title, prevNotes[i].user)); 
             }
 
             for(let k = 0; k < noteArray.length; k++){
-                console.log("kallas 4");
                 let typeName = prevNotes[k].type;
 
                 if(typeName === "list"){
@@ -562,13 +603,14 @@ function init() {
                     noteArray[k].addContent();
                     
                 }
-                //createPForSavedNote();
-                //showAllStoredNotes();
-            }
+
             }
         }
-    
+    }
 
+    /**
+     * Döljer loginboxar och visar förstasidan vid lyckad inloggning
+     */
     function loginFunc (){
         let value = validateUser();
         if (value) {
@@ -585,8 +627,6 @@ function init() {
             hideObject(labelUser);
             hideObject(userInput);
             hideObject(loginButton);
-
-            //function to filter saved notes by user
         }
         else {
             alert("Something went wrong please try again");
@@ -646,60 +686,95 @@ function init() {
     inputItemBox.addEventListener("keyup", (e) => { addListItemToList(e) });
 
     saveNewTextNoteBtn.addEventListener("click", (e) => {
-        newTextNote();
-        saveToStorage();
-        showSavedNoteTitles(e);
-        showObject(savedNotice);
-        notificationTimeout();
+        if (userTitle.textContent.length == 0) {  //checks if input field is empty//
+            alert("Title cannot be empty!")
+            inputTitleBox.focus();
+        }
+        else {
+            newTextNote();
+            saveToStorage();
+            showSavedNoteTitles(e);
+            showObject(savedNotice);
+            notificationTimeout();
+        }
     })
 
     saveNewTemplateNoteBtn.addEventListener("click", (e) => {
-        newTemplateNote();
-        saveToStorage();
-        showSavedNoteTitles(e);
-        showObject(savedNotice);
-        notificationTimeout();
+        if (userTitle.textContent.length == 0) {  //checks if input field is empty//
+            alert("Title cannot be empty!")
+            inputTitleBox.focus();
+        }
+        else {
+            newTemplateNote();
+            saveToStorage();
+            showSavedNoteTitles(e);
+            showObject(savedNotice);
+            notificationTimeout();
+        } 
     })
 
     saveNewListNoteBtn.addEventListener("click", (e) => {
-        newListNote();
-        saveToStorage();
-        showSavedNoteTitles(e);
-        showObject(savedNotice);
-        notificationTimeout();
+        if (userTitle.textContent.length == 0) {  //checks if input field is empty//
+            alert("Title cannot be empty!")
+            inputTitleBox.focus();
+        }
+        else {
+            newListNote();
+            saveToStorage();
+            showSavedNoteTitles(e);
+            showObject(savedNotice);
+            notificationTimeout();
+        }
     })
 
     saveEditedTextBtn.addEventListener("click", () => {
-        noteObject.addContent();
-        noteObject.addTitle();
-        noteObject.addDate();
-        pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
-        saveToStorage();
-        showObject(savedNotice);
-        notificationTimeout();
+        if (userTitle.textContent.length == 0) {  //checks if input field is empty//
+            alert("Title cannot be empty!");
+            inputTitleBox.focus();
+        }
+        else {
+            noteObject.addContent();
+            noteObject.addTitle();
+            noteObject.addDate();
+            pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
+            saveToStorage();
+            showObject(savedNotice);
+            notificationTimeout();
+        }
     })
 
     saveEditedTemplateBtn.addEventListener("click", () => {
-        noteObject.addContent();
-        noteObject.addContent();
-        noteObject.addTitle();
-        noteObject.addDate();
-        pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
-        saveToStorage();
-        showObject(savedNotice);
-        notificationTimeout();
+        if (userTitle.textContent.length == 0) {  //checks if input field is empty//
+            alert("Title cannot be empty!")
+            inputTitleBox.focus();
+        }
+        else {
+            noteObject.addContent();
+            noteObject.addContent();
+            noteObject.addTitle();
+            noteObject.addDate();
+            pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
+            saveToStorage();
+            showObject(savedNotice);
+            notificationTimeout();
+        }
     })
 
     saveEditedListBtn.addEventListener("click", () => {
-        noteObject.addContent();
-        noteObject.addContent();
-        noteObject.addTitle();
-        noteObject.addDate();
-        pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
-        saveToStorage();
-        showObject(savedNotice);
-        notificationTimeout();
-        
+        if (userTitle.textContent.length == 0) {  
+            alert("Title cannot be empty!")
+            inputTitleBox.focus();
+        }
+        else {
+            noteObject.addContent();
+            noteObject.addContent();
+            noteObject.addTitle();
+            noteObject.addDate();
+            pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
+            saveToStorage();
+            showObject(savedNotice);
+            notificationTimeout();
+        }
     })
 
 
@@ -747,7 +822,6 @@ function init() {
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    console.log("dom loaded");
     init();
 });
 /* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
