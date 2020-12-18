@@ -824,6 +824,7 @@ function init() {
         if (JSON.parse(localStorage.getItem("Notes")) != null) {
             savedNotesMessage.textContent = "Saved notes";
         }
+        resetNote();
         showAllStoredNotes();
     });
 
