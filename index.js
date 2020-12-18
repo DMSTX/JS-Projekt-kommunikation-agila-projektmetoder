@@ -3,6 +3,7 @@
 let noteArray = []; // skapar en array
 let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
 let currentUser = ""; // needs user name from a login-input field. add document.getElement....
+let userNotes;
 
 // ALLA VARIABLER ***************************************************************************************************************
 function init() {
@@ -422,16 +423,16 @@ function init() {
 
         savedNotes.push(lastNote);
         counter++;
-        console.log("kallas nånstans");
     }
-
+    
     function showAllStoredNotes() {
         updateSavedNotes();
-        console.log(savedNotes.length);
-        for (let i = 0; i < savedNotes.length; i++){
+        filterByUser();
+        
+        for (let i = 0; i < userNotes.length; i++){  
             pArray.push(document.createElement("p"));
-            let lastNote = savedNotes[i];
-            console.log("nu kallas jag" + i);
+            let lastNote = userNotes[i];
+            console.log("kallas" + lastNote);
 
             let newP = pArray.pop();
             newP.textContent = lastNote.title + " " + lastNote.date;
@@ -441,7 +442,7 @@ function init() {
             savedNotesDiv.appendChild(newP);
             pArray.push(newP);
             counter++;
-            //something needs to be cleared/reset here to prevent double output
+            
         }    
     }
 
@@ -515,18 +516,15 @@ function init() {
     }
 
     function fillNoteArray(){
-        console.log("kallas 1");
+        
         if(JSON.parse(localStorage.getItem("Notes")) != null){
-            console.log("kallas 2");
             let prevNotes = JSON.parse(localStorage.getItem("Notes"));
             
             for(let i = 0; i < prevNotes.length; i++){
-                console.log("kallas 3");
                 noteArray.push(new Note(prevNotes[i].type, prevNotes[i].title, prevNotes[i].user)); 
             }
 
             for(let k = 0; k < noteArray.length; k++){
-                console.log("kallas 4");
                 let typeName = prevNotes[k].type;
 
                 if(typeName === "list"){
@@ -539,14 +537,12 @@ function init() {
                     }
                     noteArray[k].addContent();
                     resetNote();
-                
                     
                 }else{
                     textArea.setAttribute("class", typeName);
                     let contentID = prevNotes[k].content;
                     textArea.value = contentID;
                     noteArray[k].addContent();
-                    
                 }
                 //createPForSavedNote();
                 //showAllStoredNotes();
@@ -571,14 +567,19 @@ function init() {
             hideObject(labelUser);
             hideObject(userInput);
             hideObject(loginButton);
-
-            //function to filter saved notes by user
         }
         else {
             alert("Something went wrong please try again");
             clearField(userInput);
             userInput.focus();
         }
+    }
+
+    
+    function filterByUser(){
+        userNotes = noteArray.filter(checkUser =>{
+            return checkUser.user.includes(currentUser)
+        });
     }
 
 
@@ -712,7 +713,6 @@ function init() {
         if (JSON.parse(localStorage.getItem("Notes")) != null) {
             savedNotesMessage.textContent = "Saved notes";
         }
-
         showAllStoredNotes();
     });
 
@@ -722,41 +722,3 @@ window.addEventListener('DOMContentLoaded', (event) => {
     console.log("dom loaded");
     init();
 });
-/* ---JOBBA PÅ DENNA NÄR VI HAR MER KLART
-document.addEventListener("DOMContentLoaded", () => {
-    createListNote();
-    createTextNote();
-    createTemplateTextNote();
-});
-*/
-
-//test to set eventlistener to every X on items. Needs objects for both li and X to work
-/*let xList;
-
-function addEventToX (){
-    xList = document.querySelectorAll(".removeListItem");
-
-    for(let i = 0; i < xList.length; i++){
-
-        xList[i].addEventListener("click", function(){ //works to add eventlistener on each X
-            console.log("I work! But I do nothing...")
-    });
-  }
-}
-*/
-
-/* ---IF WE HAVE TIME---
-//function to add remove X to every list item//
-function addRemoveBtn() {
-    let items = document.querySelectorAll(".myListItem");
-    let remove = document.createElement("i"); //skapar ett i-element till li(remove)
-    remove.setAttribute("class", "removeListItem");
-    remove.innerText = " X";
-
-    for (let i = 0; i < items.length; i++) {
-        document.getElementsByClassName("myListItem")[i].appendChild(remove);
-    }
-    //return items;
-
-}
-*/
