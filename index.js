@@ -422,6 +422,27 @@ function init() {
 
         savedNotes.push(lastNote);
         counter++;
+        console.log("kallas nånstans");
+    }
+
+    function showAllStoredNotes() {
+        updateSavedNotes();
+        console.log(savedNotes.length);
+        for (let i = 0; i < savedNotes.length; i++){
+            pArray.push(document.createElement("p"));
+            let lastNote = savedNotes[i];
+            console.log("nu kallas jag" + i);
+
+            let newP = pArray.pop();
+            newP.textContent = lastNote.title + " " + lastNote.date;
+            newP.setAttribute("id", counter);
+            newP.addEventListener("click", (e) => { openSavedNote(e) });
+
+            savedNotesDiv.appendChild(newP);
+            pArray.push(newP);
+            counter++;
+            //something needs to be cleared/reset here to prevent double output
+        }    
     }
 
     function openSavedNote(e) {
@@ -492,6 +513,74 @@ function init() {
             }
         }
     }
+
+    function fillNoteArray(){
+        console.log("kallas 1");
+        if(JSON.parse(localStorage.getItem("Notes")) != null){
+            console.log("kallas 2");
+            let prevNotes = JSON.parse(localStorage.getItem("Notes"));
+            
+            for(let i = 0; i < prevNotes.length; i++){
+                console.log("kallas 3");
+                noteArray.push(new Note(prevNotes[i].type, prevNotes[i].title, prevNotes[i].user)); 
+            }
+
+            for(let k = 0; k < noteArray.length; k++){
+                console.log("kallas 4");
+                let typeName = prevNotes[k].type;
+
+                if(typeName === "list"){
+                    let y = prevNotes[k].content;
+
+                    for(let j = 0; j < y.length; j++){
+                        listItem = document.createElement("li");
+                        listItem.textContent = y[j];
+                        listNote.appendChild(listItem);
+                    }
+                    noteArray[k].addContent();
+                    resetNote();
+                
+                    
+                }else{
+                    textArea.setAttribute("class", typeName);
+                    let contentID = prevNotes[k].content;
+                    textArea.value = contentID;
+                    noteArray[k].addContent();
+                    
+                }
+                //createPForSavedNote();
+                //showAllStoredNotes();
+            }
+            }
+        }
+    
+
+    function loginFunc (){
+        let value = validateUser();
+        if (value) {
+            currentUser = userInput.value;
+                
+            // DESSA SKA KOMMENTERAS BORT IFALL MAN INTE VILL ANVÄNDA LOGIN
+            container.appendChild(openNewListNoteBtn);
+            container.appendChild(openNewTextNoteBtn);
+            container.appendChild(openNewTemplateNoteBtn);
+            body.appendChild(savedNotesDiv);
+            savedNotesDiv.appendChild(savedNotesMessage);
+
+            //***To be un-commented later****
+            hideObject(labelUser);
+            hideObject(userInput);
+            hideObject(loginButton);
+
+            //function to filter saved notes by user
+        }
+        else {
+            alert("Something went wrong please try again");
+            clearField(userInput);
+            userInput.focus();
+        }
+    }
+
 
     // ALLA APPEND CHILD **************************************************************************************
 
@@ -617,29 +706,14 @@ function init() {
     resetNoteButton.addEventListener("click", resetNote);
 
     loginButton.addEventListener("click", () => {
-        let value = validateUser();
-        if (value) {
-            currentUser = userInput.value;
-            
-            // DESSA SKA KOMMENTERAS BORT IFALL MAN INTE VILL ANVÄNDA LOGIN
-            container.appendChild(openNewListNoteBtn);
-            container.appendChild(openNewTextNoteBtn);
-            container.appendChild(openNewTemplateNoteBtn);
-            body.appendChild(savedNotesDiv);
-            savedNotesDiv.appendChild(savedNotesMessage);
+        loginFunc();
+        fillNoteArray();
 
-            //***To be un-commented later****
-            hideObject(labelUser);
-            hideObject(userInput);
-            hideObject(loginButton);
+        if (JSON.parse(localStorage.getItem("Notes")) != null) {
+            savedNotesMessage.textContent = "Saved notes";
+        }
 
-            //function to filter saved notes by user
-        }
-        else {
-            alert("Something went wrong please try again");
-            clearField(userInput);
-            userInput.focus();
-        }
+        showAllStoredNotes();
     });
 
 }
