@@ -266,6 +266,7 @@ function init() {
         if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
             hideObject(modalBg);
             resetNote()
+            clearTitle(userTitle);
         }
     }
 
@@ -288,7 +289,7 @@ function init() {
      * Returnerar en string med ett textförslag
      */
     function randomTextTemplate() {
-        let number = Math.round((Math.random() * 10) + 1);
+        let number = Math.round((Math.random() * 9) +1);
         let text;
         switch (number) {
             case 1:
@@ -323,8 +324,8 @@ function init() {
                 break;
             default:
                 text = "default";
+                
         }
-
         return text;
     }
 
