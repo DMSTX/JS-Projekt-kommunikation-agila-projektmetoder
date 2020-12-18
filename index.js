@@ -15,6 +15,11 @@ function init() {
     modalBg.style.display = "none";
     const innerModal = document.createElement("div");// inre divbox i modalen
     innerModal.setAttribute("id", "popUp");
+    let savedNotice = document.createElement("p");
+
+    //saved notification
+    savedNotice.textContent = "Saved";
+    savedNotice.setAttribute("id", "savedNotice");
 
     // ÖPPNA NY ANTECKNING-BUTTONS
     let openNewListNoteBtn = document.createElement("button"); //button is created to initialize new list
@@ -366,6 +371,9 @@ function init() {
 
         //Textarea
         hideObject(textArea);
+
+        //saved notice
+        hideObject(savedNotice);
     }
 
     function showListObjects() {
@@ -388,6 +396,12 @@ function init() {
         showObject(textArea);
         showObject(userTitle);
         inputTitleBox.focus();
+    }
+
+
+    function notificationTimeout () {
+        setTimeout(function (){savedNotice.textContent="";},3000);
+        savedNotice.textContent = "Saved...";
     }
 
     /**
@@ -620,6 +634,7 @@ function init() {
     innerModal.appendChild(saveEditedTextBtn);
     innerModal.appendChild(saveEditedTemplateBtn);
     innerModal.appendChild(saveEditedListBtn);
+    innerModal.appendChild(savedNotice);
 
 
     // ALLA EVENT LISTENERS ***********************************************************************************
@@ -634,18 +649,24 @@ function init() {
         newTextNote();
         saveToStorage();
         showSavedNoteTitles(e);
+        showObject(savedNotice);
+        notificationTimeout();
     })
 
     saveNewTemplateNoteBtn.addEventListener("click", (e) => {
         newTemplateNote();
         saveToStorage();
         showSavedNoteTitles(e);
+        showObject(savedNotice);
+        notificationTimeout();
     })
 
     saveNewListNoteBtn.addEventListener("click", (e) => {
         newListNote();
         saveToStorage();
         showSavedNoteTitles(e);
+        showObject(savedNotice);
+        notificationTimeout();
     })
 
     saveEditedTextBtn.addEventListener("click", () => {
@@ -654,6 +675,8 @@ function init() {
         noteObject.addDate();
         pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
         saveToStorage();
+        showObject(savedNotice);
+        notificationTimeout();
     })
 
     saveEditedTemplateBtn.addEventListener("click", () => {
@@ -663,6 +686,8 @@ function init() {
         noteObject.addDate();
         pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
         saveToStorage();
+        showObject(savedNotice);
+        notificationTimeout();
     })
 
     saveEditedListBtn.addEventListener("click", () => {
@@ -672,6 +697,9 @@ function init() {
         noteObject.addDate();
         pArray[noteObjectIndex].textContent = noteObject.title + " " + noteObject.date;
         saveToStorage();
+        showObject(savedNotice);
+        notificationTimeout();
+        
     })
 
 
