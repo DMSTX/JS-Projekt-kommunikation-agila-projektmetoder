@@ -7,7 +7,6 @@ let userNotes;
 
 // ALLA VARIABLER ***************************************************************************************************************
 function init() {
-    console.log("init körs");
     // KONSTANTER
     const body = document.querySelector("body");
     const container = document.getElementById("container"); // sparar container i en variabel
@@ -439,35 +438,35 @@ function init() {
      * 
      */
     function showSavedNoteTitles(e) {
-        if (JSON.parse(localStorage.getItem("Notes")) != null) {
-            savedNotesMessage.textContent = "Saved notes";
+        filterByUser();
+        if (userNotes.length != 0) {
+            savedNotesMessage.textContent = currentUser + "'s saved notes";
         }
-        createPForSavedNote();
+        createPForNewNote();
     }
 
     /**
      * Skapar ett p-element med titel och datum för nyskapad Note
      */
-    function createPForSavedNote() {
+    function createPForNewNote() {
         updateSavedNotes();
         let lastNote = savedNotes.pop();
 
         pArray.push(document.createElement("p"));
-
         let newP = pArray.pop();
         newP.textContent = lastNote.title + " " + lastNote.date;
-
         newP.setAttribute("id", counter);
         newP.addEventListener("click", (e) => { openSavedNote(e) });
 
-
         savedNotesDiv.appendChild(newP);
         pArray.push(newP);
-
         savedNotes.push(lastNote);
         counter++;
     }
     
+    /**
+     * Skapar p-element med titel och datum för sparade Notes
+     */
     function showAllStoredNotes() {
         updateSavedNotes();
         filterByUser();
@@ -475,7 +474,6 @@ function init() {
         for (let i = 0; i < userNotes.length; i++){  
             pArray.push(document.createElement("p"));
             let lastNote = userNotes[i];
-            console.log("kallas" + lastNote);
 
             let newP = pArray.pop();
             newP.textContent = lastNote.title + " " + lastNote.date;
@@ -485,7 +483,6 @@ function init() {
             savedNotesDiv.appendChild(newP);
             pArray.push(newP);
             counter++;
-
         }    
     }
 
@@ -821,9 +818,11 @@ function init() {
         loginFunc();
         fillNoteArray();
 
-        if (JSON.parse(localStorage.getItem("Notes")) != null) {
-            savedNotesMessage.textContent = "Saved notes";
+        filterByUser();
+        if (userNotes.length != 0) {
+            savedNotesMessage.textContent = currentUser + "'s saved notes";
         }
+
         resetNote();
         clearTitle(userTitle);
         showAllStoredNotes();
