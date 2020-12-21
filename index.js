@@ -149,6 +149,12 @@ function init() {
 
     let listItem;
 
+    //KNAPP FÖR ATT RADERA ALLA NOTES I LOCAL
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete all notes";
+    deleteBtn.setAttribute("class", "pageButtons");
+
+
     // ALLA FUNKTIONER ************************************************************************************************************
 
     /**
@@ -621,6 +627,7 @@ function init() {
             container.appendChild(openNewTemplateNoteBtn);
             body.appendChild(savedNotesDiv);
             savedNotesDiv.appendChild(savedNotesMessage);
+            savedNotesDiv.appendChild(deleteBtn);
 
             //***To be un-commented later****
             hideObject(labelUser);
@@ -639,6 +646,16 @@ function init() {
         userNotes = noteArray.filter(checkUser =>{
             return checkUser.user.includes(currentUser)
         });
+    }
+
+    function deleteAllNotes() {
+        localStorage.clear();
+        while (savedNotesDiv.firstChild) {
+            savedNotesDiv.removeChild(savedNotesDiv.firstChild);
+        }
+        savedNotesMessage.textContent = "When you save a note it will show up here!";
+        savedNotesDiv.appendChild(savedNotesMessage);
+        savedNotesDiv.appendChild(deleteBtn);
     }
 
 
@@ -828,6 +845,7 @@ function init() {
         showAllStoredNotes();
     });
 
+    deleteBtn.addEventListener("click", deleteAllNotes);
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
