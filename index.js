@@ -654,8 +654,8 @@ function init() {
             savedNotesDiv.removeChild(savedNotesDiv.firstChild);
         }
         savedNotesMessage.textContent = "When you save a note it will show up here!";
-        savedNotesDiv.appendChild(savedNotesMessage);
         savedNotesDiv.appendChild(deleteBtn);
+        savedNotesDiv.appendChild(savedNotesMessage);
     }
 
 
