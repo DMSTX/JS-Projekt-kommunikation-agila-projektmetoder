@@ -58,45 +58,45 @@ function init() {
     const saveNewTextNoteBtn = document.createElement("button");
     saveNewTextNoteBtn.setAttribute("id", "textNoteButton");
     saveNewTextNoteBtn.setAttribute("class", "modalButtons");
-    saveNewTextNoteBtn.style.display = "none"; // NONE
+    saveNewTextNoteBtn.style.display = "none"; 
     saveNewTextNoteBtn.textContent = "Save";
 
     const saveNewTemplateNoteBtn = document.createElement("button");
     saveNewTemplateNoteBtn.setAttribute("id", "templateNoteButton");
     saveNewTemplateNoteBtn.setAttribute("class", "modalButtons");
-    saveNewTemplateNoteBtn.style.display = "none"; // NONE
+    saveNewTemplateNoteBtn.style.display = "none";
     saveNewTemplateNoteBtn.textContent = "Save";
 
     const saveNewListNoteBtn = document.createElement("button");
     saveNewListNoteBtn.setAttribute("id", "listNoteButton");
     saveNewListNoteBtn.setAttribute("class", "modalButtons");
-    saveNewListNoteBtn.style.display = "none"; // NONE
+    saveNewListNoteBtn.style.display = "none"; 
     saveNewListNoteBtn.textContent = "Save";
 
     // SPARA REDIGERAD ANTECKNING-BUTTONS
     const saveEditedTextBtn = document.createElement("button");
     saveEditedTextBtn.setAttribute("id", "saveEditedTextButton");
     saveEditedTextBtn.setAttribute("class", "modalButtons");
-    saveEditedTextBtn.style.display = "none"; // NONE
+    saveEditedTextBtn.style.display = "none"; 
     saveEditedTextBtn.textContent = "Save";
 
     const saveEditedTemplateBtn = document.createElement("button");
     saveEditedTemplateBtn.setAttribute("id", "saveEditedTemplateButton");
     saveEditedTemplateBtn.setAttribute("class", "modalButtons");
-    saveEditedTemplateBtn.style.display = "none"; // NONE
+    saveEditedTemplateBtn.style.display = "none"; 
     saveEditedTemplateBtn.textContent = "Save";
 
     const saveEditedListBtn = document.createElement("button");
     saveEditedListBtn.setAttribute("id", "saveEditedListButton");
     saveEditedListBtn.setAttribute("class", "modalButtons");
-    saveEditedListBtn.style.display = "none"; // NONE
+    saveEditedListBtn.style.display = "none"; 
     saveEditedListBtn.textContent = "Save";
 
-    //CLEAR-BUTTON
+    //RESET-BUTTON
     let resetNoteButton = document.createElement("button");
     resetNoteButton.setAttribute("id", "clearList");
     resetNoteButton.setAttribute("class", "modalButtons");
-    resetNoteButton.style.display = "none"; // NONE
+    resetNoteButton.style.display = "none"; 
     resetNoteButton.textContent = "Start Over";
 
     // FÄLT TILL ANTECKNINGAR
@@ -110,7 +110,7 @@ function init() {
 
     let userTitle = document.createElement("h4");
     userTitle.setAttribute("class", "userTitle");
-    userTitle.style.display = "none"; // NONE
+    userTitle.style.display = "none";
 
     let labelListItem = document.createElement("label");
     labelListItem.setAttribute("for", "inputListBox");
@@ -127,11 +127,11 @@ function init() {
     let inputTitle = document.createElement("h4");
     inputTitle.setAttribute("class", "userTitle");
     inputTitle.setAttribute("id", "myTitle");
-    inputTitle.style.display = "none";  // NONE
+    inputTitle.style.display = "none"; 
 
     //TEXT AREA TILL TEXT O TEMPLATE
     let textArea = document.createElement("textarea");
-    textArea.style.display = "none"; // NONE
+    textArea.style.display = "none"; 
 
     //SPARADE NOTES 
     const savedNotesDiv = document.createElement("div");
@@ -160,8 +160,10 @@ function init() {
     /**
      * Konstruktor för Note-objekt
      * @param {string med list, text eller template} type 
+     * @param {string med anteckningens titel} Title
+     * @param {string med användare} User
      */
-    function Note(type, title, user) { // skicka in content, user, title som parametrar!
+    function Note(type, title, user) { 
         let today = new Date();
         this.date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " | " 
         + ('0' + today.getHours()).substr(-2) + ":" + ('0' + today.getMinutes()).slice(-2);
@@ -641,13 +643,19 @@ function init() {
         }
     }
 
-    
+    /**
+     * Filtrerar noteArray på användarnamn
+     */
     function filterByUser(){
         userNotes = noteArray.filter(checkUser =>{
             return checkUser.user.includes(currentUser)
         });
     }
 
+    /**
+     * Raderar alla notes i localStorage, tar bort alla element ur savedNotesDiv
+     * och sätter tillbaka rubriken och delete-knappen
+     */
     function deleteAllNotes() {
         localStorage.clear();
         while (savedNotesDiv.firstChild) {
@@ -665,14 +673,6 @@ function init() {
     container.appendChild(labelUser);
     container.appendChild(userInput);
     container.appendChild(loginButton);
-
-    // DESSA SKA BORT HÄRIFRÅN NÄR VI ANVÄNDER LOGIN, FÖR DÅ APPENDAS DE I DEN
-    /* container.appendChild(openNewListNoteBtn);
-    container.appendChild(openNewTemplateNoteBtn);
-    container.appendChild(openNewTextNoteBtn);
-    body.appendChild(savedNotesDiv);
-    savedNotesDiv.appendChild(savedNotesHeader);
-    savedNotesDiv.appendChild(noSavedNotesMessage);  */
 
     // MODAL
     body.appendChild(modalBg);
