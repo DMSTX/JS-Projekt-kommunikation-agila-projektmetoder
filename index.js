@@ -1,54 +1,54 @@
 "use strict"
 
-let noteArray = []; // skapar en array
-let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
-let currentUser = ""; // needs user name from a login-input field. add document.getElement....
-let userNotes;
-
-// ALLA VARIABLER ***************************************************************************************************************
+// ALLA ELEMENT ***************************************************************************************************************
 function init() {
-    // KONSTANTER
+
+    // ELEMENT SOM FINNS I INDEX.HTML
     const body = document.querySelector("body");
     const container = document.getElementById("container"); // sparar container i en variabel
+    
+    //MODALER
     const modalBg = document.createElement("div"); // modalens transperenta bakgrund
     modalBg.setAttribute("id", "modalBgBox");
     modalBg.style.display = "none";
+    
     const innerModal = document.createElement("div");// inre divbox i modalen
     innerModal.setAttribute("id", "popUp");
-    let savedNotice = document.createElement("p");
-
+    
+    const savedNotice = document.createElement("p");
+    
     //saved notification
     savedNotice.textContent = "Saved";
     savedNotice.setAttribute("id", "savedNotice");
 
     // ÖPPNA NY ANTECKNING-BUTTONS
-    let openNewListNoteBtn = document.createElement("button"); //button is created to initialize new list
+    const openNewListNoteBtn = document.createElement("button"); //button is created to initialize new list
     openNewListNoteBtn.setAttribute("id", "newEmptyListButton");
     openNewListNoteBtn.setAttribute("class", "pageButtons");
     openNewListNoteBtn.textContent = "New empty list";
 
-    let openNewTextNoteBtn = document.createElement("button"); // skapar ett nytt button-element
+    const openNewTextNoteBtn = document.createElement("button"); // skapar ett nytt button-element
     openNewTextNoteBtn.setAttribute("id", "emptyNoteButton"); // ger det nya button-elementet id="emptyNoteButton"
     openNewTextNoteBtn.setAttribute("class", "pageButtons");
     openNewTextNoteBtn.textContent = "New empty note"; // sätter knappens text till New empty note
 
-    let openNewTemplateNoteBtn = document.createElement("button");
+    const openNewTemplateNoteBtn = document.createElement("button");
     openNewTemplateNoteBtn.setAttribute("id", "textTemplateButton"); // ger det nya button-elementet id
     openNewTemplateNoteBtn.setAttribute("class", "pageButtons");
     openNewTemplateNoteBtn.textContent = "New note with text Template"; // sätter knappens text
 
     //LOGIN-BUTTON
-    let loginButton = document.createElement("button");
+    const loginButton = document.createElement("button");
     loginButton.setAttribute("id", "loginButton");
     loginButton.setAttribute("class", "pageButtons");
     loginButton.textContent = "Login";
 
     //FÄLT TILL USER LOGIN
-    let labelUser = document.createElement("label");
+    const labelUser = document.createElement("label");
     labelUser.setAttribute("for", "inputUser");
     labelUser.textContent = "";
 
-    let userInput = document.createElement("input");
+    const userInput = document.createElement("input");
     userInput.setAttribute("id", "userInput");
     userInput.setAttribute("type", "text");
     userInput.setAttribute("placeholder", "Input username");
@@ -93,66 +93,101 @@ function init() {
     saveEditedListBtn.textContent = "Save";
 
     //RESET-BUTTON
-    let resetNoteButton = document.createElement("button");
+    const resetNoteButton = document.createElement("button");
     resetNoteButton.setAttribute("id", "clearList");
     resetNoteButton.setAttribute("class", "modalButtons");
     resetNoteButton.style.display = "none"; 
     resetNoteButton.textContent = "Start Over";
 
     // FÄLT TILL ANTECKNINGAR
-    let labelTitle = document.createElement("label");
+    const labelTitle = document.createElement("label");
     labelTitle.setAttribute("for", "inputTitleBox");
     labelTitle.textContent = "TITLE ";
 
-    let inputTitleBox = document.createElement("input"); //input field for user title//
+    const inputTitleBox = document.createElement("input"); //input field for user title//
     inputTitleBox.setAttribute("id", "inputTitleBox");
     inputTitleBox.setAttribute("type", "text");
 
-    let userTitle = document.createElement("h4");
+    const userTitle = document.createElement("h4");
     userTitle.setAttribute("class", "userTitle");
     userTitle.style.display = "none";
 
-    let labelListItem = document.createElement("label");
+    const labelListItem = document.createElement("label");
     labelListItem.setAttribute("for", "inputListBox");
     labelListItem.textContent = "TO-DO ";
 
-    let inputItemBox = document.createElement("input"); //input field for user list items
+    const inputItemBox = document.createElement("input"); //input field for user list items
     inputItemBox.setAttribute("id", "inputListBox");
     inputItemBox.setAttribute("type", "text");
     inputItemBox.attributes.required = true;
 
-    let listNote = document.createElement("ul"); //unordered list
+    const listNote = document.createElement("ul"); //unordered list
     listNote.setAttribute("class", "myList");
 
-    let inputTitle = document.createElement("h4");
+    const inputTitle = document.createElement("h4");
     inputTitle.setAttribute("class", "userTitle");
     inputTitle.setAttribute("id", "myTitle");
     inputTitle.style.display = "none"; 
 
     //TEXT AREA TILL TEXT O TEMPLATE
-    let textArea = document.createElement("textarea");
+    const textArea = document.createElement("textarea");
     textArea.style.display = "none"; 
 
     //SPARADE NOTES 
     const savedNotesDiv = document.createElement("div");
     savedNotesDiv.setAttribute("id", "myNotes");
 
-    let savedNotesMessage = document.createElement("h3");
+    const savedNotesMessage = document.createElement("h3");
     savedNotesMessage.textContent = "When you save a note it will show up here!";
+    
+    //KNAPP FÖR ATT RADERA ALLA NOTES I LOCAL
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete all notes";
+    deleteBtn.setAttribute("class", "pageButtons");
 
-    // VARIABLER FÖR ATT REDIGERA NOTES
+    // GLOBALA VARIABLER *************************************************************************************************************
     let pArray = [];
     let savedNotes = [];
     let counter = 0;
     let noteObject;
     let noteObjectIndex;
-
     let listItem;
+    let noteArray = [];
+    let userList = ["Ziggi", "Dan", "Ludvig", "Sandra"];
+    let currentUser = ""; 
+    let userNotes;
 
-    //KNAPP FÖR ATT RADERA ALLA NOTES I LOCAL
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete all notes";
-    deleteBtn.setAttribute("class", "pageButtons");
+    // ALLA APPEND CHILD **************************************************************************************
+
+    //USER LOGIN
+    container.appendChild(labelUser);
+    container.appendChild(userInput);
+    container.appendChild(loginButton);
+
+    // MODAL
+    body.appendChild(modalBg);
+    modalBg.appendChild(innerModal)
+
+    // LISTOR 
+    innerModal.appendChild(labelTitle);
+    labelTitle.appendChild(inputTitleBox);
+    innerModal.appendChild(labelListItem);
+    labelListItem.appendChild(inputItemBox);
+    innerModal.appendChild(userTitle);
+    innerModal.appendChild(listNote);
+
+    //TEXT AREA
+    innerModal.appendChild(textArea);
+
+    // KNAPPAR FÖR SPARA OCH RESET
+    innerModal.appendChild(saveNewTextNoteBtn);
+    innerModal.appendChild(saveNewTemplateNoteBtn);
+    innerModal.appendChild(saveNewListNoteBtn);
+    innerModal.appendChild(saveEditedTextBtn);
+    innerModal.appendChild(saveEditedTemplateBtn);
+    innerModal.appendChild(saveEditedListBtn);
+    innerModal.appendChild(resetNoteButton);
+    innerModal.appendChild(savedNotice);
 
 
     // ALLA FUNKTIONER ************************************************************************************************************
@@ -197,7 +232,7 @@ function init() {
         this.addDate = function () {
             today = new Date;
             this.date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate() + " | " 
-            + ('0' + today.getHours()).substr(-2) + ":" + ('0' + today.getMinutes()).slice(-2);
+            + ('0' + today.getHours()).substr(-2) + ":" + ('0' + today.getMinutes()).slice(-2); 
         }
     }
 
@@ -223,75 +258,7 @@ function init() {
         noteArray.push(newNote);
     }
 
-    /**
-     * Skapar nytt Note-objekt av list-typ
-     */
-    function newListNote() {
-        noteArray.push(new Note("list", userTitle.textContent, currentUser));
-
-        let newNote = noteArray.pop();
-        newNote.addContent();
-        noteArray.push(newNote);
-    }
-
-    /**
-     * Tar bort innehållet i ett fält
-     * @param {Input-fält} field 
-     */
-    function clearField(field) {
-        field.value = "";
-    }
-
-    /**
-     * Tar bort innehållet i ett fält
-     * @param {TextContent-fält} element 
-     */
-    function clearTitle(element) {
-        element.textContent = "";
-    }
-
-    /**
-     * Döljer ett objekt genom att sätta display till none
-     * @param {valfritt objekt} object 
-     */
-    function hideObject(object) {
-        object.style.display = "none";
-    }
-
-    /**
-     * Visar ett objekt genom att sätta display till block
-     * @param {valfritt objekt} object 
-     */
-    function showObject(object) {
-        object.style.display = "block";
-    }
-
-    /**
-     * Stänger modal och rensar fälten
-     * @param {eventet} e 
-     */
-    function closeModal(e) {
-        if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
-            hideObject(modalBg);
-            resetNote()
-            clearTitle(userTitle);
-        }
-    }
-
-    /**
-     * Kollar att användare får logga in
-     */
-    function validateUser() {
-        let userInput = document.getElementById("userInput").value;
-
-        for (let i = 0; i < userList.length; i++) {
-            if (userInput === userList[i]) {
-                return true;
-            }
-        };
-        return false;
-    }
-
+    
     /**
      * Slumpar fram ett av 10 textförslag
      * Returnerar en string med ett textförslag
@@ -337,38 +304,89 @@ function init() {
         return text;
     }
 
+
     /**
-     * Sparar noteArray till localStorage
+     * Skapar nytt Note-objekt av list-typ
      */
-    function saveToStorage() {
-        let noteBook = JSON.stringify(noteArray);
-        localStorage.setItem("Notes", noteBook);
+    function newListNote() {
+        noteArray.push(new Note("list", userTitle.textContent, currentUser));
+
+        let newNote = noteArray.pop();
+        newNote.addContent();
+        noteArray.push(newNote);
+    }
+
+    
+    /**
+     * Läser in och skriver ut titel i modal
+     * @param {eventet} e 
+     */
+    function addTitleToNote(e) {
+        if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
+            if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
+                alert("Title cannot be empty!")
+            }
+            else {
+                userTitle.textContent = inputTitleBox.value.toUpperCase();
+                showObject(userTitle);
+                inputItemBox.focus();
+                textArea.focus();
+            }
+            clearField(inputTitleBox);
+        }
     }
 
     /**
-     * Nollställer fälten i modalen
+     * Läser in och skriver ut list-items i modal
+     * @param {eventet} e 
      */
-    function resetNote() {
-        while (listNote.firstChild) {
-            listNote.removeChild(listNote.firstChild);
-        }
-        clearTitle(userTitle);
-        clearField(textArea);
-        clearField(inputTitleBox);
-        clearField(inputItemBox);
-        if (textArea.classList.contains("template")) {
-            userTitle.textContent = randomTextTemplate();
+    function addListItemToList(e) {
+        if (e.which === 13 || e.key === 13) {   //firefox .which, chrome .key//
+            if (inputItemBox.value.length == 0) {  //checks if input is empty
+                alert("This field cannot be empty!")
+            }
+            else {
+                listItem = document.createElement("li");
+                listItem.setAttribute("class", "myListItem");
+                listItem.textContent = document.getElementById("inputListBox").value;
+                document.getElementsByClassName("myList")[0].appendChild(listItem);
+
+                clearField(inputItemBox);
+                showObject(resetNoteButton);
+            }
         }
     }
 
     /**
-     * Öppnar modal och sätter pekaren i titelfältet
+     * Tar bort innehållet i ett fält
+     * @param {Input-fält} field 
      */
-    function initModal() {
-        showObject(modalBg);
-        showObject(innerModal);;
-        showObject(resetNoteButton);
-        inputTitleBox.focus();
+    function clearField(field) {
+        field.value = "";
+    }
+
+    /**
+     * Tar bort innehållet i ett fält
+     * @param {TextContent-fält} element 
+     */
+    function clearTitle(element) {
+        element.textContent = "";
+    }
+
+    /**
+     * Döljer ett objekt genom att sätta display till none
+     * @param {valfritt objekt} object 
+     */
+    function hideObject(object) {
+        object.style.display = "none";
+    }
+
+    /**
+     * Visar ett objekt genom att sätta display till block
+     * @param {valfritt objekt} object 
+     */
+    function showObject(object) {
+        object.style.display = "block";
     }
 
     /**
@@ -432,6 +450,43 @@ function init() {
         inputTitleBox.focus();
     }
 
+    /**
+     * Öppnar modal och sätter pekaren i titelfältet
+     */
+    function initModal() {
+        showObject(modalBg);
+        showObject(innerModal);;
+        showObject(resetNoteButton);
+        inputTitleBox.focus();
+    }
+
+    /**
+     * Stänger modal och rensar fälten
+     * @param {eventet} e 
+     */
+    function closeModal(e) {
+        if (e.target == modalBg) { //om target inte är modal, stäng modal (DAN) 
+            hideObject(modalBg);
+            resetNote()
+            clearTitle(userTitle);
+        }
+    }
+
+    /**
+     * Nollställer fälten i modalen
+     */
+    function resetNote() {
+        while (listNote.firstChild) {
+            listNote.removeChild(listNote.firstChild);
+        }
+        clearTitle(userTitle);
+        clearField(textArea);
+        clearField(inputTitleBox);
+        clearField(inputItemBox);
+        if (textArea.classList.contains("template")) {
+            userTitle.textContent = randomTextTemplate();
+        }
+    }
 
     /**
      * Bekräftelse-meddelande när note sparats
@@ -439,18 +494,6 @@ function init() {
     function notificationTimeout () {
         setTimeout(function (){savedNotice.textContent="";},3000);
         savedNotice.textContent = "Saved...";
-    }
-
-    /**
-     * Visar sparade notes
-     * 
-     */
-    function showSavedNoteTitles(e) {
-        filterByUser();
-        if (userNotes.length != 0) {
-            savedNotesMessage.textContent = currentUser + "'s saved notes";
-        }
-        createPForNewNote();
     }
 
     /**
@@ -473,27 +516,17 @@ function init() {
     }
     
     /**
-     * Skapar p-element med titel och datum för sparade Notes
+     * Visar sparade notes
+     * 
      */
-    function showAllStoredNotes() {
-        updateSavedNotes();
+    function showSavedNoteTitles(e) {
         filterByUser();
-        
-        for (let i = 0; i < userNotes.length; i++){  
-            pArray.push(document.createElement("p"));
-            let lastNote = userNotes[i];
-
-            let newP = pArray.pop();
-            newP.textContent = lastNote.title + " " + lastNote.date;
-            newP.setAttribute("id", counter);
-            newP.addEventListener("click", (e) => { openSavedNote(e) });
-
-            savedNotesDiv.appendChild(newP);
-            pArray.push(newP);
-            counter++;
-        }    
+        if (userNotes.length != 0) {
+            savedNotesMessage.textContent = currentUser + "'s saved notes";
+        }
+        createPForNewNote();
     }
-
+    
     /**
      * Öppnar en sparad Note
      * @param {eventet} e 
@@ -520,15 +553,47 @@ function init() {
         else if (noteObject.type === "template") {
             userTitle.textContent = noteObject.title;
             textArea.value = noteObject.content;
-            showTemplateObjects();
             showObject(saveEditedTemplateBtn);
+            showTemplateObjects();
+            
         }
         else {
             userTitle.textContent = noteObject.title;
             textArea.value = noteObject.content;
-            showTextObjects();
             showObject(saveEditedTextBtn);
+            showTextObjects();
         }
+    }
+
+
+    /**
+     * Skapar p-element med titel och datum för Notes som hämtas från Local Storage
+     */
+    function showAllStoredNotes() {
+        updateSavedNotes();
+        filterByUser();
+        
+        for (let i = 0; i < userNotes.length; i++){  
+            pArray.push(document.createElement("p"));
+            let lastNote = userNotes[i];
+
+            let newP = pArray.pop();
+            newP.textContent = lastNote.title + " " + lastNote.date;
+            newP.setAttribute("id", counter);
+            newP.addEventListener("click", (e) => { openSavedNote(e) });
+
+            savedNotesDiv.appendChild(newP);
+            pArray.push(newP);
+            counter++;
+        }    
+    }
+
+    /**
+     * Sparar noteArray till localStorage
+     */
+    function saveToStorage() {
+        let noteBook = JSON.stringify(noteArray);
+        localStorage.setItem("Notes", noteBook);
     }
 
     /**
@@ -536,46 +601,6 @@ function init() {
      */
     function updateSavedNotes() {
         savedNotes = JSON.parse(localStorage.getItem("Notes"));
-    }
-
-    /**
-     * Läser in och skriver ut titel i modal
-     * @param {eventet} e 
-     */
-    function addTitleToNote(e) {
-        if (e.which === 13 || e.key === 13) {  //firefox .which, chrome .key//
-            if (inputTitleBox.value.length == 0) {  //checks if input field is empty//
-                alert("Title cannot be empty!")
-            }
-            else {
-                userTitle.textContent = inputTitleBox.value.toUpperCase();
-                showObject(userTitle);
-                inputItemBox.focus();
-                textArea.focus();
-            }
-            clearField(inputTitleBox);
-        }
-    }
-
-    /**
-     * Läser in och skriver ut list-items i modal
-     * @param {eventet} e 
-     */
-    function addListItemToList(e) {
-        if (e.which === 13 || e.key === 13) {   //firefox .which, chrome .key//
-            if (inputItemBox.value.length == 0) {  //checks if input is empty
-                alert("This field cannot be empty!")
-            }
-            else {
-                listItem = document.createElement("li");
-                listItem.setAttribute("class", "myListItem");
-                listItem.textContent = document.getElementById("inputListBox").value;
-                document.getElementsByClassName("myList")[0].appendChild(listItem);
-
-                clearField(inputItemBox);
-                showObject(resetNoteButton);
-            }
-        }
     }
 
     /**
@@ -616,6 +641,44 @@ function init() {
     }
 
     /**
+     * Filtrerar noteArray på användarnamn
+     */
+    function filterByUser(){
+        userNotes = noteArray.filter(checkUser =>{
+            return checkUser.user.includes(currentUser)
+        });
+    }
+
+    /**
+     * Raderar alla notes i localStorage, tar bort alla element ur savedNotesDiv
+     * och sätter tillbaka rubriken och delete-knappen
+     */
+    function deleteAllNotes() {
+        localStorage.clear();
+        while (savedNotesDiv.firstChild) {
+            savedNotesDiv.removeChild(savedNotesDiv.firstChild);
+        }
+        savedNotesMessage.textContent = "When you save a note it will show up here!";
+        savedNotesDiv.appendChild(deleteBtn);
+        savedNotesDiv.appendChild(savedNotesMessage);
+    }
+    
+
+    /**
+     * Kollar att användare får logga in
+     */
+    function validateUser() {
+        let userInput = document.getElementById("userInput").value;
+
+        for (let i = 0; i < userList.length; i++) {
+            if (userInput === userList[i]) {
+                return true;
+            }
+        };
+        return false;
+    }
+    
+    /**
      * Döljer loginboxar och visar förstasidan vid lyckad inloggning
      */
     function loginFunc (){
@@ -643,64 +706,36 @@ function init() {
         }
     }
 
-    /**
-     * Filtrerar noteArray på användarnamn
-     */
-    function filterByUser(){
-        userNotes = noteArray.filter(checkUser =>{
-            return checkUser.user.includes(currentUser)
-        });
-    }
-
-    /**
-     * Raderar alla notes i localStorage, tar bort alla element ur savedNotesDiv
-     * och sätter tillbaka rubriken och delete-knappen
-     */
-    function deleteAllNotes() {
-        localStorage.clear();
-        while (savedNotesDiv.firstChild) {
-            savedNotesDiv.removeChild(savedNotesDiv.firstChild);
-        }
-        savedNotesMessage.textContent = "When you save a note it will show up here!";
-        savedNotesDiv.appendChild(deleteBtn);
-        savedNotesDiv.appendChild(savedNotesMessage);
-    }
-
-
-    // ALLA APPEND CHILD **************************************************************************************
-
-    //USER LOGIN
-    container.appendChild(labelUser);
-    container.appendChild(userInput);
-    container.appendChild(loginButton);
-
-    // MODAL
-    body.appendChild(modalBg);
-    modalBg.appendChild(innerModal)
-
-    // LISTOR 
-    innerModal.appendChild(labelTitle);
-    labelTitle.appendChild(inputTitleBox);
-    innerModal.appendChild(labelListItem);
-    labelListItem.appendChild(inputItemBox);
-    innerModal.appendChild(userTitle);
-    innerModal.appendChild(listNote);
-
-    //TEXT AREA
-    innerModal.appendChild(textArea);
-
-    // KNAPPAR FÖR SPARA OCH RESET
-    innerModal.appendChild(saveNewTextNoteBtn);
-    innerModal.appendChild(saveNewTemplateNoteBtn);
-    innerModal.appendChild(saveNewListNoteBtn);
-    innerModal.appendChild(resetNoteButton);
-    innerModal.appendChild(saveEditedTextBtn);
-    innerModal.appendChild(saveEditedTemplateBtn);
-    innerModal.appendChild(saveEditedListBtn);
-    innerModal.appendChild(savedNotice);
-
-
     // ALLA EVENT LISTENERS ***********************************************************************************
+
+    // öppna ny text-note
+    openNewTextNoteBtn.addEventListener("click", () => {
+        textArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+        textArea.setAttribute("class", "text");
+        initModal();
+        hideModalObjects();
+        showTextObjects();
+        showObject(saveNewTextNoteBtn);
+    });
+
+    // öppna ny template-note
+    openNewTemplateNoteBtn.addEventListener("click", () => {
+        textArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
+        textArea.setAttribute("class", "template");
+        userTitle.textContent = randomTextTemplate();
+        initModal();
+        hideModalObjects();
+        showTemplateObjects();
+        showObject(saveNewTemplateNoteBtn);
+    });
+
+    // öppna ny list-note
+    openNewListNoteBtn.addEventListener("click", () => {
+        initModal();
+        hideModalObjects();
+        showListObjects();
+        showObject(saveNewListNoteBtn);
+    });
 
     //function to add title chosen by user. Triggered when enter is released.
     inputTitleBox.addEventListener("keyup", (e) => { addTitleToNote(e) });
@@ -708,6 +743,7 @@ function init() {
     //Event for user to add list items//
     inputItemBox.addEventListener("keyup", (e) => { addListItemToList(e) });
 
+    //Spara ny text-note
     saveNewTextNoteBtn.addEventListener("click", (e) => {
         if (userTitle.textContent.length == 0) {  //checks if input field is empty//
             alert("Title cannot be empty!")
@@ -722,6 +758,7 @@ function init() {
         }
     })
 
+    // spara ny Template-note
     saveNewTemplateNoteBtn.addEventListener("click", (e) => {
         if (userTitle.textContent.length == 0) {  //checks if input field is empty//
             alert("Title cannot be empty!")
@@ -736,6 +773,7 @@ function init() {
         } 
     })
 
+    // spara ny list-note
     saveNewListNoteBtn.addEventListener("click", (e) => {
         if (userTitle.textContent.length == 0) {  //checks if input field is empty//
             alert("Title cannot be empty!")
@@ -750,6 +788,7 @@ function init() {
         }
     })
 
+    // spara redigerad text-note
     saveEditedTextBtn.addEventListener("click", () => {
         if (userTitle.textContent.length == 0) {  //checks if input field is empty//
             alert("Title cannot be empty!");
@@ -766,6 +805,7 @@ function init() {
         }
     })
 
+    // Spara redigerad template-note
     saveEditedTemplateBtn.addEventListener("click", () => {
         if (userTitle.textContent.length == 0) {  //checks if input field is empty//
             alert("Title cannot be empty!")
@@ -783,6 +823,7 @@ function init() {
         }
     })
 
+    // spara redigerade list-note
     saveEditedListBtn.addEventListener("click", () => {
         if (userTitle.textContent.length == 0) {  
             alert("Title cannot be empty!")
@@ -800,37 +841,13 @@ function init() {
         }
     })
 
-
-    openNewTextNoteBtn.addEventListener("click", () => {
-        textArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-        textArea.setAttribute("class", "text");
-        initModal();
-        hideModalObjects();
-        showTextObjects();
-        showObject(saveNewTextNoteBtn);
-    });
-
-    openNewTemplateNoteBtn.addEventListener("click", () => {
-        textArea.removeAttribute("class"); // rensar class-attributet så det alltid bara finns ett
-        textArea.setAttribute("class", "template");
-        userTitle.textContent = randomTextTemplate();
-        initModal();
-        hideModalObjects();
-        showTemplateObjects();
-        showObject(saveNewTemplateNoteBtn);
-    });
-
-    openNewListNoteBtn.addEventListener("click", () => {
-        initModal();
-        hideModalObjects();
-        showListObjects();
-        showObject(saveNewListNoteBtn);
-    });
-
+    // klicka utanför inre modal för att stänga
     modalBg.addEventListener("click", closeModal);
 
+    // tömmer innehåll i titel- och textfält 
     resetNoteButton.addEventListener("click", resetNote);
 
+    // login-knappen 
     loginButton.addEventListener("click", () => {
         loginFunc();
         fillNoteArray();
@@ -845,6 +862,7 @@ function init() {
         showAllStoredNotes();
     });
 
+    // raderar alla notes
     deleteBtn.addEventListener("click", deleteAllNotes);
 }
 
